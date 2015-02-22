@@ -1,0 +1,34 @@
+{
+	"title": "Top 5",
+	"type": "TOPX",
+	"mode": "single",
+	"filterfields": [
+		{"display": "display1", "value" : "1"},
+		{"display": "display2", "value" : "2"}
+	],
+	"base": { 
+	    "source": "mysource",
+	    "timespan": {
+	        "from" : "2014-01-01",
+	        "to" : "2014-01-31"
+	    },
+	    "filter": [
+			{"value" : "1"},
+			{"value" : "2"}
+	    ],
+		"data":[
+			{"label": "Product A", "value": "545", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"},
+			{"label": "Product B", "value": "200", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"},
+			{"label": "Product C", "value": "150", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"},
+			{"label": "Product D", "value": "150", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"},
+			{"label": "Product E", "value": "120", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"}
+		],
+		"other": {
+			"value": "1232",
+			"label": "Other"
+		}
+	},
+	"comparison" : {
+		
+	}
+}
