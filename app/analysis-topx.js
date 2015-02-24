@@ -79,19 +79,24 @@ drillix.analysis.topx = function module() {
 				filterdiv.attr("style","margin:20px");
 				var filtertbl = filterdiv.append("table")
 					.attr("style","width:100%;");
+				var filtertitle = filtertbl.append("tr");
+				filtertitle.append("td")
+					.attr("colspan","3")
+					.attr("style","border:1px solid grey;padding:5px;width:100px;font-weight:bold;background-color:#F6F7F8;text-align:center")
+					.text("Data Slice")
 				var source = filtertbl
 					.append("tr");
 				source.append("td")
 					.attr("style","border:1px solid grey;padding:5px;width:100px;font-weight:bold;background-color:#F6F7F8")
-					.text("Analysis Source")
+					.text("Data Context")
 				source.append("td")
 					.attr("style","border:1px solid grey;padding:5px;width:250px")
-					.text("Source Data")
+					.text("Context")
 					.append("img")
 					.attr("src","datacilinder.png")
 					.attr("style","width:16px;height:16px;float:right");
 				//Compare button
-				var comparebox = source.append("td").attr("rowspan",5)
+				var comparebox = source.append("td").attr("rowspan",6)
 					.attr("style","border:1px solid grey;padding:5px;text-align:center");
 				comparebox.append("div")
 					.attr("style","padding:7px")
@@ -117,17 +122,19 @@ drillix.analysis.topx = function module() {
 				propertyhdr.append("td")
 					.attr("colspan","2")
 					.attr("style","border:1px solid grey;padding:5px;font-weight:bold;background-color:#F6F7F8")
-					.text("Filter Properties")
+					.text("Properties")
 					.append("a")
 					.attr("style", "margin-left: 5px;float:right")
 					.text("Add New");
 
 				var property1 = filtertbl
 					.append("tr");
-				property1.append("td").attr("style","border:1px solid grey;padding:5px;font-weight:bold;background-color:#F6F7F8").text("Property 1");
+				property1.append("td")
+					.attr("style","border:1px solid grey;padding:5px;font-weight:bold;background-color:#F6F7F8")
+					.text("Region");
 				var propertytext1 = property1.append("td")
 					.attr("style","border:1px solid grey;padding:5px")
-					.text("XXXXXX");
+					.text("Latam");
 				propertytext1.append("img")
 					.attr("src","property.png")
 					.attr("style","width:16px;height:16px;float:right")
@@ -136,12 +143,21 @@ drillix.analysis.topx = function module() {
 					.attr("src","delete.png")
 					.attr("style","width:16px;height:16px;float:right");
 					
+				var measurehdr = filtertbl
+					.append("tr")	
+					.append("td")
+					.attr("colspan","2")
+					.attr("style","border:1px solid grey;padding:5px;font-weight:bold;background-color:#F6F7F8")
+					.text("Measures");
+					
 				var property2 = filtertbl
 					.append("tr");
-				property2.append("td").attr("style","border:1px solid grey;padding:5px;font-weight:bold;background-color:#F6F7F8").text("Property 2");
+					
+					
 				var propertytext2 = property2.append("td")
+					.attr("colspan","2")
 					.attr("style","border:1px solid grey;padding:5px")
-					.text("XXXXXX");
+					.text("Sales");
 					
 				propertytext2.append("img")
 					.attr("src","property.png")
@@ -150,7 +166,39 @@ drillix.analysis.topx = function module() {
 				propertytext2.append("img")
 					.attr("src","delete.png")
 					.attr("style","width:16px;height:16px;float:right");
-												
+					
+				var parametertable = filterdiv.append("table")
+					.attr("style","width:100%;margin-top:10px");
+					
+				var filtertitleparm = parametertable.append("tr");
+				filtertitleparm.append("td")
+					.attr("colspan","3")
+					.attr("style","border:1px solid grey;padding:5px;width:100px;font-weight:bold;background-color:#F6F7F8;text-align:center")
+					.text("Analysis Parameters");
+				var sourceparm = parametertable
+					.append("tr");
+				sourceparm.append("td")
+					.attr("style","border:1px solid grey;padding:5px;width:100px;font-weight:bold;background-color:#F6F7F8")
+					.text("Ranking Property");
+				sourceparm.append("td")
+					.attr("style","border:1px solid grey;padding:5px;width:250px")
+					.text("Product")
+					.append("img")
+					.attr("src","datacilinder.png")
+					.attr("style","width:16px;height:16px;float:right");
+					
+				var sourceparm2 = parametertable
+					.append("tr");
+				sourceparm2.append("td")
+					.attr("style","border:1px solid grey;padding:5px;width:100px;font-weight:bold;background-color:#F6F7F8")
+					.text("Ranking Measure");
+				sourceparm2.append("td")
+					.attr("style","border:1px solid grey;padding:5px;width:250px")
+					.text("Sales")
+					.append("img")
+					.attr("src","datacilinder.png")
+					.attr("style","width:16px;height:16px;float:right");					
+																						
 				var svg = d3.select(this).append("svg").classed("topx",true).attr("height",710).attr("width",694);
 				svg.attr("border","1px solid");
 												
