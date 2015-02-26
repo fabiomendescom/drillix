@@ -4,35 +4,52 @@
 var drillixApp = angular.module('drillix', []);
 
 drillixApp.controller('drillixController', ['$scope','$http', function($scope, $http) {
+     $scope.title = "Top 10";
 
- $http.get('data.json').success(function(data) {
-  $scope.data = data;
+	 var g = document.getElementById("analysisscript");
+	 if (g!=undefined) {
+		g.parentNode.removeChild(g);
+	 }
+	
+	 var wf = document.createElement('script');
+	 wf.id = "analysisscript";
+	 wf.src = "analysis-topx.js";
+	 wf.type = 'text/javascript';
+	 document.getElementById("scriptcontainer").appendChild(wf);	
+	 $scope.newentry = false;
+	 
+	$http.get('data.json').success(function(data) {
 
-  $scope.display = {};	
-  
-  $scope.$watch(function(scope) { return scope.data.mode },
-     function(newValue, oldValue) {
-		$scope.display.mode = $scope.data.mode;
-		if($scope.data.mode=="single") {
-			$scope.display.singlecls = "col-md-12";
-			$scope.display.singlecls2 = "col-md-12";
-			$scope.display.issingle = false;
-		} else {
-			$scope.display.singlecls = "col-md-6";
-			$scope.display.singlecls2 = "col-md-5";
-			$scope.display.issingle = true;
-		};                   
-     }
-  );
-  
-  $scope.toggleCompare = function() {
-	  if($scope.data.mode=="single") {
-         $scope.data.mode = "compare";
-      } else {
-		 $scope.data.mode = "single";
-	  }
-  };  
-
- });	  
+	});	  
+	
+	$scope.goBasket = function() {	
+		$('#analysis').empty();
+		var g = document.getElementById("analysisscript");
+		if (g!=undefined) {
+			g.parentNode.removeChild(g);
+		}
+	
+		var wf = document.createElement('script');
+		wf.id = "analysisscript";
+		wf.src = "analysis-basket.js";
+		wf.type = 'text/javascript';
+		document.getElementById("scriptcontainer").appendChild(wf);			
+	};	
+	
+	$scope.newanalysis = function() {	
+		$scope.newentry = true;
+		//$('#analysis').empty();
+		var g = document.getElementById("analysisscript");
+		if (g!=undefined) {
+			g.parentNode.removeChild(g);
+		}
+	
+		var wf = document.createElement('script');
+		wf.id = "analysisscript";
+		wf.src = "newanalysis.js";
+		wf.type = 'text/javascript';
+		document.getElementById("scriptcontainer").appendChild(wf);			
+	};	
+	
   
 }]);

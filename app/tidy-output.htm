@@ -53,13 +53,12 @@ a.c5 {font-style: italic; text-decoration: underline}
         </style>
     </head>
     <body class="c20">
-	<div ng-app="drillix" ng-controller="drillixController">
-        <div class="container c19 row"  id="pagelet_bluebar" role="banner" data-click="bluebar" data-click-phase="0">
+        <div class="container c19 row" ng-app="drillix" ng-controller="drillixController" id="pagelet_bluebar" role="banner" data-click="bluebar" data-click-phase="0">
             <div id="blueBarDOMInspector" class="_21mm">
                 <div id="blueBarNAXAnchor" class="_4f7n _xxp fixed_elem _uaw clearfix _uaw _59g8" role="banner">
                     <a class="accessible_elem skipto" href="#newsFeedHeading" target="newsFeedHeading" id="u_0_1" name="u_0_1">Skip to News Feed</a>
                     <h1 class="_5lus" data-click="bluebar_logo" id="u_0_e">
-                        <button ng-click="newanalysis()">New Analysis</button>
+                        <button>Fabio</button>
                     </h1>
                     <div class="clearfix rfloat _ohf">
                         <ul class="_2exj clearfix" role="navigation">
@@ -533,7 +532,7 @@ a.c5 {font-style: italic; text-decoration: underline}
             </div>
         </div>
         <div class="row">
-            <div id="basedrill" class="c17 classfix">
+            <div id="basedrill" class="c17">
                 <a class="btn btn-primary c1" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Add a comment {{title}}</a>
                 <div class="collapse" id="collapseExample">
                     <div data-insertion-position="-35" class="_4-u2 mbm _5jmm _5pat _5v3q _2l4l _x72 userContentWrapper _5pcr _3ccb" data-ft="{&quot;qid&quot;:&quot;6118130916541823104&quot;,&quot;mf_story_key&quot;:&quot;3937479244171304174&quot;,&quot;fbfeed_location&quot;:1,&quot;insertion_position&quot;:2}" data-cursor="MTQyNDQ4ODM1OToxNDI0NDg4MzU5OjEwOjM5Mzc0NzkyNDQxNzEzMDQxNzQ6MTQyNDM1ODk2MDowOjA6MTIwMA==" data-dedupekey="3937479244171304174" id="u_3u_2" data-gt="{&quot;type&quot;:&quot;click2canvas&quot;,&quot;fbsource&quot;:703,&quot;ref&quot;:&quot;nf_generic&quot;}">
@@ -1150,12 +1149,7 @@ a.c5 {font-style: italic; text-decoration: underline}
                     </div>
                 </div>
             </div>
-            <div class="c18" id="analysis">
-				<ul ng-show="newentry">
-					<li>Top 5</li>
-					<li><a ng-click="goBasket()">Market Basket Analysis</a></li>
-				</ul>
-            </div>
+            <div class="c18" id="analysis"></div>
         </div>
         <div id="scriptcontainer">
             <script id="analysisscript" type="text/javascript">
@@ -1171,6 +1165,5 @@ a.c5 {font-style: italic; text-decoration: underline}
 </script><script src="components/version/version-directive.js" type="text/javascript">
 </script><script src="components/version/interpolate-filter.js" type="text/javascript">
 </script>
-</div>
     </body>
 </html>
