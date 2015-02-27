@@ -73,7 +73,18 @@ drillix.analysis.topx = function module() {
 					.attr("style","width:16px;height:32px;margin-right:5px");
 					
 				title.append("span")
-					.text("Top 5")														
+					.text("Top 5")		
+					
+				//title box
+				var commenttitlelabel = d3.select(this).append("div").attr("style","margin-left:20px;font-weight:bold").text("Title");
+				var commenttitlediv = d3.select(this).append("input")
+					.attr("style","width:685px;margin-left:20px");	
+										
+				//comment box
+				var commentdivlabel = d3.select(this).append("div").attr("style","margin-top:10px;margin-left:20px;font-weight:bold").text("Comment or Finding");
+				var commentdiv = d3.select(this).append("textarea")
+					.attr("rows","4")
+					.attr("style","width:685px;margin-left:20px");										
 				//filter areas div
 				var filterdiv = d3.select(this).append("div")
 				filterdiv.attr("style","margin:20px");
