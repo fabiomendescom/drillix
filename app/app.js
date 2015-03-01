@@ -6,15 +6,54 @@ var drillixApp = angular.module('drillix', []);
 drillixApp.controller('drillixController', ['$scope','$http', '$window', function($scope, $http, $window) {
      $scope.title = "Top 10";
      
+     $scope.getwindowstate = function() {
+		 var w = angular.element($window);
+		 if(w.width() <= 630) {
+			 return "DYNAMIC";
+		 } else {
+			if (w.width() <= 1186) {
+			    return "SLIDABLE";
+			} else {
+				return "FULL";
+			}
+		 }
+	 }
+     $scope.getwindowwidth = function() {
+		 var w = angular.element($window);
+		 return w.width();
+	 }
+       
      var w = angular.element($window);
      
      w.bind('resize', function () {
-		 if(w.width() < 630) {
-			 $("#analysiscontainer").width(w.width()-30)
-		 } else {
-			 $("#analysiscontainer").width(630)
-		 }
-		if (w.width() > 630 && w.width() <= 1186) {
+         $scope.$apply(function () {
+				$scope.windowstate = $scope.getwindowstate();		
+            var windowwidth = $scope.getwindowwidth();
+            if($scope.windowstate=="DYNAMIC") {
+				$scope.analysiswidth = windowwidth-15;
+				$scope.feederwidth = windowwidth-30;
+				$scope.buttonwidth = ($scope.analysiswidth-15)/2;
+			} else {
+				if($scope.windowstate=="SLIDABLE") {				
+					$scope.analysiswidth = windowwidth-37;
+					$scope.feederwidth = 375;						
+				} else { //FULL
+					$scope.analysiswidth = windowwidth - 415;
+					$scope.feederwidth = 375;	
+				}		
+			}	 
+            $scope.title = $scope.windowstate;
+            
+            $("#analysis").empty();
+            var maxwidth = $scope.analysiswidth;
+			var analysisdata = drillix.layout.topx(data,maxwidth);
+			var topxbase = drillix.analysis.topx(analysisdata);
+			var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase);             
+            
+            
+         });
+		 
+		if ($scope.windowstate=="SLIDABLE") {
 				$('.feedboxclass').hide();
 			    $('.feedboxclassclone').remove();
 				var newdude = $(".feedboxclass").clone().addClass("feedboxclassclone");

@@ -3,8 +3,8 @@ var data = {
 		"scale" : "1",
 		"boxheight" : "100",
 		"boxwidth" : "600",
-		"leftmargin" : "20",
-		"topmargin" : "40",
+		"leftmargin" : "5",
+		"topmargin" : "10",
 		"boxspacing": "25"
 	},
 	"title": "Top 5",
@@ -96,10 +96,16 @@ drillix = {};
 drillix.analysis = {};
 drillix.layout = {};	
 
-drillix.layout.topx = function(dt) {
+drillix.layout.topx = function(dt,maxwidth) {
 	var tmpdata = dt;
+	var max_w = maxwidth;
+	tmpdata.defaults.maxwidth = max_w;
+	
 	
 	var scale = parseInt(dt.defaults.scale);	
+
+	scale = maxwidth / 694;
+	
 	var boxheight = parseInt(dt.defaults.boxheight);
 	var boxwidth = parseInt(dt.defaults.boxwidth);
 	var box_x = parseInt(dt.defaults.leftmargin);
@@ -135,6 +141,7 @@ drillix.layout.topx = function(dt) {
 	
 	measurebarmaxwidth = boxwidth * .95;
 	measurebarratio = measurebarmaxwidth / tmpdata.base.data[0].value;
+	
 	
 	i=0;
 	while (i < tmpdata.base.data.length) {
@@ -207,12 +214,13 @@ drillix.analysis.topx = function module(dt) {
 					
 				title.append("span")
 					.text(_data.title)		
-					
+
+/*					
 				//title box
 				var commenttitlelabel = d3.select(this).append("div").attr("style","margin-left:20px;font-weight:bold").text("Title");
+
 				var commenttitlediv = d3.select(this).append("input")
-					.attr("style","width:685px;margin-left:20px");	
-										
+					.attr("style","width:685px;margin-left:20px");											
 				//comment box
 				var commentdivlabel = d3.select(this).append("div").attr("style","margin-top:10px;margin-left:20px;font-weight:bold").text("Comment or Finding");
 				var commentdiv = d3.select(this).append("textarea")
@@ -341,8 +349,8 @@ drillix.analysis.topx = function module(dt) {
 					.append("img")
 					.attr("src","datacilinder.png")
 					.attr("style","width:16px;height:16px;float:right");					
-																						
-				var svg = d3.select(this).append("svg").classed("topx",true).attr("height",710).attr("width",694);
+	*/																					
+				var svg = d3.select(this).append("svg").classed("topx",true).attr("height",3000).attr("width",_data.defaults.maxwidth);
 				svg.attr("border","1px solid");
 												
 				//comment box in graph
@@ -605,6 +613,4 @@ drillix.analysis.topx = function module(dt) {
 	return exports;
 };
 
-var analysisdata = drillix.layout.topx(data);
-var topxbase = drillix.analysis.topx(analysisdata);
-var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase);   
+ 
