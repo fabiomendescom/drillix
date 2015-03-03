@@ -1,11 +1,34 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-var drillixApp = angular.module('drillix', []);
+var drillixApp = angular.module('drillix', ['ngRoute']);
+
+drillixApp.config(function($routeProvider){
+  $routeProvider.when("/",
+    {
+      templateUrl: "main.html",
+      controller: "drillixMainController"
+    }
+  );
+  $routeProvider.when("/topx",
+    {
+      templateUrl: "topx/topx.html",
+      controller: "drillixController"
+    }
+  );
+});
+
+drillixApp.controller('drillixMainController', ['$scope','$http', '$window','$location', function($scope, $http, $window, $location) {
+      $("#analysis").empty();
+      $scope.go = function ( path ) {
+			$location.path( path );
+	  }
+}]);
 
 drillixApp.controller('drillixController', ['$scope','$http', '$window', function($scope, $http, $window) {
-     $scope.title = "Top 10";
-     
+
+     $scope.title = "HOME";
+	
      $scope.getwindowstate = function() {
 		 var w = angular.element($window);
 		 if(w.width() <= 630) {
@@ -22,12 +45,13 @@ drillixApp.controller('drillixController', ['$scope','$http', '$window', functio
 		 var w = angular.element($window);
 		 return w.width();
 	 }
-       
-     var w = angular.element($window);
-     
-     w.bind('resize', function () {
-         $scope.$apply(function () {
-				$scope.windowstate = $scope.getwindowstate();		
+	 
+	$scope.renderResize = function() {
+		    $scope.analysiswidth=0;
+		    $scope.feederwidth=0;
+		    $scope.buttonwidth=0;
+ //        $scope.$apply(function () {
+			$scope.windowstate = $scope.getwindowstate();		
             var windowwidth = $scope.getwindowwidth();
             if($scope.windowstate=="DYNAMIC") {
 				$scope.analysiswidth = windowwidth-15;
@@ -41,17 +65,8 @@ drillixApp.controller('drillixController', ['$scope','$http', '$window', functio
 					$scope.analysiswidth = windowwidth - 415;
 					$scope.feederwidth = 375;	
 				}		
-			}	 
-            $scope.title = $scope.windowstate;
-            
-            $("#analysis").empty();
-            var maxwidth = $scope.analysiswidth;
-			var analysisdata = drillix.layout.topx(data,maxwidth);
-			var topxbase = drillix.analysis.topx(analysisdata);
-			var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase);             
-            
-            
-         });
+			}	                      
+ //        });
 		 
 		if ($scope.windowstate=="SLIDABLE") {
 				$('.feedboxclass').hide();
@@ -77,53 +92,38 @@ drillixApp.controller('drillixController', ['$scope','$http', '$window', functio
 				$('.feedboxclassclone').remove();	
 				$('.feedboxclass').show();
 		}
-	});
-
-/*
-	 var g = document.getElementById("analysisscript");
-	 if (g!=undefined) {
-		g.parentNode.removeChild(g);
-	 }
+	}
 	
-	 var wf = document.createElement('script');
-	 wf.id = "analysisscript";
-	 wf.src = "analysis-topx.js";
-	 wf.type = 'text/javascript';
-	 document.getElementById("scriptcontainer").appendChild(wf);	
-	 $scope.newentry = false;
-	 
-	$http.get('data.json').success(function(data) {
-
-	});	  
-	
-	$scope.goBasket = function() {	
-		$('#analysis').empty();
-		var g = document.getElementById("analysisscript");
-		if (g!=undefined) {
-			g.parentNode.removeChild(g);
+	$scope.safeApply = function(fn) {
+	var phase = this.$root.$$phase;
+	if(phase == '$apply' || phase == '$digest') {
+		if(fn && (typeof(fn) === 'function')) {
+			fn();
 		}
-	
-		var wf = document.createElement('script');
-		wf.id = "analysisscript";
-		wf.src = "analysis-basket.js";
-		wf.type = 'text/javascript';
-		document.getElementById("scriptcontainer").appendChild(wf);			
-	};	
-	
-	$scope.newanalysis = function() {	
-		$scope.newentry = true;
-		//$('#analysis').empty();
-		var g = document.getElementById("analysisscript");
-		if (g!=undefined) {
-			g.parentNode.removeChild(g);
+		} else {
+			this.$apply(fn);
 		}
+	};
+
+      
+     var w = angular.element($window);     
+     w.bind('resize', function () {
+		$scope.safeApply(function () { 
+			$scope.renderResize();
+		});
+		$("#analysis").empty();
+		var maxwidth = $scope.analysiswidth;
+		var analysisdata = drillix.layout.topx(data,maxwidth);
+		var topxbase = drillix.analysis.topx(analysisdata);
+		var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase); 			
+	 });
+
+	$scope.renderResize();
 	
-		var wf = document.createElement('script');
-		wf.id = "analysisscript";
-		wf.src = "newanalysis.js";
-		wf.type = 'text/javascript';
-		document.getElementById("scriptcontainer").appendChild(wf);			
-	};	
-*/	
+    $("#analysis").empty();
+    var maxwidth = $scope.analysiswidth;
+	var analysisdata = drillix.layout.topx(data,maxwidth);
+	var topxbase = drillix.analysis.topx(analysisdata);
+	var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase); 	
   
 }]);
