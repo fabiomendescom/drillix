@@ -10,6 +10,12 @@ drillixApp.config(function($routeProvider){
       controller: "drillixMainController"
     }
   );
+  $routeProvider.when("/newanalysis",
+    {
+      templateUrl: "newanalysis.html",
+      controller: "drillixNewAnalysisController"
+    }
+  );
   $routeProvider.when("/topx",
     {
       templateUrl: "topx/topx.html",
@@ -20,6 +26,10 @@ drillixApp.config(function($routeProvider){
 
 drillixApp.controller('drillixMainController', ['$scope','$http', '$window','$location', function($scope, $http, $window, $location) {
       $("#analysis").empty();
+}]);
+
+drillixApp.controller('drillixNewAnalysisController', ['$scope','$http', '$window','$location', function($scope, $http, $window, $location) {
+      $("#analysis").empty();
       $scope.go = function ( path ) {
 			$location.path( path );
 	  }
@@ -27,7 +37,7 @@ drillixApp.controller('drillixMainController', ['$scope','$http', '$window','$lo
 
 drillixApp.controller('drillixController', ['$scope','$http', '$window', function($scope, $http, $window) {
 
-     $scope.title = "HOME";
+     $scope.title = "";
 	
      $scope.getwindowstate = function() {
 		 var w = angular.element($window);
