@@ -19,7 +19,7 @@ drillixApp.config(function($routeProvider){
   $routeProvider.when("/topx",
     {
       templateUrl: "topx/topx.html",
-      controller: "drillixController"
+      controller: "drillixTopxController"
     }
   );
 });
@@ -35,7 +35,7 @@ drillixApp.controller('drillixNewAnalysisController', ['$scope','$http', '$windo
 	  }
 }]);
 
-drillixApp.controller('drillixController', ['$scope','$http', '$window', function($scope, $http, $window) {
+drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', function($scope, $http, $window) {
 
      $scope.title = "";
 	
@@ -115,6 +115,40 @@ drillixApp.controller('drillixController', ['$scope','$http', '$window', functio
 		}
 	};
 
+      $scope.conclusiontoggle = function () {
+			if(!$scope.data.ui.conclusion_expanded) {
+				$scope.data.ui.conclusion_pic = "fa-caret-down";
+				$scope.data.ui.conclusion_expanded = true;
+			} else {
+				$scope.data.ui.conclusion_pic = "fa-caret-right";
+				$scope.data.ui.conclusion_expanded = false;
+			}
+	  };
+	  
+      $scope.dataslicetoggle = function () {
+			if(!$scope.data.ui.dataslice_expanded) {
+				$scope.data.ui.dataslice_pic = "fa-caret-down";
+				$scope.data.ui.dataslice_expanded = true;
+			} else {
+				$scope.data.ui.dataslice_pic = "fa-caret-right";
+				$scope.data.ui.dataslice_expanded = false;
+			}
+	  }	
+	  
+      $scope.timelineclick = function () {
+			$scope.data.mode = "TIMELINE";
+			$scope.class_timeline = "active";
+	  }	
+	  
+      $scope.comparisonclick = function () {
+			$scope.data.mode = "COMPARISON";
+			$scope.class_comparison = "active";
+	  }	
+	  
+      $scope.singleclick = function () {
+			$scope.data.mode = "SINGLE";
+			$scope.class_single = "active";
+	  }		    
       
      var w = angular.element($window);     
      w.bind('resize', function () {
@@ -128,12 +162,44 @@ drillixApp.controller('drillixController', ['$scope','$http', '$window', functio
 		var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase); 			
 	 });
 
-	$scope.renderResize();
+	$http.get('data.json').
+    success(function(data, status, headers, config) {
+		$scope.renderResize();
+		$scope.data = data;
+		if ($scope.data.mode=="SINGLE") {
+			$scope.class_single = "active";
+			$scope.class_comparison = "";
+			$scope.class_timeline = "";
+		};
+		if ($scope.data.mode=="COMPARISON") {
+			$scope.class_comparison = "active";
+			$scope.class_single = "";	
+			$scope.class_timeline = "";		
+		};
+		if ($scope.data.mode=="TIMELINE") {
+			$scope.class_comparison = "";
+			$scope.class_single = "";
+			$scope.class_timeline = "active";			
+		}
+		if ($scope.data.ui.conclusion_expanded) {
+			$scope.data.ui.conclusion_pic = "fa-caret-down";
+		} else {
+			$scope.data.ui.conclusion_pic = "fa-caret-right";
+		};
+		if ($scope.data.ui.dataslice_expanded) {
+			$scope.data.ui.dataslice_pic = "fa-caret-down";
+		} else {
+			$scope.data.ui.dataslice_pic = "fa-caret-right";
+		};		
 	
-    $("#analysis").empty();
-    var maxwidth = $scope.analysiswidth;
-	var analysisdata = drillix.layout.topx(data,maxwidth);
-	var topxbase = drillix.analysis.topx(analysisdata);
-	var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase); 	
+		//$("#analysis").empty();
+		var maxwidth = $scope.analysiswidth;
+		var analysisdata = drillix.layout.topx(data,maxwidth);
+		var topxbase = drillix.analysis.topx(analysisdata);
+		var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase);       
+    }).
+    error(function(data, status, headers, config) {
+      alert(status);
+    });	
   
 }]);

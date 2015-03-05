@@ -1,31 +1,96 @@
 {
-	"title": "Top 5",
+	"defaults" : {
+		"scale" : "1",
+		"boxheight" : "100",
+		"boxwidth" : "600",
+		"leftmargin" : "5",
+		"topmargin" : "10",
+		"boxspacing": "25"
+	},
+	"ui" : {
+		"conclusion_expanded": false,
+		"dataslice_expanded" : false
+	},
 	"type": "TOPX",
-	"mode": "single",
-	"filterfields": [
-		{"display": "display1", "value" : "1"},
-		{"display": "display2", "value" : "2"}
+	"typename": "Top X Analysis",
+	"title": "This is the title from json",
+	"conclusion": "Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus.",
+	"mode": "SINGLE",
+	"parameters" : [
+		{"rankingproperty" : "Product"},
+		{"rankingmeasure" : "Sales"}
 	],
 	"base": { 
-	    "source": "mysource",
-	    "timespan": {
-	        "from" : "2014-01-01",
-	        "to" : "2014-01-31"
-	    },
-	    "filter": [
-			{"value" : "1"},
-			{"value" : "2"}
-	    ],
+		"dataslice" : {
+			"datacontext": "Context",
+			"timefrom" : "2010-01-01",
+			"timeto" : "2010-01-31",
+			"properties" : [
+				{
+					"property" : {
+						"name" : "Region",
+						"type" : ""
+					}
+				},
+				{
+					"property" : {
+						"name" : "State",
+						"type" : ""
+					}					
+				}
+			],
+			"measures" : [
+				{
+					"measure" : {
+						"name" : "value",
+						"type" : ""
+					}
+				}
+			]
+		},
 		"data":[
-			{"label": "Product A", "value": "545", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"},
-			{"label": "Product B", "value": "200", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"},
-			{"label": "Product C", "value": "150", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"},
-			{"label": "Product D", "value": "150", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"},
-			{"label": "Product E", "value": "120", "accumvalue": "1000", "perc": ".10", "accumperc": ".20"}
+			{
+				"label": "Product A", 
+				"value": 545,
+				"comments": [
+					{
+						"from": "Fabio Mendes",
+						"image": "1.jpg",
+						"date" : "Jan 3, 10:00pm",
+						"comment": "This is a comment"
+					}
+				],
+				"alarms" : [
+					{
+						"image": "Alarm.png"
+					}
+				]
+			},
+			{
+				"label": "Product B", 
+				"value": 200,
+				"comments" : []
+			},
+			{
+				"label": "Product C", 
+				"value": 150,
+				"comments" : []
+			},
+			{
+				"label": "Product D", 
+				"value": 150,
+				"comments" : []
+			},
+			{
+				"label": "Product E", 
+				"value": 120,
+				"comments" : []
+			}
 		],
 		"other": {
-			"value": "1232",
-			"label": "Other"
+			"label": "Other",
+			"value": 1232,
+			"comments" : []
 		}
 	},
 	"comparison" : {

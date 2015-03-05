@@ -1,97 +1,3 @@
-var data = {
-	"defaults" : {
-		"scale" : "1",
-		"boxheight" : "100",
-		"boxwidth" : "600",
-		"leftmargin" : "5",
-		"topmargin" : "10",
-		"boxspacing": "25"
-	},
-	"title": "Top 5",
-	"type": "TOPX",
-	"mode": "single",
-	"parameters" : [
-		{"rankingproperty" : "Product"},
-		{"rankingmeasure" : "Sales"}
-	],
-	"base": { 
-		"dataslice" : {
-			"datacontext": "Context",
-			"timefrom" : "2010-01-01",
-			"timeto" : "2010-01-31",
-			"properties" : [
-				{
-					"property" : {
-						"name" : "Region",
-						"type" : ""
-					}
-				},
-				{
-					"property" : {
-						"name" : "State",
-						"type" : ""
-					}					
-				}
-			],
-			"measures" : [
-				{
-					"measure" : {
-						"name" : "value",
-						"type" : ""
-					}
-				}
-			]
-		},
-		"data":[
-			{
-				"label": "Product A", 
-				"value": 545,
-				"comments": [
-					{
-						"from": "Fabio Mendes",
-						"image": "1.jpg",
-						"date" : "Jan 3, 10:00pm",
-						"comment": "This is a comment"
-					}
-				],
-				"alarms" : [
-					{
-						"image": "Alarm.png"
-					}
-				]
-			},
-			{
-				"label": "Product B", 
-				"value": 200,
-				"comments" : []
-			},
-			{
-				"label": "Product C", 
-				"value": 150,
-				"comments" : []
-			},
-			{
-				"label": "Product D", 
-				"value": 150,
-				"comments" : []
-			},
-			{
-				"label": "Product E", 
-				"value": 120,
-				"comments" : []
-			}
-		],
-		"other": {
-			"label": "Other",
-			"value": 1232,
-			"comments" : []
-		}
-	},
-	"comparison" : {
-		
-	}
-};
-
 drillix = {};
 drillix.analysis = {};
 drillix.layout = {};	
@@ -204,16 +110,7 @@ drillix.analysis.topx = function module(dt) {
 		_selection.each(function(_data) {
 
 			if (!svg) {
-				//title
-				var title = d3.select(this).append("h1")
-					.attr("style","font-size:25px;padding:5px;text-align:center");
-				
-				title.append("img")
-					.attr("src","datacilinder.png")
-					.attr("style","width:16px;height:32px;margin-right:5px");
-					
-				title.append("span")
-					.text(_data.title)		
+	
 
 /*					
 				//title box
