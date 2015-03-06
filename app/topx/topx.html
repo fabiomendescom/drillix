@@ -39,7 +39,18 @@
 							<div style="margin-left:5px;margin-right:5px;margin-top:10px;">
 								<div>
 									Tags
-								</div>							
+								</div>	
+								<div>
+									<input style="margin-left:5px;margin-right:5px;margin-top:15px" name="tagsx" id="tags" value="foo,bar,baz" />
+									<script>
+										$( document ).ready(function() {				
+											$('#tags').tagsInput({
+												'height':'80px',
+												'width':'100%'
+											});	
+										});		
+									</script>									
+								</div>						
 							</div>
 
 							<div style="margin-left:5px;margin-right:5px;margin-top:15px">
@@ -49,16 +60,7 @@
 									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									{{data.conclusion}}
 								</div>
-							</div>
-							
-							<div style="margin-left:5px;margin-right:5px;margin-top:5px">
-								<a style="cursor: pointer" ng-click="conclusiontoggle()"><i style="cursor:pointer" class="fa {{data.ui.conclusion_pic}}"></i></a>
-								 <span style="cursor:pointer" ng-click="conclusiontoggle()">Comments</span>
-								<div ng-show="data.ui.conclusion_expanded" style="padding:4px;border:1px solid;border-color:#CCC;background-color:#F6F7F8">
-									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
-									{{data.conclusion}}
-								</div>
-							</div>							
+							</div>						
 
 							<div style="margin-left:5px;margin-right:5px;margin-top:5px;margin-bottom:10px">
 								<a style="cursor: pointer"><i ng-click="dataslicetoggle()" style="cursor:pointer" class="fa {{data.ui.dataslice_pic}}"></i></a>
@@ -118,8 +120,18 @@
 								</div>									
 							</div>					
 							
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-xm-12 col-sm-12">
+									<div style="text-align:center;margin-right:15px;margin-left:15px;margin-top:20px">
+										<a style="cursor:pointer" ng-click="thumbupclick()"><i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-thumbs-o-up pull-right"></i></a>
+										<span>{{data.likelabel}}</span>
+										<a style="cursor:pointer" ng-click="thumbdownclick()"><i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-thumbs-o-down pull-left"></i></a>
+									</div>
+								</div>							
+							</div>
+
 							<div>
 								<i style="margin-right:7px" class="pull-right fa fa-cog"></i>
 							</div>
-														
+																					
 							<div id="analysis"></div>

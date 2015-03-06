@@ -149,6 +149,52 @@ drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', fun
 			$scope.data.mode = "SINGLE";
 			$scope.class_single = "active";
 	  }		    
+
+      $scope.thumbupclick = function () {
+		  if ($scope.data.likes < 2) {
+			$scope.data.likes = $scope.data.likes + 1;
+			switch($scope.data.likes) {
+				case -2:
+					$scope.data.likelabel = "Irrelevant";
+					break;
+				case -1:
+					$scope.data.likelabel = "Not interesting";
+					break;
+				case 0:
+					$scope.data.likelabel = "Neutral";
+					break;
+				case 1:
+					$scope.data.likelabel = "Interesting";
+					break;
+				case 2:
+					$scope.data.likelabel = "Very interesting";
+					break;
+			} 
+		  }
+	  }	
+	  
+      $scope.thumbdownclick = function () {
+		  if ($scope.data.likes > -2) {
+			$scope.data.likes = $scope.data.likes - 1;
+			switch($scope.data.likes) {
+				case -2:
+					$scope.data.likelabel = "Irrelevant";
+					break;
+				case -1:
+					$scope.data.likelabel = "Not interesting";
+					break;
+				case 0:
+					$scope.data.likelabel = "Neutral";
+					break;
+				case 1:
+					$scope.data.likelabel = "Interesting";
+					break;
+				case 2:
+					$scope.data.likelabel = "Very interesting";
+					break;
+			}
+		  }
+	  }		    
       
      var w = angular.element($window);     
      w.bind('resize', function () {
@@ -191,6 +237,24 @@ drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', fun
 		} else {
 			$scope.data.ui.dataslice_pic = "fa-caret-right";
 		};		
+		
+		switch($scope.data.likes) {
+			case -2:
+				$scope.data.likelabel = "Irrelevant";
+				break;
+			case -1:
+				$scope.data.likelabel = "Not interesting";
+				break;
+			case 0:
+				$scope.data.likelabel = "Neutral";
+				break;
+			case 1:
+				$scope.data.likelabel = "Interesting";
+				break;
+			case 2:
+				$scope.data.likelabel = "Very interesting";
+				break;
+		} 
 	
 		//$("#analysis").empty();
 		var maxwidth = $scope.analysiswidth;
