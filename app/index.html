@@ -202,23 +202,28 @@
 		
 	<nav class="navbar navbar-default navbar-static-top">
       <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
-      <div class="container-fluid">
-        <div class="navbar-header">
-		  <span class="pull-right"><span style="background-color:red" class="badge">42</span><img width="60" height="40" src="analysis.png"></span>
+      <div style="background-color:#47639E" class="container-fluid">
+        <div class="navbar-header {{classmenu1}}">
+		  <span style="cursor:hand;position:relative;top:3px;left:-10px" class="{{classmenu2}}">
+			<a href="" style="cursor:hand">  
+			  <span style="cursor:hand;background-color:red;position:relative;left:60px;top:-10px;font-size:9px" class="badge">42</span>
+			  <img style="cursor:hand" width="60" height="40" src="analysis.png">
+			</a>
+		  </span>
           <button type="button" class="pull-left navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-8">
             <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span style="background-color:white" class="icon-bar"></span>
+            <span style="background-color:white" class="icon-bar"></span>
+            <span style="background-color:white" class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Drillix</a>
+          <a style="color:white" class="navbar-brand" href="#">Drillix</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-8">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Link</a></li>
+            <li><a href="#/newanalysis">Analysis</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div>
