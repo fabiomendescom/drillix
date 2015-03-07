@@ -8,8 +8,8 @@
 		"boxspacing": "25"
 	},
 	"ui" : {
-		"conclusion_expanded": false,
-		"dataslice_expanded" : false
+		"conclusion_expanded": true,
+		"dataslice_expanded" : true
 	},
 	"type": "TOPX",
 	"typename": "Top X Analysis",
