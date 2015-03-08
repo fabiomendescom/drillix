@@ -82,28 +82,128 @@
 								<div style="margin-top:10px" ng-show="data.ui.dataslice_expanded">
 									<table style="margin-top:3px;font-size:12px" class="table table-bordered">
 										<tr>
-											<td colspan="2" style="padding:4px;background-color:#F6F7F8"><i style="margin-right:7px" class="pull-left fa fa-lg fa-database"></i><span style="">{{data.base.dataslice.datacontext}}</span></td>
+											<td colspan="2" style="padding:4px;background-color:#F6F7F8">
+												<table>
+													<tr>
+														<td style="padding-right:5px"><i class="pull-left fa fa-lg fa-database"></i></td>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" >{{data.base.dataslice.datacontext}}</span>
+															</div>
+															<div ng-show="data.mode=='COMPARISON'">
+																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
+																<span style="font-size:9px">BBBB</span>
+															</div>															
+														</td>
+													</tr>
+												</table>		
+											</td>
 										</tr>
 										<tr>
-											<td colspan="2" style="padding:4px;background-color:#F6F7F8"><i style="margin-right:7px" class="pull-left fa fa-lg fa-clock-o"></i><span style="">{{data.base.dataslice.timefrom}} - {{data.base.dataslice.timeto}}</span></td>
-										</tr>										
+											<td colspan="2" style="padding:4px;background-color:#F6F7F8">		
+												<table>
+													<tr>
+														<td style="padding-right:5px"><i class="pull-left fa fa-lg fa-clock-o"></i></td>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" >{{data.base.dataslice.timefrom}} - {{data.base.dataslice.timeto}}</span>
+															</div>
+															<div ng-show="data.mode=='COMPARISON'">
+																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
+																<span style="font-size:9px">BBBB</span>
+															</div>															
+														</td>
+													</tr>
+												</table>														
+											</td>
+										</tr>			
+										<tr ng-if="data.mode=='TIMELINE'">
+											<td colspan="2" style="padding:4px;background-color:#F6F7F8">		
+												<table>
+													<tr>
+														<td style="padding-right:5px"><i class="pull-left fa fa-lg fa-ellipsis-h"></i></td>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" >Month</span>
+															</div>
+															<div ng-show="data.mode=='COMPARISON'">
+																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
+																<span style="font-size:9px">Month</span>
+															</div>															
+														</td>
+													</tr>
+												</table>														
+											</td>
+										</tr>																		
 										<tr>
-											<td colspan="2" style="padding:4px;background-color:#F6F7F8;text-align:center"><span style="font-weight:bold"><i class="fa fa-caret-down"></i> Properties <i class="fa fa-plus"></i></span></td>
+											<td colspan="2" style="padding:4px;background-color:#F6F7F8;text-align:center">
+												<span style="font-weight:bold">
+													Properties <i class="fa fa-plus pull-left"></i>
+												</span>
+											</td>
 										</tr>										
 										<tr>
 											<td style="padding:4px;background-color:#F6F7F8;width:50%"><i style="margin-right:7px" class="pull-left fa fa-lg fa-tag"></i><span style="">Property 1</span></td>
-											<td style="padding:4px;width:50%">Property value</td>
+											<td style="padding:4px;width:50%">
+												<table>
+													<tr>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" >Property Value</span>
+															</div>
+															<div ng-show="data.mode=='COMPARISON'">
+																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
+																<span style="font-size:9px">BBBB</span>
+															</div>															
+														</td>
+													</tr>
+												</table>																								
+											</td>
 										</tr>	
 										<tr>
 											<td style="padding:4px;background-color:#F6F7F8;width:50%"><i style="margin-right:7px" class="pull-left fa fa-lg fa-tag"></i><span style="">Property 2</span></td>
-											<td style="padding:4px;width:50%">Property value</td>
+											<td style="padding:4px;width:50%">
+												<table>
+													<tr>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" >Property Value</span>
+															</div>
+															<div ng-show="data.mode=='COMPARISON'">
+																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
+																<span style="font-size:9px">BBBB</span>
+															</div>															
+														</td>
+													</tr>
+												</table>												
+											</td>
 										</tr>			
 										<tr>
-											<td colspan="2" style="padding:4px;background-color:#F6F7F8;text-align:center"><span style="font-weight:bold"><i class="fa fa-caret-down"></i> Measures <i class="fa fa-plus"></i></span></td>
+											<td colspan="2" style="padding:4px;background-color:#F6F7F8;text-align:center"><span style="font-weight:bold">Measures <i class="fa fa-plus pull-left"></i></span></td>
 										</tr>																		
 										<tr>
 											<td style="padding:4px;background-color:#F6F7F8;width:50%"><i style="margin-right:7px" class="pull-left fa fa-lg fa-tag"></i><span style="">Measure 1</span></td>
-											<td style="padding:4px;width:50%">Measure value</td>
+											<td style="padding:4px;width:50%">
+												<table>
+													<tr>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" >Measure Value</span>
+															</div>
+															<div ng-show="data.mode=='COMPARISON'">
+																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
+																<span style="font-size:9px">BBBB</span>
+															</div>															
+														</td>
+													</tr>
+												</table>												
+											</td>
 										</tr>	
 									</table>
 								</div>
@@ -121,16 +221,38 @@
 
 							<div id="timelinesubmode" ng-show="data.mode=='TIMELINE'" style="margin-top:10px;text-align:center" class="col-lg-12 col-md-12 col-xm-12 col-sm-12">	
 								<div class="btn-group" style="margin-top:5px;" data-toggle="buttons">
-									<label style="font-size:10px" id="analysisbutton"  class="btn btn-primary {{class_single}}">
+									<label ng-click="submodestaticclick()" style="font-size:10px" id="analysisbutton"  class="btn btn-primary {{classstatic}}">
 										<input type="radio" style="font-size:10px" name="options" id="option1" autocomplete="off" checked> Static
 									</label>
-									<label style="font-size:10px" id="newsfeedbutton" class="btn btn-primary {{class_comparison}}">
+									<label ng-click="submodeinteractiveclick()" style="font-size:10px" id="newsfeedbutton" class="btn btn-primary {{classinteractive}}">
 										<input type="radio" style="font-size:10px" name="options" id="option2" autocomplete="off"> Interactive
 									</label>								
 								</div>									
-							</div>											
-
-
+							</div>			
+							
+							<div ng-show="data.mode=='TIMELINE' && data.submode=='INTERACTIVE'" style="margin-top:10px;margin-left:15px;margin-right:15px">			
+								<label style="font-size:12px" for="amount">Move slider to see changes over time</label>
+								<div id="slider"></div>	
+								Date: <input type="text" id="amount" readonly style="border:0; color:#23527C; font-weight:bold;">															
+								<script>
+									$(function() {
+										$( "#slider" ).slider({
+											value:0,
+											min: 0,
+											max: 100,
+											step: 10,
+											slide: function( event, ui ) {
+												$( "#amount" ).val( function() {
+													var result = new Date();
+													result.setDate(new Date().getDate() + parseInt(ui.value));
+													return result;													
+												});
+											}
+										});
+										$( "#amount" ).val( $( "#slider" ).slider( "value" ) );
+									});
+								</script>
+							</div>	
 							<div>
 								<i style="margin-right:7px" class="pull-right fa fa-cog"></i>
 							</div>

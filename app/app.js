@@ -81,6 +81,11 @@ drillixApp.factory("state", ["$window", function($window) {
       service.timelineclick = function ($scope) {
 			$scope.data.mode = "TIMELINE";
 			$scope.class_timeline = "active";
+			if ($scope.submode == undefined) {
+				$scope.submode = "STATIC";
+				$scope.classstatic = "active";
+				$scope.classinteractive = "";
+			}
 	  }		 
 
       service.comparisonclick = function ($scope) {
@@ -124,8 +129,17 @@ drillixApp.factory("state", ["$window", function($window) {
       service.thumbdownclick = function ($scope) {
 		  if ($scope.data.likes > -2) {
 			$scope.data.likes = $scope.data.likes - 1;
-			$scope.data.likelabel = service.getLikeLabel($scope.data.likes);		  }
-	  }		    	  
+			$scope.data.likelabel = service.getLikeLabel($scope.data.likes);		  
+		  }
+	  }		
+	  
+      service.submodestaticclick = function ($scope) {
+			$scope.data.submode = "STATIC";
+	  }		 
+	  
+      service.submodeinteractiveclick = function ($scope) {
+			$scope.data.submode = "INTERACTIVE";
+	  }	   	  
 
 	 service.setEventFunctions = function($scope) {
 		$scope.conclusiontoggle = function () {
@@ -148,7 +162,13 @@ drillixApp.factory("state", ["$window", function($window) {
 		};	
 		$scope.thumbdownclick = function () {
 			service.thumbdownclick($scope);
-		};		    					 
+		};		
+		$scope.submodestaticclick = function () {
+			service.submodestaticclick($scope);
+		};	   
+		$scope.submodeinteractiveclick = function () {
+			service.submodeinteractiveclick($scope);
+		};	 					 
 	 }
 	 
 	 service.setAnalysisFramework = function($scope,layout,analysis) {
@@ -175,7 +195,13 @@ drillixApp.factory("state", ["$window", function($window) {
 		
 		service.setConclusionState($scope);
 		service.setDataSliceState($scope);
-		$scope.data.likelabel = service.getLikeLabel($scope.data.likes);		 
+		$scope.data.likelabel = service.getLikeLabel($scope.data.likes);		
+		
+		if ($scope.submode == undefined) {
+				$scope.submode = "STATIC";
+				$scope.classstatic = "active";
+				$scope.classinteractive = "";
+		} 
 	 }
 	       
 	 service.setBindings = function($scope, layout, analysis) {      
