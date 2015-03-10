@@ -104,11 +104,32 @@
 											<td colspan="2" style="padding:4px;background-color:#F6F7F8">		
 												<table>
 													<tr>
+														<td style="padding-right:5px"><i class="pull-left fa fa-lg fa-calendar"></i></td>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" >{{data.base.dataslice.timecontext.scale}}</span>
+															</div>
+															<div ng-show="data.mode=='COMPARISON'">
+																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
+																<span style="font-size:9px">BBBB</span>
+															</div>															
+														</td>
+													</tr>
+												</table>														
+											</td>
+										</tr>		
+										<tr>
+											<td colspan="2" style="padding:4px;background-color:#F6F7F8">		
+												<table>
+													<tr>
 														<td style="padding-right:5px"><i class="pull-left fa fa-lg fa-clock-o"></i></td>
 														<td>
 															<div>
 																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
-																<span style="font-size:9px" >{{data.base.dataslice.timefrom}} - {{data.base.dataslice.timeto}}</span>
+																<span style="font-size:9px">{{data.base.dataslice.timecontext.from}}</span>
+																<i style="margin-right:5px" class="fa fa-caret-left"></i><i class="fa fa-caret-right"></i> 
+																<span style="font-size:9px">{{data.base.dataslice.timecontext.to}}</span>
 															</div>
 															<div ng-show="data.mode=='COMPARISON'">
 																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
@@ -127,7 +148,7 @@
 														<td>
 															<div>
 																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
-																<span style="font-size:9px" >Month</span>
+																<span style="font-size:9px" >{{data.base.dataslice.timecontext.interval}}</span>
 															</div>
 															<div ng-show="data.mode=='COMPARISON'">
 																<span style="background-color:#285F8E;font-size:9px" class="badge">B</span>
@@ -141,7 +162,7 @@
 										<tr>
 											<td colspan="2" style="padding:4px;background-color:#F6F7F8;text-align:center">
 												<span style="font-weight:bold">
-													Properties <i class="fa fa-plus pull-left"></i>
+													Properties
 												</span>
 											</td>
 										</tr>										
@@ -182,9 +203,31 @@
 													</tr>
 												</table>												
 											</td>
-										</tr>			
+										</tr>		
 										<tr>
-											<td colspan="2" style="padding:4px;background-color:#F6F7F8;text-align:center"><span style="font-weight:bold">Measures <i class="fa fa-plus pull-left"></i></span></td>
+											<td style="padding:4px;background-color:#F6F7F8;width:50%">
+												<span style="">
+													<i class="fa fa-plus"></i> Add New
+												</span>
+											</td>
+											<td style="padding:4px;width:50%">
+												<table>
+													<tr>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" ></span>
+															</div>
+														</td>
+													</tr>
+												</table>																								
+											</td>
+										</tr>												
+										<tr>
+											<td colspan="2" style="padding:4px;background-color:#F6F7F8;text-align:center">
+												<span style="font-weight:bold">Measures 
+												</span>
+											</td>
 										</tr>																		
 										<tr>
 											<td style="padding:4px;background-color:#F6F7F8;width:50%"><i style="margin-right:7px" class="pull-left fa fa-lg fa-tag"></i><span style="">Measure 1</span></td>
@@ -205,6 +248,26 @@
 												</table>												
 											</td>
 										</tr>	
+										<tr>
+											<td style="padding:4px;background-color:#F6F7F8;width:50%">
+												<span style="">
+													<i class="fa fa-plus"></i> Add New
+												</span>
+											</td>
+											<td style="padding:4px;width:50%">
+												<table>
+													<tr>
+														<td>
+															<div>
+																<span ng-show="data.mode=='COMPARISON'" style="background-color:#285F8E;font-size:9px" class="badge">A</span>
+																<span style="font-size:9px" ></span>
+															</div>
+														</td>
+													</tr>
+												</table>																								
+											</td>
+										</tr>	
+										
 									</table>
 								</div>
 							</div>	
@@ -233,7 +296,7 @@
 							<div ng-show="data.mode=='TIMELINE' && data.submode=='INTERACTIVE'" style="margin-top:10px;margin-left:15px;margin-right:15px">			
 								<label style="font-size:12px" for="amount">Move slider to see changes over time</label>
 								<div id="slider"></div>	
-								Date: <input type="text" id="amount" readonly style="border:0; color:#23527C; font-weight:bold;">															
+								Date: <input type="text" id="amount" readonly style="border:0; color:#285F8F; font-weight:bold;">															
 								<script>
 									$(function() {
 										$( "#slider" ).slider({

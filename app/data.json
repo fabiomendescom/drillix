@@ -25,8 +25,12 @@
 	"base": { 
 		"dataslice" : {
 			"datacontext": "Context",
-			"timefrom" : "2010-01-01",
-			"timeto" : "2010-01-31",
+			"timecontext" : {
+				"scale" : "Month",
+				"interval" : "Week",
+				"from" : "2010-01",
+				"to" : "2010-01"			
+			},
 			"properties" : [
 				{
 					"property" : {

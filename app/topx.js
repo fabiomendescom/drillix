@@ -1,116 +1,131 @@
 drillix = {};
 drillix.analysis = {};
-drillix.layout = {};	
 
-drillix.layout.topx = function(dt,maxwidth) {
-	var tmpdata = dt;
-	var max_w = maxwidth;
-	tmpdata.defaults.maxwidth = max_w;
+drillix.analysis.topx = function() {
+	var drawingwidth;
+	var htmlelement;
+	
+	var layout = function(dt,maxwidth) {
+		var tmpdata = dt;
+		var max_w = maxwidth;
+		tmpdata.defaults.maxwidth = max_w;
 	
 	
-	var scale = parseInt(dt.defaults.scale);	
+		var scale = parseInt(dt.defaults.scale);	
 
-	scale = maxwidth / 694;
+		scale = maxwidth / 694;
 	
-	var boxheight = parseInt(dt.defaults.boxheight);
-	var boxwidth = parseInt(dt.defaults.boxwidth);
-	var box_x = parseInt(dt.defaults.leftmargin);
-	var box_y = parseInt(dt.defaults.topmargin);	
-	var boxspacing = parseInt(dt.defaults.boxspacing);
+		var boxheight = parseInt(dt.defaults.boxheight);
+		var boxwidth = parseInt(dt.defaults.boxwidth);
+		var box_x = parseInt(dt.defaults.leftmargin);
+		var box_y = parseInt(dt.defaults.topmargin);	
+		var boxspacing = parseInt(dt.defaults.boxspacing);
 
-	//sizes
-	boxheight = boxheight*scale;
-	boxwidth = boxwidth*scale;
-	numberranksize = boxheight*.3;
-	numberfontsize = numberranksize*1.20;	
-	boxspacing = boxspacing * scale;	
-	labelfontsize = numberfontsize*.50;
+		//sizes
+		boxheight = boxheight*scale;
+		boxwidth = boxwidth*scale;
+		numberranksize = boxheight*.3;
+		numberfontsize = numberranksize*1.20;	
+		boxspacing = boxspacing * scale;	
+		labelfontsize = numberfontsize*.50;
 							
-	//positions	
-	start_x = (box_x + numberranksize);
-	start_y = (box_y + numberranksize);		
-	circlestart_x = box_x + (numberranksize*1.50);
-	circlestart_y = box_y + (numberranksize*1.50);
-	numberstart_x = box_x + (numberranksize*1.10);
-	numberstart_y = box_y + (numberranksize*1.80);
+		//positions	
+		start_x = (box_x + numberranksize);
+		start_y = (box_y + numberranksize);		
+		circlestart_x = box_x + (numberranksize*1.50);
+		circlestart_y = box_y + (numberranksize*1.50);
+		numberstart_x = box_x + (numberranksize*1.10);
+		numberstart_y = box_y + (numberranksize*1.80);
 
-	//spacing
-	labelxspacing = numberstart_x + (numberranksize*1.6);
-	underlineoffsety = numberfontsize / 2.77;
-	underlinesize = boxwidth * 0.96;
-	barmargin = numberranksize * 1.4;
-	baroffset = underlineoffsety * 3.2;
-	barheight = numberranksize * .5;
-	accumnumberoffset = baroffset * .85;
-	valuesfontsize = labelfontsize * .5;
-	numberoffset = accumnumberoffset + barheight + (valuesfontsize * 2);
+		//spacing
+		labelxspacing = numberstart_x + (numberranksize*1.6);
+		underlineoffsety = numberfontsize / 2.77;
+		underlinesize = boxwidth * 0.96;
+		barmargin = numberranksize * 1.4;
+		baroffset = underlineoffsety * 3.2;
+		barheight = numberranksize * .5;
+		accumnumberoffset = baroffset * .85;
+		valuesfontsize = labelfontsize * .5;
+		numberoffset = accumnumberoffset + barheight + (valuesfontsize * 2);
 	
-	measurebarmaxwidth = boxwidth * .95;
-	measurebarratio = measurebarmaxwidth / tmpdata.base.data[0].value;
+		measurebarmaxwidth = boxwidth * .95;
+		measurebarratio = measurebarmaxwidth / tmpdata.base.data[0].value;
 	
 	
-	i=0;
-	while (i < tmpdata.base.data.length) {
-		tmpdata.base.data[i].x = start_x;
-		tmpdata.base.data[i].y = start_y+(i*boxheight)+(i*boxspacing);	
-		tmpdata.base.data[i].width = boxwidth;
-		tmpdata.base.data[i].height = boxheight;	
-		tmpdata.base.data[i].ranking_x = circlestart_x;
-		tmpdata.base.data[i].ranking_y = circlestart_y+(i*boxheight)+(i*boxspacing);
-		tmpdata.base.data[i].rankingcirclesize = numberranksize;
-		tmpdata.base.data[i].rankingfontsize = numberranksize;
-		tmpdata.base.data[i].rankingnumber_x = numberstart_x;		
-		tmpdata.base.data[i].rankingnumber_y = numberstart_y+(i*boxheight)+(i*boxspacing);
-		tmpdata.base.data[i].rankingnumber = i+1;
-		tmpdata.base.data[i].labelfontsize = labelfontsize;
-		tmpdata.base.data[i].rankingtext_y = numberstart_y+(i*boxheight)+(i*boxspacing);
-		tmpdata.base.data[i].rankingtext_x = labelxspacing;
-		tmpdata.base.data[i].textunderline_y = numberstart_y+(i*boxheight)+(i*boxspacing) + underlineoffsety;
-		tmpdata.base.data[i].textunderline_start = labelxspacing;
-		tmpdata.base.data[i].textunderline_end = numberstart_x+underlinesize;
-		tmpdata.base.data[i].measurebar_x = box_x+barmargin;
-		tmpdata.base.data[i].measurebar_y = numberstart_y+(i*boxheight)+(i*boxspacing) + baroffset;
-		tmpdata.base.data[i].measurebar_width = tmpdata.base.data[i].value * measurebarratio;
-		tmpdata.base.data[i].measurebar_height = barheight;
-		tmpdata.base.data[i].measurevaluefontsize = valuesfontsize;
-		tmpdata.base.data[i].measurevalue_x = box_x+barmargin;
-		tmpdata.base.data[i].measurevalue_y = numberstart_y+(i*boxheight)+(i*boxspacing) + accumnumberoffset;
+		i=0;
+		while (i < tmpdata.base.data.length) {
+			tmpdata.base.data[i].x = start_x;
+			tmpdata.base.data[i].y = start_y+(i*boxheight)+(i*boxspacing);	
+			tmpdata.base.data[i].width = boxwidth;
+			tmpdata.base.data[i].height = boxheight;	
+			tmpdata.base.data[i].ranking_x = circlestart_x;
+			tmpdata.base.data[i].ranking_y = circlestart_y+(i*boxheight)+(i*boxspacing);
+			tmpdata.base.data[i].rankingcirclesize = numberranksize;
+			tmpdata.base.data[i].rankingfontsize = numberranksize;
+			tmpdata.base.data[i].rankingnumber_x = numberstart_x;		
+			tmpdata.base.data[i].rankingnumber_y = numberstart_y+(i*boxheight)+(i*boxspacing);
+			tmpdata.base.data[i].rankingnumber = i+1;
+			tmpdata.base.data[i].labelfontsize = labelfontsize;
+			tmpdata.base.data[i].rankingtext_y = numberstart_y+(i*boxheight)+(i*boxspacing);
+			tmpdata.base.data[i].rankingtext_x = labelxspacing;
+			tmpdata.base.data[i].textunderline_y = numberstart_y+(i*boxheight)+(i*boxspacing) + underlineoffsety;
+			tmpdata.base.data[i].textunderline_start = labelxspacing;
+			tmpdata.base.data[i].textunderline_end = numberstart_x+underlinesize;
+			tmpdata.base.data[i].measurebar_x = box_x+barmargin;
+			tmpdata.base.data[i].measurebar_y = numberstart_y+(i*boxheight)+(i*boxspacing) + baroffset;
+			tmpdata.base.data[i].measurebar_width = tmpdata.base.data[i].value * measurebarratio;
+			tmpdata.base.data[i].measurebar_height = barheight;
+			tmpdata.base.data[i].measurevaluefontsize = valuesfontsize;
+			tmpdata.base.data[i].measurevalue_x = box_x+barmargin;
+			tmpdata.base.data[i].measurevalue_y = numberstart_y+(i*boxheight)+(i*boxspacing) + accumnumberoffset;
 		
-		j=0;
-		while (j < tmpdata.base.data[i].comments.length) {
-			tmpdata.base.data[i].comments[j].box_x = 300;
-			tmpdata.base.data[i].comments[j].box_y = 1;
-			tmpdata.base.data[i].comments[j].box_height = 35;
-			tmpdata.base.data[i].comments[j].box_width = 140;
+			j=0;
+			while (j < tmpdata.base.data[i].comments.length) {
+				tmpdata.base.data[i].comments[j].box_x = 300;
+				tmpdata.base.data[i].comments[j].box_y = 1;
+				tmpdata.base.data[i].comments[j].box_height = 35;
+				tmpdata.base.data[i].comments[j].box_width = 140;
 									
-			tmpdata.base.data[i].comments[j].from_x = 340;
-			tmpdata.base.data[i].comments[j].from_y = 15;
-			tmpdata.base.data[i].comments[j].from_height = 33;
-			tmpdata.base.data[i].comments[j].from_width = 140;
+				tmpdata.base.data[i].comments[j].from_x = 340;
+				tmpdata.base.data[i].comments[j].from_y = 15;
+				tmpdata.base.data[i].comments[j].from_height = 33;
+				tmpdata.base.data[i].comments[j].from_width = 140;
 
-			tmpdata.base.data[i].comments[j].date_x = 340;
-			tmpdata.base.data[i].comments[j].date_y = 32;
-			tmpdata.base.data[i].comments[j].date_height = 33;
-			tmpdata.base.data[i].comments[j].date_width = 140;
+				tmpdata.base.data[i].comments[j].date_x = 340;
+				tmpdata.base.data[i].comments[j].date_y = 32;
+				tmpdata.base.data[i].comments[j].date_height = 33;
+				tmpdata.base.data[i].comments[j].date_width = 140;
 			
-			tmpdata.base.data[i].comments[j].image_x = 301;
-			tmpdata.base.data[i].comments[j].image_y = 2;		
+				tmpdata.base.data[i].comments[j].image_x = 301;
+				tmpdata.base.data[i].comments[j].image_y = 2;		
 			
-			j++;
+				j++;
+			}
+			i++;
 		}
-		i++;
-	}
 	
-    return tmpdata;
- };
-
-drillix.analysis.topx = function module(dt) {
+		return tmpdata;		
+	};
 	
-	function exports(_selection)	 {	
-		_selection.each(function(_data) {
+	return {
+		init : function() {
+			$(htmlelement).empty();
+		},
+		
+		setDrawingWidth: function(width) {
+			drawingwidth = width;
+		},
+		
+		setHtmlElement: function(element) {
+			htmlelement = element;
+		},
+		
+		renderSingle: function(_data) {
+			var data = layout(_data,drawingwidth);
+			var _data = data;
 
 			if (!svg) {
-				var svg = d3.select(this).append("svg").classed("topx",true).attr("height",3000).attr("width",_data.defaults.maxwidth);
+				var svg = d3.select(htmlelement).append("svg").classed("topx",true).attr("height",3000).attr("width",_data.defaults.maxwidth);
 				svg.attr("border","1px solid");
 												
 				//comment box in graph
@@ -363,14 +378,26 @@ drillix.analysis.topx = function module(dt) {
 				})
 				.text(function(d,i) {
 					return d.value;
-				});		
-		});		
+				});
+		},
+		
+		renderComparison: function(data) {
+				this.renderSingle(data);	
+		},
+		
+		renderTimelineStatic: function(data) {
+				this.renderSingle(data);
+		},
+		
+		renderTimelineInteractive: function(data) {
+				this.renderSingle(data);
+		},
+		
+		renderConfig: function(data) {
+				this.renderSingle(data);
+		}
 	};
-	
-	function drawboxes(rankingbars,data) {
-	};
-	
-	return exports;
-};
+}();
 
- 
+
+

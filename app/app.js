@@ -4,6 +4,7 @@
 var drillixApp = angular.module('drillix', ['ngRoute']);
 
 drillixApp.factory("state", ["$window", function($window) {
+	var savedanalysis;
 	var service = {};
 	
     service.getwindowstate = function() {
@@ -85,17 +86,26 @@ drillixApp.factory("state", ["$window", function($window) {
 				$scope.submode = "STATIC";
 				$scope.classstatic = "active";
 				$scope.classinteractive = "";
+				savedanalysis.init();
+				savedanalysis.renderTimelineStatic($scope.data);
+			} else {
+				savedanalysis.init();
+				savedanalysis.renderTimelineInteractive($scope.data);				
 			}
 	  }		 
 
       service.comparisonclick = function ($scope) {
 			$scope.data.mode = "COMPARISON";
 			$scope.class_comparison = "active";
+			savedanalysis.init();
+			savedanalysis.renderComparison($scope.data);
 	  }	
 
       service.singleclick = function ($scope) {
 			$scope.data.mode = "SINGLE";
 			$scope.class_single = "active";
+			savedanalysis.init();
+			savedanalysis.renderSingle($scope.data);
 	  }		  
 	  
 	  service.getLikeLabel = function(number) {
@@ -135,10 +145,14 @@ drillixApp.factory("state", ["$window", function($window) {
 	  
       service.submodestaticclick = function ($scope) {
 			$scope.data.submode = "STATIC";
+			savedanalysis.init();
+			savedanalysis.renderTimelineStatic($scope.data);
 	  }		 
 	  
       service.submodeinteractiveclick = function ($scope) {
 			$scope.data.submode = "INTERACTIVE";
+			savedanalysis.init();
+			savedanalysis.renderTimelineInteractive($scope.data);			
 	  }	   	  
 
 	 service.setEventFunctions = function($scope) {
@@ -171,11 +185,25 @@ drillixApp.factory("state", ["$window", function($window) {
 		};	 					 
 	 }
 	 
-	 service.setAnalysisFramework = function($scope,layout,analysis) {
+	 service.setAnalysisFramework = function($scope,analysis) {
 		var maxwidth = $scope.analysiswidth;
-		var analysisdata = layout($scope.data,maxwidth);
-		var topxbase = analysis(analysisdata);
-		var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase);  		 
+		analysis.setDrawingWidth(maxwidth);
+		analysis.setHtmlElement("#analysis");
+		savedanalysis = analysis;
+		analysis.init();
+		if($scope.data.mode=="SINGLE") {
+			analysis.renderSingle($scope.data);	
+		};
+		if($scope.data.mode=="COMPARISON") {
+			analysis.renderComparison($scope.data);
+		};
+		if($scope.data.mode=="TIMELINE") {
+			if($scope.data.submode=="STATIC") {
+				analysis.renderTimelineStatic($scope.data);
+			} else {
+				analysis.renderTimelineInteractive($scope.data);
+			}
+		}				 
 	 }
 	 
 	 service.safeApply = function(scope,fn) {
@@ -204,20 +232,29 @@ drillixApp.factory("state", ["$window", function($window) {
 		} 
 	 }
 	       
-	 service.setBindings = function($scope, layout, analysis) {      
+	 service.setBindings = function($scope, analysis) {      
 			var w = angular.element($window);     
 			w.bind('resize', function () {
 				service.safeApply($scope,function () { 
 					service.renderResize($scope);
+					analysis.setDrawingWidth($scope.analysiswidth);
 					if($scope.data != undefined) {
-						$("#analysis").empty();
-						var maxwidth = $scope.analysiswidth;
-						var analysisdata = layout($scope.data,maxwidth);
-						var topxbase = analysis(analysisdata);		
-						var topgraphbase = d3.select("#analysis").datum(analysisdata).call(topxbase); 		
+						analysis.init();
+						if($scope.data.mode=="SINGLE") {
+							analysis.renderSingle($scope.data);	
+						};
+						if($scope.data.mode=="COMPARISON") {
+							analysis.renderComparison($scope.data);
+						};
+						if($scope.data.mode=="TIMELINE") {
+							if($scope.data.submode=="STATIC") {
+								analysis.renderTimelineStatic($scope.data);
+							} else {
+								analysis.renderTimelineInteractive($scope.data);
+							}
+						}	
 					}						
 				});
-
 			});	 
 	}		 
 	 
@@ -311,13 +348,13 @@ drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', 'st
     $scope.title = "";
      
     state.setEventFunctions($scope);
-    state.setBindings($scope,drillix.layout.topx,drillix.analysis.topx);
+    state.setBindings($scope,drillix.analysis.topx);
      
 	$http.get('data.json').
     success(function(data, status, headers, config) {
 		$scope.data = data;
 		state.setInitialState($scope);	
-		state.setAnalysisFramework($scope,drillix.layout.topx,drillix.analysis.topx);     
+		state.setAnalysisFramework($scope,drillix.analysis.topx);     
     }).
     error(function(data, status, headers, config) {
       alert(status);
