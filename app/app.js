@@ -111,19 +111,19 @@ drillixApp.factory("state", ["$window", function($window) {
 	  service.getLikeLabel = function(number) {
 			switch(number) {
 				case -2:
-					return "Irrelevant";
+					return "-2";
 					break;
 				case -1:
-					return "Not interesting";
+					return "-1";
 					break;
 				case 0:
-					return "Neutral";
+					return "0";
 					break;
 				case 1:
-					return "Interesting";
+					return "+1";
 					break;
 				case 2:
-					return "Very interesting";
+					return "+2";
 					break;
 			} 
 		  
@@ -133,6 +133,15 @@ drillixApp.factory("state", ["$window", function($window) {
 		  if ($scope.data.likes < 2) {
 			$scope.data.likes = $scope.data.likes + 1;
 			$scope.data.likelabel = service.getLikeLabel($scope.data.likes);
+		  };
+		  if ($scope.data.likes == 0) {
+			  $scope.data.likecolor = "black";
+		  } else {
+				if ($scope.data.likes > 0) {
+					$scope.data.likecolor = "green";
+				} else  {
+					$scope.data.likecolor = "red";
+				}
 		  }
 	  }	
 
@@ -140,6 +149,15 @@ drillixApp.factory("state", ["$window", function($window) {
 		  if ($scope.data.likes > -2) {
 			$scope.data.likes = $scope.data.likes - 1;
 			$scope.data.likelabel = service.getLikeLabel($scope.data.likes);		  
+		  };
+		  if ($scope.data.likes == 0) {
+			  $scope.data.likecolor = "black";
+		  } else {
+				if ($scope.data.likes > 0) {
+					$scope.data.likecolor = "green";
+				} else  {
+					$scope.data.likecolor = "red";
+				}
 		  }
 	  }		
 	  
@@ -223,7 +241,16 @@ drillixApp.factory("state", ["$window", function($window) {
 		
 		service.setConclusionState($scope);
 		service.setDataSliceState($scope);
-		$scope.data.likelabel = service.getLikeLabel($scope.data.likes);		
+		$scope.data.likelabel = service.getLikeLabel($scope.data.likes);	
+		if ($scope.data.likes == 0) {
+			  $scope.data.likecolor = "black";
+		} else {
+				if ($scope.data.likes > 0) {
+					$scope.data.likecolor = "green";
+				} else  {
+					$scope.data.likecolor = "red";
+				}
+		}			
 		
 		if ($scope.submode == undefined) {
 				$scope.submode = "STATIC";
@@ -330,6 +357,24 @@ drillixApp.config(function($routeProvider){
       controller: "drillixTopxController"
     }
   );
+  $routeProvider.when("/topx-config",
+    {
+      templateUrl: "topx/topx-config.html",
+      controller: "drillixTopxConfigController"
+    }
+  );
+  $routeProvider.when("/association",
+    {
+      templateUrl: "association/association.html",
+      controller: "drillixAssociationController"
+    }
+  );  
+  $routeProvider.when("/8020",
+    {
+      templateUrl: "8020/8020.html",
+      controller: "drillix8020Controller"
+    }
+  );    
 });
 
 drillixApp.controller('drillixMainController', ['$scope','$http', '$window','$location', function($scope, $http, $window, $location) {
@@ -344,8 +389,6 @@ drillixApp.controller('drillixNewAnalysisController', ['$scope','$http', '$windo
 }]);
 
 drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', 'state', function($scope, $http, $window, state) {
-
-    $scope.title = "";
      
     state.setEventFunctions($scope);
     state.setBindings($scope,drillix.analysis.topx);
@@ -354,10 +397,65 @@ drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', 'st
     success(function(data, status, headers, config) {
 		$scope.data = data;
 		state.setInitialState($scope);	
-		state.setAnalysisFramework($scope,drillix.analysis.topx);     
+		state.setAnalysisFramework($scope,drillix.analysis.topx); 
+		$scope.data.typename = "Top X Analysis";		    
     }).
     error(function(data, status, headers, config) {
       alert(status);
     });	
-  
+      
+}]);
+
+drillixApp.controller('drillixTopxConfigController', ['$scope','$http', '$window', 'state', function($scope, $http, $window, state) {
+     
+    state.setEventFunctions($scope);
+    state.setBindings($scope,drillix.analysis.topx);
+     
+	$http.get('data.json').
+    success(function(data, status, headers, config) {
+		$scope.data = data;
+		state.setInitialState($scope);	
+		state.setAnalysisFramework($scope,drillix.analysis.topx); 
+		$scope.data.typename = "Top X Analysis (Configuration)";		    
+    }).
+    error(function(data, status, headers, config) {
+      alert(status);
+    });	
+      
+}]);
+
+
+drillixApp.controller('drillixAssociationController', ['$scope','$http', '$window', 'state', function($scope, $http, $window, state) {
+
+     
+    state.setEventFunctions($scope);
+    state.setBindings($scope,drillix.analysis.association);
+     
+	$http.get('data.json').
+    success(function(data, status, headers, config) {
+		$scope.data = data;
+		state.setInitialState($scope);	
+		state.setAnalysisFramework($scope,drillix.analysis.association);   
+		$scope.data.typename = "Association Analysis";  
+    }).
+    error(function(data, status, headers, config) {
+      alert(status);
+    });	
+}]);    
+    
+drillixApp.controller('drillix8020Controller', ['$scope','$http', '$window', 'state', function($scope, $http, $window, state) {
+    
+    state.setEventFunctions($scope);
+    state.setBindings($scope,drillix.analysis.pareto8020);
+     
+	$http.get('data.json').
+    success(function(data, status, headers, config) {
+		$scope.data = data;
+		state.setInitialState($scope);	
+		state.setAnalysisFramework($scope,drillix.analysis.pareto8020);   
+		$scope.data.typename = "80/20 Analysis";  
+    }).
+    error(function(data, status, headers, config) {
+      alert(status);
+    });	    
 }]);

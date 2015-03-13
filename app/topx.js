@@ -109,7 +109,7 @@ drillix.analysis.topx = function() {
 	
 	return {
 		init : function() {
-			$(htmlelement).empty();
+			$(htmlelement + " svg").empty();
 		},
 		
 		setDrawingWidth: function(width) {
@@ -382,11 +382,25 @@ drillix.analysis.topx = function() {
 		},
 		
 		renderComparison: function(data) {
-				this.renderSingle(data);	
+				d3.xml("topx-comp.svg", "image/svg+xml", function(xml) {
+					if (!svg) {
+						var svg = d3.select(htmlelement).append("svg").classed("topx",true).attr("height",3000).attr("width",data.defaults.maxwidth);
+						svg.attr("border","1px solid");
+						var importedNode = document.importNode(xml.documentElement, true);
+						svg.node().appendChild(importedNode);
+					}							
+				});
 		},
 		
 		renderTimelineStatic: function(data) {
-				this.renderSingle(data);
+				d3.xml("topx-timestatic.svg", "image/svg+xml", function(xml) {
+					if (!svg) {
+						var svg = d3.select(htmlelement).append("svg").classed("topx",true).attr("height",3000).attr("width",data.defaults.maxwidth);
+						svg.attr("border","1px solid");
+						var importedNode = document.importNode(xml.documentElement, true);
+						svg.node().appendChild(importedNode);
+					}							
+				});
 		},
 		
 		renderTimelineInteractive: function(data) {
@@ -394,7 +408,7 @@ drillix.analysis.topx = function() {
 		},
 		
 		renderConfig: function(data) {
-				this.renderSingle(data);
+			
 		}
 	};
 }();
