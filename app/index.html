@@ -205,10 +205,34 @@
 			});		
 		</script>
     </head>
-    <body ng-controller="drillixTopxController" style="background-color:#E9EAED">
-		
+    <body ng-controller="drillixTopxController" style="background-color:#E1E68C">
+
+			<nav style="background-color:#7D9B5B;height:50px;margin-bottom:0px" class="navbar navbar-default navbar-static-top">
+				<div style="margin-top:5px;margin-right:3px"  class="container-fluid">
+					<span style="color:white;margin-right:40px">
+						<img style="width:45px;height:40px" src="drillixlogo.png" />
+					</span>
+					<span style="position:relative;top:0px;">
+						<a href="#/newanalysis"><button style="color:black">New Analysis</button></a>
+					</span>
+					<span style="cursor:pointer;float:right;">
+								<span class="container-1">
+									<span style="color:white" class="icon"><i class="fa fa-search"></i></span>
+									<input type="search" id="search" placeholder="Search..." />
+								</span>												
+								<a id="notificationsicon" style="margin-left:0px;position:relative;left:10px">  				
+									<img width="60" height="40" src="analysis.png">
+									<span style="background-color:red;position:relative;left:-30px;top:-10px;font-size:9px" class="badge">42</span>
+								</a>
+								<a id="usersettingicon" style="width:32px">  
+									<img style="width:32px;height:32px" src="http://lorempixel.com/50/50/people/6" />
+								</a>																													
+					</span>	
+				</div>
+			</nav>
+
+<!--	
 	<nav class="navbar navbar-default navbar-static-top">
-      <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
       <div style="background-color:#47639E" class="container-fluid">
         <div class="navbar-header {{classmenu1}}">
 		  <span style="cursor:hand;position:relative;top:3px;left:-10px" class="{{classmenu2}}">
@@ -226,16 +250,15 @@
           <a style="color:white" class="navbar-brand" href="#">Drillix</a>
         </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-8">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#/newanalysis">Home</a></li>
             <li><a href="#/newanalysis">Analysis</a></li>
           </ul>
-        </div><!-- /.navbar-collapse -->
+        </div>
       </div>
     </nav>
-    	
+-->    	
   
 			<!--
 			<div style="background-color:#47639E;margin-right:0px">
@@ -266,17 +289,17 @@
 					</div>
 					-->
 					<div id="analysiscontainer" style="padding-right:0px;width:{{analysiswidth}}px" class="col-lg-7 col-md-7 col-xm-7 col-sm-7">
-						<div id="analysisbox" style="padding:20px;background-color: white;border: #BBB solid 1px;">
+						<div id="analysisbox" style="border-radius: 25px;padding:20px;background-color: #F5FBE4;border: #BBB solid 1px;">
 							<ng-view></ng-view>
 						</div>
 					</div>
 					<div id="feedcontainer"  class="col-lg-5 col-md-5 col-xm-5 col-sm-5" style="width:{{feederwidth}}px">
 					  <div id="feedbox" class="feedboxclass">			
-							<div id="feed" style="background-color: red;background-color: white;height: 300px">
+							<div id="feed" style="height: 300px">
 								
 <!--START newsfeed -->							
-<div class="detailBox" style="width:{{feederwidth}}px">
-    <div class="titleBox">
+<div class="detailBox" style="background-color:#F5FBE4;border-radius: 15px;width:{{feederwidth}}px">
+    <div style="border-radius: 15px;" class="titleBox">
       <label>Analysis Newsfeed</label>
       
     </div>
@@ -338,6 +361,46 @@
 					</div>
 				</div>
 			</div>
+			
+			<div id="notificationsbox" style="display:none;position:absolute;top:48px;left:875px;border:1px solid black;height:500px;width:400px;background-color:#F5FBE4">
+				<div style="background-color:#7D9B5B;color:white;padding:5px">
+					Notifications (42)
+				</div>
+			</div>
+			
+			<div id="usersettingbox" style="display:none;position:absolute;top:48px;left:875px;border:1px solid black;height:500px;width:400px;background-color:#F5FBE4">
+				<div style="background-color:#7D9B5B;color:white;padding:5px">
+					User Settings (Fabio Mendes)
+				</div>
+			</div>			
+			
+<script type="text/javascript">
+    $(document).ready(function($) { 			
+		$("#notificationsicon").hover(
+			function() {
+				// Styles to show the box
+				$("#notificationsbox").show();
+			},
+			function () {
+				$("#notificationsbox").hide();
+			}
+		);	
+	});
+</script>	
+
+<script type="text/javascript">
+    $(document).ready(function($) { 			
+		$("#usersettingicon").hover(
+			function() {
+				// Styles to show the box
+				$("#usersettingbox").show();
+			},
+			function () {
+				$("#usersettingbox").hide();
+			}
+		);	
+	});
+</script>
         
     </body>
     

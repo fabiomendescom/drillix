@@ -24,8 +24,8 @@
 							<hr style="margin-top:3px;margin-bottom:3px">					
 -->							
 							<div style="cursor:hand;margin-left:5px;margin-right:5px;margin-top:20px">
-								<h4 style="margin-bottom:0px;padding-bottom:0px">Title</h4>
-								<hr style="margin-top:0px;margin-bottom:15px">	
+								<h4 style="margin-bottom:0px;padding-bottom:0px;color:#2B3C36">Title<span style="font-size:9px;margin-left:15px">Analysis is saved when a title is given. Click on title name below</span></h4>
+								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div ng-click="titleeditclick()" ng-hide="data.title_edit" style="cursor:pointer;font-weight:bold">
 									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									<span>{{data.title}}</span>
@@ -41,7 +41,7 @@
 							
 							<div style="margin-left:5px;margin-right:5px;margin-top:20px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Meta</h4>
-								<hr style="margin-top:0px;margin-bottom:15px">	
+								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div style="margin-bottom:10px">
 									<img style="width:32px;height:32px" src="http://lorempixel.com/50/50/people/6" /> Fabio  Mendes
 								</div>
@@ -53,7 +53,10 @@
 								</div>		
 								<div>
 									Visiblity: Public
-								</div>																
+								</div>		
+								<div>
+									Interest level: 143
+								</div>															
 							</div>
 														
 <!--							
@@ -71,7 +74,7 @@
 -->							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Tags</h4>
-								<hr style="margin-top:0px;margin-bottom:15px">	
+								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div style="cursor:pointer" ng-click="tagseditclick()" ng-hide="data.tags_edit">
 									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									{{data.tags}}
@@ -92,10 +95,34 @@
 									</script>									
 								</div>						
 							</div>
+							
+							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Watchers</h4>
+								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
+								<div style="cursor:pointer" ng-click="watcherseditclick()" ng-hide="data.watchers_edit">
+									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
+									{{data.watchers}}
+								</div>
+								<div ng-show="data.watchers_edit">
+									<div style="cursor: pointer">
+										 <span ng-click="watcherseditsaveclick()" style="color:green;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-check"></i><span>Save</span></span>
+										 <span ng-click="watcherseditcancelclick()" style="color:red;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-close"></i><span>Cancel</span></span>
+									</div>									
+									<input style="margin-left:5px;margin-right:5px;margin-top:15px" name="tagsx" id="watchers" ng-model="data.tags"/>
+									<script>
+										$( document ).ready(function() {				
+											$('#watchers').tagsInput({
+												'height':'80px',
+												'width':'100%'
+											});	
+										});		
+									</script>									
+								</div>						
+							</div>							
 
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:15px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Details</h4>
-								<hr style="margin-top:0px;margin-bottom:15px">									 
+								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">									 
 								<div ng-click="detailseditclick()" style="cursor:pointer" ng-hide="data.details_edit" style="margin-top:10px">
 									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									{{data.details}}
@@ -111,7 +138,7 @@
 							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Filter</h4>
-								<hr style="margin-top:0px;margin-bottom:15px">	
+								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div style="cursor:pointer" ng-click="filtereditclick()" ng-hide="data.filter_edit">
 									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									Sales Date between 2001-01-01 and 2001-01-31 for product A and B and region LATAM
@@ -135,7 +162,7 @@
 							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Settings</h4>
-								<hr style="margin-top:0px;margin-bottom:15px">	
+								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div ng-hide="data.settings_edit" ng-click="settingseditclick()" style="cursor:pointer">
 									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									For the topx analysis use product for the ranking,rank by sales amount, rank the top 5
@@ -157,13 +184,16 @@
 								</div>						
 							</div>																						
 											
-							<div id="spacer" style="margin-top:30px"></div>		
+							<div id="spacer" style="text-align:center;margin-top:30px;margin-bottom:30px">
+								<i style="margin-right:3px;margin-bottom:3px" class="fa fa-circle-o"></i>
+								<i style="margin-right:3px;margin-bottom:3px" class="fa fa-circle-o"></i>
+								<i style="margin-right:3px;margin-bottom:3px" class="fa fa-circle-o"></i>
+							</div>		
 																			
 							<div id="analysis">								
 								<div id="analysisfloatingmenu" style="z-index:0;position:absolute;">
 									<div style="margin:0px;width:37px" class="btn-group">
 										<a href="#/topx-config" style="margin-left:0px;width:37px" class="btn btn-default" href="#"><i class="fa fa-gear"></i></a>
-										<a style="margin-left:0px;width:37px" class="btn btn-default" href="#"><i class="fa fa-share-alt"></i></a>
 
 										<a  style="margin-left:0px;margin-top:10px;width:37px;" ng-click="thumbupclick()" class="btn btn-default"><i style="color:green" class="fa fa-thumbs-o-up"></i></a>
 										<a  style="margin:0px;text-align:center;width:37px;background-color:{{data.likecolor}};color:white" class="btn"><i>{{data.likelabel}}</i></a>
@@ -171,9 +201,8 @@
 
 										<a style="margin-left:0px;margin-top:10px;width:37px;background-color:blue" class="btn btn-default" href="#"><i style="color:white" class="fa fa-external-link"></i></a>
 										<a style="margin-left:0px;width:37px" class="btn btn-default" href="#"><i class="fa fa-exchange"></i></a>
-										<a style="margin-left:0px;width:37px" class="btn btn-default" href="#"><i class="fa fa-clock-o"></i></a>										
-
-										<a style="margin-left:0px;margin-top:10px;width:37px" class="btn btn-default" href="#"><i class="fa fa-trash"></i></a>
+										<a style="margin-left:0px;width:37px" class="btn btn-default" href="#"><i class="fa fa-clock-o"></i></a>	
+										<a style="margin-left:0px;width:37px" class="btn btn-default" href="#"><i class="fa fa-arrows-h"></i></a>									
 									</div>													
 								</div>
 							</div>

@@ -236,6 +236,18 @@ drillixApp.factory("state", ["$window", function($window) {
 	  
       service.settingseditsaveclick = function ($scope) {
 			$scope.data.settings_edit = false;		
+	  }	
+	  
+      service.watcherseditclick = function ($scope) {
+			$scope.data.watchers_edit = true;		
+	  }	 	
+	  
+      service.watcherseditcancelclick = function ($scope) {
+			$scope.data.watchers_edit = false;			
+	  }	 	
+	  
+      service.watcherseditsaveclick = function ($scope) {
+			$scope.data.watchers_edit = false;		
 	  }		    	  	       
 
 	 service.setEventFunctions = function($scope) {
@@ -310,7 +322,16 @@ drillixApp.factory("state", ["$window", function($window) {
 		};	
 		$scope.settingseditsaveclick = function () {
 			service.settingseditsaveclick($scope);
-		};																		 
+		};	
+		$scope.watcherseditclick = function () {
+			service.watcherseditclick($scope);
+		};	
+		$scope.watcherseditcancelclick = function () {
+			service.watcherseditcancelclick($scope);
+		};	
+		$scope.watcherseditsaveclick = function () {
+			service.watcherseditsaveclick($scope);
+		};																				 
 	 }
 	 
 	 service.setAnalysisFramework = function($scope,analysis) {
