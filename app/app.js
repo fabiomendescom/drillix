@@ -171,7 +171,72 @@ drillixApp.factory("state", ["$window", function($window) {
 			$scope.data.submode = "INTERACTIVE";
 			savedanalysis.init();
 			savedanalysis.renderTimelineInteractive($scope.data);			
-	  }	   	  
+	  }	   	 
+	  
+      service.titleeditclick = function ($scope) {
+			$scope.data.title_edit = true;			
+	  }	 	
+	  
+      service.titleeditcancelclick = function ($scope) {
+			$scope.data.title_edit = false;			
+	  }	 	
+	  
+      service.titleeditsaveclick = function ($scope) {
+			$scope.data.title_edit = false;			
+	  }	 
+	  
+      service.tagseditclick = function ($scope) {
+			$scope.data.tags_edit = true;	
+			$('#tags_tagsinput').remove();
+			$('#tags').tagsInput({
+				'height':'80px',
+				'width':'100%'
+			});		
+	  }	 	
+	  
+      service.tagseditcancelclick = function ($scope) {
+			$scope.data.tags_edit = false;			
+	  }	 	
+	  
+      service.tagseditsaveclick = function ($scope) {
+			$scope.data.tags_edit = false;		
+	  }	 
+	  
+      service.detailseditclick = function ($scope) {
+			$scope.data.details_edit = true;		
+	  }	 	
+	  
+      service.detailseditcancelclick = function ($scope) {
+			$scope.data.details_edit = false;			
+	  }	 	
+	  
+      service.detailseditsaveclick = function ($scope) {
+			$scope.data.details_edit = false;		
+	  }	 
+	  
+      service.filtereditclick = function ($scope) {
+			$scope.data.filter_edit = true;		
+	  }	 	
+	  
+      service.filtereditcancelclick = function ($scope) {
+			$scope.data.filter_edit = false;			
+	  }	 	
+	  
+      service.filtereditsaveclick = function ($scope) {
+			$scope.data.filter_edit = false;		
+	  }	
+	  
+      service.settingseditclick = function ($scope) {
+			$scope.data.settings_edit = true;		
+	  }	 	
+	  
+      service.settingseditcancelclick = function ($scope) {
+			$scope.data.settings_edit = false;			
+	  }	 	
+	  
+      service.settingseditsaveclick = function ($scope) {
+			$scope.data.settings_edit = false;		
+	  }		    	  	       
 
 	 service.setEventFunctions = function($scope) {
 		$scope.conclusiontoggle = function () {
@@ -200,7 +265,52 @@ drillixApp.factory("state", ["$window", function($window) {
 		};	   
 		$scope.submodeinteractiveclick = function () {
 			service.submodeinteractiveclick($scope);
-		};	 					 
+		};	 	
+		$scope.titleeditclick = function () {
+			service.titleeditclick($scope);
+		};	
+		$scope.titleeditcancelclick = function () {
+			service.titleeditcancelclick($scope);
+		};	
+		$scope.titleeditsaveclick = function () {
+			service.titleeditsaveclick($scope);
+		};	
+		$scope.tagseditclick = function () {
+			service.tagseditclick($scope);
+		};	
+		$scope.tagseditcancelclick = function () {
+			service.tagseditcancelclick($scope);
+		};	
+		$scope.tagseditsaveclick = function () {
+			service.tagseditsaveclick($scope);
+		};	
+		$scope.detailseditclick = function () {
+			service.detailseditclick($scope);
+		};	
+		$scope.detailseditcancelclick = function () {
+			service.detailseditcancelclick($scope);
+		};	
+		$scope.detailseditsaveclick = function () {
+			service.detailseditsaveclick($scope);
+		};		
+		$scope.filtereditclick = function () {
+			service.filtereditclick($scope);
+		};	
+		$scope.filtereditcancelclick = function () {
+			service.filtereditcancelclick($scope);
+		};	
+		$scope.filtereditsaveclick = function () {
+			service.filtereditsaveclick($scope);
+		};	
+		$scope.settingseditclick = function () {
+			service.settingseditclick($scope);
+		};	
+		$scope.settingseditcancelclick = function () {
+			service.settingseditcancelclick($scope);
+		};	
+		$scope.settingseditsaveclick = function () {
+			service.settingseditsaveclick($scope);
+		};																		 
 	 }
 	 
 	 service.setAnalysisFramework = function($scope,analysis) {

@@ -2,22 +2,27 @@
 	"defaults" : {
 		"scale" : "1",
 		"boxheight" : "100",
-		"boxwidth" : "600",
+		"boxwidth" : "580",
 		"leftmargin" : "5",
 		"topmargin" : "10",
 		"boxspacing": "25"
 	},
 	"ui" : {
 		"conclusion_expanded": true,
-		"dataslice_expanded" : true
+		"dataslice_expanded" : true,
+		"title_edit": false,
+		"tags_edit": false,
+		"details_edit": false,
+		"filter_edit": false
 	},
 	"type": "TOPX",
 	"typename": "Top X Analysis",
 	"title": "This is the title from json",
-	"conclusion": "Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus.",
+	"details": "Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus.",
 	"mode": "SINGLE",
 	"submode": "",
 	"likes": 2,
+	"tags": "end of month, revenue, profit",
 	"parameters" : [
 		{"rankingproperty" : "Product"},
 		{"rankingmeasure" : "Sales"}

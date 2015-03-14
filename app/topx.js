@@ -125,7 +125,7 @@ drillix.analysis.topx = function() {
 			var _data = data;
 
 			if (!svg) {
-				var svg = d3.select(htmlelement).append("svg").classed("topx",true).attr("height",3000).attr("width",_data.defaults.maxwidth);
+				var svg = d3.select(htmlelement).append("svg").classed("topx",true).attr("height",850).attr("width",_data.defaults.maxwidth);
 				svg.attr("border","1px solid");
 												
 				//comment box in graph

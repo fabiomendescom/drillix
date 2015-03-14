@@ -1,3 +1,13 @@
+
+
+							<div>
+								<h3 style="font-weight:bold;text-align:center">
+									{{data.typename}}
+								</h3>
+								<!--<hr style="margin-top:3px;margin-bottom:3px">-->
+							</div>
+
+<!--							
 							<div style="margin:5px;height:35px" class="btn-group hidden-xs">
 								<a class="btn btn-default btn-sm" href="#/newanalysis"><i class="fa fa-plus"></i> New Analysis</a>
 								<a class="btn btn-default btn-sm" href="#/newanalysis"><i class="fa fa-search"></i> Search Analysis</a>
@@ -9,22 +19,44 @@
 								<a class="btn btn-default" href="#"><i class="fa fa-trash"></i></a>
 								<a class="btn btn-default" href="#"><i class="fa fa-user-secret"></i></a>
 								<a class="btn btn-default" href="#"><i class="fa fa-share-alt"></i></a>
-							</div>
-
-							<div style="margin-left:5px;margin-right:5px;margin-top:15px">
-								<div style="font-weight:bold;text-align:center">
-									{{data.typename}}
-								</div>
-								<hr style="margin-top:3px;margin-bottom:3px">
-							</div>
-							
-							<div style="margin-left:5px;margin-right:5px;margin-top:10px">
-								<div style="font-weight:bold">
+							</div>		
+					
+							<hr style="margin-top:3px;margin-bottom:3px">					
+-->							
+							<div style="cursor:hand;margin-left:5px;margin-right:5px;margin-top:20px">
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Title</h4>
+								<hr style="margin-top:0px;margin-bottom:15px">	
+								<div ng-click="titleeditclick()" ng-hide="data.title_edit" style="cursor:pointer;font-weight:bold">
 									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
-									{{data.title}}
+									<span>{{data.title}}</span>
+								</div>
+								<div ng-show="data.title_edit">
+									 <div style="cursor: pointer">
+										 <span ng-click="titleeditsaveclick()" style="color:green;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-check"></i><span>Save</span></span>
+										 <span ng-click="titleeditcancelclick()" style="color:red;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-close"></i><span>Cancel</span></span>
+									 </div>
+									 <textarea ng-model="data.title" rows="2" style="width:100%">{{data.title}}</textarea> 
 								</div>
 							</div>
 							
+							<div style="margin-left:5px;margin-right:5px;margin-top:20px;">
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Meta</h4>
+								<hr style="margin-top:0px;margin-bottom:15px">	
+								<div style="margin-bottom:10px">
+									<img style="width:32px;height:32px" src="http://lorempixel.com/50/50/people/6" /> Fabio  Mendes
+								</div>
+								<div>
+									Created: Jan 3, 2014 10:34pm
+								</div>	
+								<div>
+									Last Update: Jan 3, 2014 10:34pm
+								</div>		
+								<div>
+									Visiblity: Public
+								</div>																
+							</div>
+														
+<!--							
 							<div style="margin-left:5px;margin-right:5px;margin-top:10px;font-size:9px">
 								<div>
 									Author
@@ -36,13 +68,20 @@
 									Jan 3, 2014 10:34pm
 								</div>								
 							</div>
-							
+-->							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
-								<div>
-									Tags
-								</div>	
-								<div>
-									<input style="margin-left:5px;margin-right:5px;margin-top:15px" name="tagsx" id="tags" value="foo,bar,baz" />
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Tags</h4>
+								<hr style="margin-top:0px;margin-bottom:15px">	
+								<div style="cursor:pointer" ng-click="tagseditclick()" ng-hide="data.tags_edit">
+									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
+									{{data.tags}}
+								</div>
+								<div ng-show="data.tags_edit">
+									<div style="cursor: pointer">
+										 <span ng-click="tagseditsaveclick()" style="color:green;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-check"></i><span>Save</span></span>
+										 <span ng-click="tagseditcancelclick()" style="color:red;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-close"></i><span>Cancel</span></span>
+									</div>									
+									<input style="margin-left:5px;margin-right:5px;margin-top:15px" name="tagsx" id="tags" ng-model="data.tags"/>
 									<script>
 										$( document ).ready(function() {				
 											$('#tags').tagsInput({
@@ -55,20 +94,34 @@
 							</div>
 
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:15px;">
-								<a style="cursor: pointer" ng-click="conclusiontoggle()"><i style="cursor:pointer" class="fa {{data.ui.conclusion_pic}}"></i></a>
-								 <span style="cursor:pointer;" ng-click="conclusiontoggle()">Finding or Conclusion</span>
-								<div ng-show="data.ui.conclusion_expanded" style="padding:4px;border:1px solid;border-color:#CCC;background-color:#F6F7F8;margin-top:10px">
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Details</h4>
+								<hr style="margin-top:0px;margin-bottom:15px">									 
+								<div ng-click="detailseditclick()" style="cursor:pointer" ng-hide="data.details_edit" style="margin-top:10px">
 									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
-									{{data.conclusion}}
+									{{data.details}}
 								</div>
+								<div ng-show="data.details_edit">
+									 <div style="cursor: pointer">
+										 <span ng-click="detailseditsaveclick()" style="color:green;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-check"></i><span>Save</span></span>
+										 <span ng-click="detailseditcancelclick()" style="color:red;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-close"></i><span>Cancel</span></span>
+									 </div>
+									 <textarea ng-model="data.details" rows="8" style="width:100%">{{data.details}}</textarea> 
+								</div>								
 							</div>				
 							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
-								<div>
-									Data Slice
-								</div>	
-								<div>
-									<input style="margin-left:5px;margin-right:5px;margin-top:15px" name="tagsxx" id="tagsx" value="Sales,between,2001-01-01,and,2001-01-31,for,product,A,and.,B,and..,region,LATAM" />
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Filter</h4>
+								<hr style="margin-top:0px;margin-bottom:15px">	
+								<div style="cursor:pointer" ng-click="filtereditclick()" ng-hide="data.filter_edit">
+									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
+									Sales Date between 2001-01-01 and 2001-01-31 for product A and B and region LATAM
+								</div>								
+								<div ng-show="data.filter_edit">
+									 <div style="cursor: pointer">
+										 <span ng-click="filtereditsaveclick()" style="color:green;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-check"></i><span>Save</span></span>
+										 <span ng-click="filtereditcancelclick()" style="color:red;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-close"></i><span>Cancel</span></span>
+									 </div>									
+									<input style="margin-left:5px;margin-right:5px;margin-top:15px" name="tagsxx" id="tagsx" value="Sales Date,between,2001-01-01,and,2001-01-31,for,product,A,and.,B,and..,region,LATAM" />
 									<script>
 										$( document ).ready(function() {				
 											$('#tagsx').tagsInput({
@@ -81,10 +134,17 @@
 							</div>		
 							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
-								<div>
-									Analysis Configuration
-								</div>	
-								<div>
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Settings</h4>
+								<hr style="margin-top:0px;margin-bottom:15px">	
+								<div ng-hide="data.settings_edit" ng-click="settingseditclick()" style="cursor:pointer">
+									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
+									For the topx analysis use product for the ranking,rank by sales amount, rank the top 5
+								</div>									
+								<div ng-show="data.settings_edit">
+									 <div style="cursor: pointer">
+										 <span ng-click="settingseditsaveclick()" style="color:green;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-check"></i><span>Save</span></span>
+										 <span ng-click="settingseditcancelclick()" style="color:red;cursor:hand;margin-right:3px;margin-bottom:3px"><i class="fa fa-lg fa-close"></i><span>Cancel</span></span>
+									 </div>										
 									<input style="margin-left:5px;margin-right:5px;margin-top:15px" name="tagsxx" id="tagsxx" value="for the topx analysis use,product,for the ranking,rank by, sales amount,rank the top, 5" />
 									<script>
 										$( document ).ready(function() {				
