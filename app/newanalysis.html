@@ -1,36 +1,495 @@
 <div id="navcontainer">
-	<ul>
-		<li>
-			<button ng-click="go('/topx')"><div><img src="newsfeed.png"></div><div class="buttontitle">Top X</div></button>
-		</li>
-		<li>
-			<button ng-click="go('/association')"><div><img src="newsfeed.png"></div><div class="buttontitle">Association</div></button>
-		</li>
-		<li>
-			<button ng-click="go('/8020')"><div><img src="newsfeed.png"></div><div class="buttontitle">80/20</div></button>
-		</li>
-		<li>
-			<button><div><img src="newsfeed.png"></div><div class="buttontitle">Statistical</div></button>
-		</li>
-		<li>
-			<button><div><img src="newsfeed.png"></div><div class="buttontitle">Top X</div></button>	
-		</li>
-		<li>
-			<button><div><img src="newsfeed.png"></div><div class="buttontitle">Top X</div></button>
-		</li>
-		<li>
-			<button><div><img src="newsfeed.png"></div><div class="buttontitle">Top X</div></button>
-		</li>
-		<li>
-			<button><div><img src="newsfeed.png"></div><div class="buttontitle">Top X</div></button>
-		</li>
-		<li>
-			<button><div><img src="newsfeed.png"></div><div class="buttontitle">Top X</div></button>
-		</li>
-		<li>
-			<button><div><img src="newsfeed.png"></div><div class="buttontitle">Top X</div></button>	
-		</li>
-	</ul>
+	<table style="width:100%">
+		<tr style="border-bottom:1px solid black;border-top:1px solid black;">
+			<td style="padding:15px">
+			  <a ng-click="go('/topx')" style="cursor:pointer;">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Top x
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"I want to know my top 5 product sales this month"
+				</div>
+				<div style="font-style:italic;color:black"> 
+					"What are my top 10 countries in number of products sold this year"
+				</div>
+			  </a>	
+			</td>
+		</tr>
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/topx')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/association')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Association
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"Customers who bought product A also bought product B"
+				</div>
+				<div style="font-style:italic;color:black"> 
+					"Customers who bought in January also buy in February"
+				</div>
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					80/20
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"50% of my sales this month came from 22% of my products"
+				</div>
+				<div style="font-style:italic;color:black"> 
+					"I want a list of roughtly 20% of the sales force that bought 80% of the revenue"
+				</div>
+			  </a>	
+			</td>
+		</tr>
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Statistical
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"What is the average sales for blue products in Q1?"
+				</div>
+				<div style="font-style:italic;color:black"> 
+					"Is my average sale for product A increasing or decreasing?"
+				</div>
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Cohort
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"What are my sales across months for customers cohorted by signup date?"
+				</div>
+				<div style="font-style:italic;color:black"> 
+					"What are my sales monthly cohorted by distribution channel?"
+				</div>
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Geomap
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"What are my sales by country?"
+				</div>
+				<div style="font-style:italic;color:black"> 
+					"What are my marketings costs per region?"
+				</div>
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Funnel
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"I want see a funnel of my sales cycle"
+				</div>
+				<div style="font-style:italic;color:black"> 
+					"I want to see a funnel of my support process"
+				</div>
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Best Explanation
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"The highest profitability margin is coming from customers who live in region B and
+are between 25-29 years of age"
+				</div>
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Transaction Listing
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"Every sale this week subtotaling by product type"
+				</div>
+				<div style="font-style:italic;color:black"> 
+					"Every sale this week subtotaling by region"
+				</div>
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Similarity
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"There is a significant statistical difference between sales before and after our new marketing campaign"
+				</div>
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Dependence
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"There seems to be a strong relationship between increase in sales and increase in spending on google campaigns"
+				</div>
+				<div style="font-style:italic;color:black">
+					"There seems to be a strong relationship between gender and subscriptions to product B"
+				</div>				
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Participation (Part-to-whole)
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"70% of customers are from Asia"
+				</div>
+				<div style="font-style:italic;color:black">
+					"34% of sales came from product A"
+				</div>				
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Ratio
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"The ratio of sales to cost (profit) is increasing monthly this year"
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>				
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Cross Tabulation
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>				
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Forecast
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>				
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Bar
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>				
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Anomaly
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					"List sales that are above normal average"
+				</div>			
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Cluster
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>			
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Box Plot
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>			
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Regression
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for?
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>			
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Impact
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for? (Variable significance)
+				</div>
+				<div style="font-style:italic;color:black">
+					"Region, product type and sales person gender are the major drivers of revenue this year"
+				</div>		
+				<div style="font-style:italic;color:black">
+					"Distribution channel seems to have little impact in your sales"
+				</div>						
+			  </a>	
+			</td>
+		</tr>	
+		<tr style="border-bottom:1px solid black;">
+			<td style="padding:15px;">
+			  <a ng-click="go('/8020')" style="cursor:pointer">
+				<img style="width:45px;height:45px" src="newsfeed.png">
+			  </a>	
+			</td>
+			<td style="padding:15px;text-align:left;">
+			  <a ng-click="go('/topx')" style="cursor:pointer;text-decoration:none">	
+				<div style="font-weight:bold;font-size:25px;color:black">
+					Social Media
+				</div>
+				<div style="font-weight:bold;font-size:15px;color:black">
+					What would I use it for? (Twitter mood, facebook, etc)
+				</div>
+				<div style="font-style:italic;color:black">
+					""
+				</div>		
+				<div style="font-style:italic;color:black">
+					""
+				</div>						
+			  </a>	
+			</td>
+		</tr>																																					
+	</table>
 </div> 
 
 

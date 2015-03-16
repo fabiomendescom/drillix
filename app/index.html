@@ -215,6 +215,9 @@
 					<span style="position:relative;top:0px;">
 						<a href="#/newanalysis"><button style="color:black">New Analysis</button></a>
 					</span>
+					<span style="margin-left:15px;color:white">
+						<span style="color:white">Manage:</span> <button style="color:black">Filters</button> <button  style="color:black">Alerts</button>
+					</span>
 					<span style="cursor:pointer;float:right;">
 								<span class="container-1">
 									<span style="color:white" class="icon"><i class="fa fa-search"></i></span>
@@ -372,7 +375,18 @@
 				<div style="background-color:#7D9B5B;color:white;padding:5px">
 					User Settings (Fabio Mendes)
 				</div>
-			</div>			
+			</div>		
+			
+<!--
+			<div id="overlay">
+			  <div style="position:absolute;top:120px;left:30px;color:white;opacity:1;">
+						This is where you enter a title for your analysis
+			  </div>	
+				<div style="position:absolute;top:140px;left:30px;background-color:white;opacity:1;width:850px;height:80px;background-color:white;opacity:1;">
+									
+				</div>
+			</div>	
+-->
 			
 <script type="text/javascript">
     $(document).ready(function($) { 			
@@ -400,6 +414,27 @@
 			}
 		);	
 	});
+	
+	
+//$(function() {
+
+//   var docHeight = $(document).height();
+
+
+//   $("#overlay")
+//      .height(docHeight)
+//      .css({
+//         'opacity' : 0.7,
+//         'position': 'absolute',
+//         'top': 0,
+//         'left': 0,
+//         'background-color': 'black',
+//         'width': '100%',
+//         'z-index': 5000
+//      });
+
+//});	
+	
 </script>
         
     </body>

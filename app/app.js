@@ -519,8 +519,8 @@ drillixApp.controller('drillixNewAnalysisController', ['$scope','$http', '$windo
 	  }
 }]);
 
-drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', 'state', function($scope, $http, $window, state) {
-     
+drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', '$location', '$anchorScroll', 'state', function($scope, $http, $window, $location, $anchorScroll, state) {
+       
     state.setEventFunctions($scope);
     state.setBindings($scope,drillix.analysis.topx);
      
@@ -529,7 +529,10 @@ drillixApp.controller('drillixTopxController', ['$scope','$http', '$window', 'st
 		$scope.data = data;
 		state.setInitialState($scope);	
 		state.setAnalysisFramework($scope,drillix.analysis.topx); 
-		$scope.data.typename = "Top X Analysis";		    
+		$scope.data.typename = "Top X Analysis";	
+		//$location.hash('newanalysis');
+		//$anchorScroll();	 
+		//alert($location.url());
     }).
     error(function(data, status, headers, config) {
       alert(status);
