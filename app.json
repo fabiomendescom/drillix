@@ -1,0 +1,7 @@
+{
+  "name": "angular-seed",
+  "description": "Angular project sample made by angular team",
+  "repository": "https://github.com/weed/angular-seed-heroku-p140814",
+  "logo": "https://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "angular"]
+}
