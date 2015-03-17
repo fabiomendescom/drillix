@@ -13,11 +13,16 @@
     "shelljs": "^0.2.6",
     "karma-junit-reporter": "^0.2.2"
   },
+  "dependencies": {
+	"npm install bower --save",
+	"npm install express --save"
+	
+  },
   "engines" : {
 	"node": "0.10.x"
   },
   "scripts": {
-    "postinstall": "bower install",
+    "postinstall": "./node_modules/bower/bin/bower install",
 
     "prestart": "npm install",
     "start": "http-server -a localhost -p 8000 -c-1",
