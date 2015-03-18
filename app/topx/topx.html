@@ -24,10 +24,10 @@
 							<hr style="margin-top:3px;margin-bottom:3px">					
 -->							
 							<div style="cursor:hand;margin-left:5px;margin-right:5px;margin-top:20px">
-								<h4 style="margin-bottom:0px;padding-bottom:0px;color:#2B3C36">Title<span style="font-size:9px;margin-left:15px">Analysis is saved when a title is given. Click on title name below</span></h4>
+								<h4 style="margin-bottom:0px;padding-bottom:0px;color:#2B3C36">Title<span style="font-size:9px;margin-left:15px">Analysis is saved when a title is given. Click on title name below</span><i ng-click="titleeditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div ng-click="titleeditclick()" ng-hide="data.title_edit" style="cursor:pointer;font-weight:bold">
-									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
+									
 									<span>{{data.title}}</span>
 								</div>
 								<div ng-show="data.title_edit">
@@ -73,10 +73,9 @@
 							</div>
 -->							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
-								<h4 style="margin-bottom:0px;padding-bottom:0px">Tags</h4>
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Tags<i ng-click="tagseditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div style="cursor:pointer" ng-click="tagseditclick()" ng-hide="data.tags_edit">
-									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									{{data.tags}}
 								</div>
 								<div ng-show="data.tags_edit">
@@ -97,10 +96,9 @@
 							</div>
 							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
-								<h4 style="margin-bottom:0px;padding-bottom:0px">Watchers</h4>
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Watchers<i ng-click="watcherseditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
-								<div style="cursor:pointer" ng-click="watcherseditclick()" ng-hide="data.watchers_edit">
-									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
+								<div style="cursor:pointer" ng-click="watcherseditclick()" ng-hide="data.watchers_edit">		
 									{{data.watchers}}
 								</div>
 								<div ng-show="data.watchers_edit">
@@ -121,10 +119,9 @@
 							</div>							
 
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:15px;">
-								<h4 style="margin-bottom:0px;padding-bottom:0px">Details</h4>
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Details<i ng-click="detailseditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">									 
 								<div ng-click="detailseditclick()" style="cursor:pointer" ng-hide="data.details_edit" style="margin-top:10px">
-									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									{{data.details}}
 								</div>
 								<div ng-show="data.details_edit">
@@ -137,10 +134,9 @@
 							</div>			
 							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
-								<h4 style="margin-bottom:0px;padding-bottom:0px">Filter</h4>
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Filter<i ng-click="filtereditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div style="cursor:pointer" ng-click="filtereditclick()" ng-hide="data.filter_edit">
-									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									Sales Date between 2001-01-01 and 2001-01-31 for product A and B and region LATAM
 								</div>								
 								<div ng-show="data.filter_edit">
@@ -161,10 +157,9 @@
 							</div>		
 							
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
-								<h4 style="margin-bottom:0px;padding-bottom:0px">Settings</h4>
+								<h4 style="margin-bottom:0px;padding-bottom:0px">Settings<i ng-click="settingseditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
 								<div ng-hide="data.settings_edit" ng-click="settingseditclick()" style="cursor:pointer">
-									<i style="margin-right:3px;margin-bottom:3px" class="fa fa-lg fa-edit"></i>
 									For the topx analysis use product for the ranking,rank by sales amount, rank the top 5
 								</div>									
 								<div ng-show="data.settings_edit">
