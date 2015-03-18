@@ -13,7 +13,8 @@
 		<link href="jquery-ui.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="jquery.tagsinput.css" />  
 		<script src="jquery-ui.js"></script>	
-		<script src="jquery.visible.js"></script>				
+		<script src="jquery.visible.js"></script>		
+		<script src="verge.js"></script>					
 		<!-- <script src="analysis-topx.js"></script> -->
 		<script src="topx.js"></script>
 		<script src="association.js"></script>
@@ -364,13 +365,13 @@
 				</div>
 			</div>
 			
-			<div id="notificationsbox" style="display:none;position:absolute;top:48px;left:875px;border:1px solid black;height:500px;width:400px;background-color:#F5FBE4">
+			<div id="notificationsbox" style="display:none;position:absolute;top:48px;left:0px;border:1px solid black;height:500px;width:400px;background-color:#F5FBE4">
 				<div style="background-color:#7D9B5B;color:white;padding:5px">
 					Notifications (42)
 				</div>
 			</div>
 			
-			<div id="usersettingbox" style="display:none;position:absolute;top:48px;left:875px;border:1px solid black;height:500px;width:400px;background-color:#F5FBE4">
+			<div id="usersettingbox" style="display:none;position:absolute;top:48px;left:0px;border:1px solid black;height:500px;width:400px;background-color:#F5FBE4">
 				<div style="background-color:#7D9B5B;color:white;padding:5px">
 					User Settings (Fabio Mendes)
 				</div>
@@ -388,7 +389,9 @@
 -->
 			
 <script type="text/javascript">
-    $(document).ready(function($) { 			
+    $(document).ready(function($) { 	
+		var leftpos = verge.viewportW() - $("#notificationsbox").width() - 20;
+		$("#notificationsbox").offset({left: leftpos});		
 		$("#notificationsicon").hover(
 			function() {
 				// Styles to show the box
@@ -402,7 +405,9 @@
 </script>	
 
 <script type="text/javascript">
-    $(document).ready(function($) { 			
+    $(document).ready(function($) { 	
+		var leftpos = verge.viewportW() - $("#usersettingbox").width() - 20;
+		$("#usersettingbox").offset({left: leftpos});					
 		$("#usersettingicon").hover(
 			function() {
 				// Styles to show the box
