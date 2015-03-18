@@ -20,7 +20,32 @@
 		<script src="association.js"></script>
 		<script src="8020.js"></script>
 
-        <style>
+        <style>	
+			.analysismetametaitem {
+				padding:8px;
+				border:none;
+				cursor:pointer;
+			}						
+			.analysismetaitem:hover {
+				padding:8px;
+				border:1px solid red;
+				cursor:pointer;
+			}
+			.analysismetaitem:hover i {
+				display:inline;
+				float:right;
+				cursor:pointer;
+				color:red;			
+			}
+			.analysismetaitem {
+				padding:8px;
+				border:none;
+				cursor:pointer;
+			}
+			.analysismetaitem i {
+				display:none;
+			}			
+											
 			@media (min-width: 630px) {			
 				#navcontainer
 				{
@@ -390,7 +415,7 @@
 			
 <script type="text/javascript">
     $(document).ready(function($) { 	
-		var leftpos = verge.viewportW() - $("#notificationsbox").width() - 20;
+		var leftpos = verge.viewportW() - $("#notificationsbox").width() - 40;
 		$("#notificationsbox").offset({left: leftpos});		
 		$("#notificationsicon").hover(
 			function() {
@@ -406,7 +431,7 @@
 
 <script type="text/javascript">
     $(document).ready(function($) { 	
-		var leftpos = verge.viewportW() - $("#usersettingbox").width() - 20;
+		var leftpos = verge.viewportW() - $("#usersettingbox").width() - 40;
 		$("#usersettingbox").offset({left: leftpos});					
 		$("#usersettingicon").hover(
 			function() {

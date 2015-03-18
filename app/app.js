@@ -390,9 +390,9 @@ drillixApp.factory("state", ["$window", function($window) {
 		} 
 	 }
 	       
-	 service.setBindings = function($scope, analysis) {      
+	 service.setBindings = function($scope, analysis) {    		  
 			var w = angular.element($window);     
-			w.bind('resize', function () {
+			w.bind('resize', function () {		
 				service.safeApply($scope,function () { 
 					service.renderResize($scope);
 					analysis.setDrawingWidth($scope.analysiswidth);

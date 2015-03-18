@@ -26,8 +26,9 @@
 							<div style="cursor:hand;margin-left:5px;margin-right:5px;margin-top:20px">
 								<h4 style="margin-bottom:0px;padding-bottom:0px;color:#2B3C36">Title<span style="font-size:9px;margin-left:15px">Analysis is saved when a title is given. Click on title name below</span><i ng-click="titleeditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
-								<div ng-click="titleeditclick()" ng-hide="data.title_edit" style="cursor:pointer;font-weight:bold">
-									
+								
+								<div ng-click="titleeditclick()" ng-hide="data.title_edit" class="analysismetaitem">								
+									<i class="fa fa-lg fa-pencil"></i>
 									<span>{{data.title}}</span>
 								</div>
 								<div ng-show="data.title_edit">
@@ -42,21 +43,23 @@
 							<div style="margin-left:5px;margin-right:5px;margin-top:20px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Meta</h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
-								<div style="margin-bottom:10px">
-									<img style="width:32px;height:32px" src="http://lorempixel.com/50/50/people/6" /> Fabio  Mendes
-								</div>
-								<div>
-									Created: Jan 3, 2014 10:34pm
-								</div>	
-								<div>
-									Last Update: Jan 3, 2014 10:34pm
-								</div>		
-								<div>
-									Visiblity: Public
-								</div>		
-								<div>
-									Interest level: 143
-								</div>															
+								<div class="analysismetametaitem">
+									<div style="margin-bottom:10px">
+										<img style="width:32px;height:32px" src="http://lorempixel.com/50/50/people/6" /> Fabio  Mendes
+									</div>
+									<div>
+										Created: Jan 3, 2014 10:34pm
+									</div>	
+									<div>
+										Last Update: Jan 3, 2014 10:34pm
+									</div>		
+									<div>
+										Visiblity: Public
+									</div>		
+									<div>
+										Interest level: 143
+									</div>	
+								</div>														
 							</div>
 														
 <!--							
@@ -75,7 +78,8 @@
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Tags<i ng-click="tagseditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
-								<div style="cursor:pointer" ng-click="tagseditclick()" ng-hide="data.tags_edit">
+								<div class="analysismetaitem" ng-click="tagseditclick()" ng-hide="data.tags_edit">
+									<i class="fa fa-lg fa-pencil"></i>
 									{{data.tags}}
 								</div>
 								<div ng-show="data.tags_edit">
@@ -98,7 +102,8 @@
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Watchers<i ng-click="watcherseditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
-								<div style="cursor:pointer" ng-click="watcherseditclick()" ng-hide="data.watchers_edit">		
+								<div class="analysismetaitem" ng-click="watcherseditclick()" ng-hide="data.watchers_edit">	
+									<i class="fa fa-lg fa-pencil"></i>	
 									{{data.watchers}}
 								</div>
 								<div ng-show="data.watchers_edit">
@@ -121,7 +126,8 @@
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:15px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Details<i ng-click="detailseditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">									 
-								<div ng-click="detailseditclick()" style="cursor:pointer" ng-hide="data.details_edit" style="margin-top:10px">
+								<div ng-click="detailseditclick()" class="analysismetaitem" ng-hide="data.details_edit" style="margin-top:10px">
+									<i class="fa fa-lg fa-pencil"></i>
 									{{data.details}}
 								</div>
 								<div ng-show="data.details_edit">
@@ -136,7 +142,8 @@
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Filter<i ng-click="filtereditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
-								<div style="cursor:pointer" ng-click="filtereditclick()" ng-hide="data.filter_edit">
+								<div class="analysismetaitem" ng-click="filtereditclick()" ng-hide="data.filter_edit">
+									<i class="fa fa-lg fa-pencil"></i>
 									Sales Date between 2001-01-01 and 2001-01-31 for product A and B and region LATAM
 								</div>								
 								<div ng-show="data.filter_edit">
@@ -159,7 +166,8 @@
 							<div class="row" style="margin-left:5px;margin-right:5px;margin-top:10px;">
 								<h4 style="margin-bottom:0px;padding-bottom:0px">Settings<i ng-click="settingseditclick()" style="float:right;cursor:pointer" class="fa fa-lg fa-edit"></i></h4>
 								<hr style="margin-top:0px;margin-bottom:15px;border-top: 2px solid #2B3C36">	
-								<div ng-hide="data.settings_edit" ng-click="settingseditclick()" style="cursor:pointer">
+								<div ng-hide="data.settings_edit" ng-click="settingseditclick()" class="analysismetaitem" >
+									<i class="fa fa-lg fa-pencil"></i>
 									For the topx analysis use product for the ranking,rank by sales amount, rank the top 5
 								</div>									
 								<div ng-show="data.settings_edit">
