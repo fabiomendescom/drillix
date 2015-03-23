@@ -5,6 +5,115 @@
 // STEP 3: Redirect to analysis queues 
 // STEP 3a : Redirect to association analysis queue
 
+//META DATA
+/*
+{
+	"objectname" : "customer",
+	"objecttype" : "entity",  
+	"objectsourceid" : "customer_id",  
+	"objectfields" : [
+	   {	  
+		   "name" : "customer_name",
+		   "type" : "string",
+		   "validation" : [
+				{
+					"mandatory" : "true",
+					"characters" : {
+						"min" : "10",
+						"max" : "100"
+					}
+				}
+		   ] 		   		   
+	   },
+	   {	  
+		   "name" : "customer_name",
+		   "type" : "string"		   
+	   },
+	   {	  
+		   "name" : "tags",
+		   "type" : "string-list"		   
+	   },	   
+	   {
+		   "name" : "sales",
+		   "type" : "transactionobject",
+		   "objectreference": {
+			   "object" : "sale",
+			   "key" : "customer_id"
+		   }
+	   }
+	]
+}
+
+{
+	"objectname" : "sale",
+	"objecttype" : "transaction",    
+	"objectsourceid" : "unique_sales_id",
+	"objectfields" : [
+	   {	  
+		   "name" : "line_number",
+		   "type" : "int",		
+		   "validation" : [
+				{
+					"mandatory" : "true",
+					"range" : {
+						"from" : "0",
+						"to" : "100"
+					}
+				}
+		   ]   
+	   },
+	   {	   
+		   "name" : "product_id",
+		   "type" : "entityobject",
+		   "objectreference": {
+			   "object" : "product",
+			   "key" : "id"
+		   }		   
+	   },
+	   {
+		   "name" : "variant_id",
+		   "type" : "entityobject",
+		   "objectreference" : {
+			   "object" : "variant", 
+			   "key" : "id"
+		   }		   
+	   },
+	   {
+		   "name" : "customer_id",
+		   "type" : "entityobject",
+		   "objectreference" : {
+			   "object" : "customer", 
+			   "key" : "id"
+		   }		   
+	   },
+	   {   
+		   "name" : "sale_date",
+		   "type" : "datetime"
+	   },  
+	   {
+		   "name" : "gross_amount",
+		   "type" : "money"		   
+	   },
+	   {   
+		   "name" : "net_amount",
+		   "type" : "money"	   
+	   },
+	   {  
+		   "name" : "quantity",
+		   "type" : "double"		   
+	   },   
+	   {
+		   "name" : "partner_id",
+		   "type" : "entityobject",
+		   "objectreference" : {
+			   "object" : "partner", 
+			   "key" : "id"
+		   }		   
+	   }
+	]
+}
+*/
+
 // Some configs
 var tenant				= "darby";
 var accesskey 			= "AKIAIUAUOG5OVKIGNYWQ";
