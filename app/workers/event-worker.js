@@ -112,6 +112,34 @@
 	   }
 	]
 }
+
+
+{
+	"basketgroups" : [
+		{
+			"object" : "sales",
+			"baskets": {
+				"id" : "basket1",
+				"description": "products bought by customer",
+				"type" : "count|boolean",
+				"within" : "objectsourceid|_sale_date_ym",
+				"basketfields": [
+					{
+						"field": "product_id",
+						"countscope": [
+							{
+								"name" : "objectsourceid"
+							}
+						],
+						"analysisrange" : {
+							"allproducts": "true"
+						}
+					}
+				]
+			}
+		}
+	]
+}
 */
 
 // Some configs
