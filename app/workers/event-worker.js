@@ -108,7 +108,7 @@ MongoClient.connect(mongouri, function(err, db) {
 			///////////////////////////////////////////////
 			// STEP 4: Delete the message from the queue //
 			///////////////////////////////////////////////
-    
+     
 			e.deleteMessage(function(err, data) {
 				e.next();
 			});
