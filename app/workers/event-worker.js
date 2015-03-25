@@ -5,226 +5,99 @@
 // STEP 3: Redirect to analysis queues 
 // STEP 3a : Redirect to association analysis queue
 
-//META DATA
 /*
- 
 {
-  "meta": "object",
-  "metaid" : "customer",
-  "metaschema": 
-  {
-	"type" : "entity",  
-	"fields" : [
-	   {
-	       "name" : "customer_id",
-	       "key" : "true"
-       },
-	   {	  
-		   "name" : "customer_name",
-		   "type" : "string",
-		   "validation" : [
-				{
-					"mandatory" : "true",
-					"characters" : {
-						"min" : "10",
-						"max" : "100"
-					}
-				}
-		   ] 		   		   
-	   },
-	   {	  
-		   "name" : "customer_name",
-		   "type" : "string"		   
-	   },
-	   {	  
-		   "name" : "tags",
-		   "type" : "string-list"		   
-	   },	   
-	   {
-		   "name" : "sales",
-		   "type" : "transaction",
-		   "reference": {
-			   "transaction" : "sale",
-			   "key" : "customer_id"
-		   }
-	   }
-	]
-  }
-}
-
-{
-  "meta": "object",
-  "metaid" : "sale",
-  "metaschema": 
-  {
-	"type" : "transaction",    
-	"fields" : [
-	   {
-	       "name" : "unique_sales_id",
-	       "type" : "int",
-	       "transactiongroupid": "true"
-       },
-	   {	  
-		   "name" : "line_number",
-		   "type" : "int",		
-		   "validation" : [
-				{
-					"mandatory" : "true",
-					"range" : {
-						"from" : "0",
-						"to" : "100"
-					}
-				}
-		   ]   
-	   },
-	   {	   
-		   "name" : "product_id",
-		   "type" : "entity",
-		   "reference": {
-			   "entity" : "product",
-			   "key" : "id"
-		   }		   
-	   },
-	   {
-		   "name" : "variant_id",
-		   "type" : "entity",
-		   "reference" : {
-			   "entity" : "variant", 
-			   "key" : "id"
-		   }		   
-	   },
-	   {
-		   "name" : "customer_id",
-		   "type" : "entity",
-		   "reference" : {
-			   "entity" : "customer", 
-			   "key" : "id"
-		   }		   
-	   },
-	   {   
-		   "name" : "sale_date",
-		   "type" : "datetime"
-	   },  
-	   {
-		   "name" : "gross_amount",
-		   "type" : "money"		   
-	   },
-	   {   
-		   "name" : "net_amount",
-		   "type" : "money"	   
-	   },
-	   {  
-		   "name" : "quantity",
-		   "type" : "double"		   
-	   },   
-	   {
-		   "name" : "partner_id",
-		   "type" : "entity",
-		   "reference" : {
-			   "entity" : "partner", 
-			   "key" : "id"
-		   }		   
-	   }
-	]
-  }
-}
-
-
-
-{
-  "meta": "basket",
-  "metaid" : "basket1",
-  "metaschema":  
-  {
-      "description" : "some description",
-      "effective" : {
-          "from" : "xxx",
-          "to" : "xxx" 
-      }
-      "object": "customer",
-      "scope" : "object",
-      "counter" : [
-          {
-               "field" : "product_id",
-               "values" : {
-                    "type": "all | range | list",
-                    "range" : {
-                        "from" : "xxx",
-                        "to" : "xxx"
-                    },
-                    "list" : [
-                        {"item": "productA"},
-                        {"item": "productB")
-                     ]
-               }
-          },
-          {
-               "field" : "sale._sale_date_ym"
-          }
-       ]
-  }
-} 
- 
-
-
-{
-  "meta": "basket",
-  "metaid" : "basket2",
-  "metaschema":  
-      "description" : "some description",
-      "effective" : {
-          "from" : "xxx",
-          "to" : "xxx" 
-      }
-      "object": "customer",
-      "scope" : "transactiongroup",
-      "counter" : [
-          {
-               "field" : "product_id",
-               "values" : {
-                     "type": "all"
+    "_id": {
+        "$oid": "55116969e4b05987cd0ca421"
+    },
+    "meta": "object",
+    "metaid": "sale",
+    "metaschema": {
+        "type": "transaction",
+        "fields": [
+            {
+                "name": "unique_sales_id",
+                "type": "int",
+                "transactiongroupid": "true"
+            },
+            {
+                "name": "line_number",
+                "type": "int",
+                "validation": [
+                    {
+                        "mandatory": "true",
+                        "range": {
+                            "from": "0",
+                            "to": "100"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "product",
+                "type": "entity",
+                "reference": {
+                    "key" : "product_id",
+                    "entity": "product",
+                    "foreignkey": "id"
                 }
-          }
-       ]
-  }
-}
-
-
-
-{
-  "meta": "basketanalysis",
-  "metaid" : "basketanalysis1",
-  "metaschema":  
-  {
-       "description": "description",
-       "effective" : {
-          "from" : "xxx",
-          "to" : "xxx" 
-      },
-      "baskets": [
-           {"id": "basket1"},
-           {"id": "basket2"}
-       ],
-       "association" : [
-           {"item" : "product_id", "method": "cartesian"},
-           {
-               "item" : "sale._sale_date_ym", "method" : "offset",
-               "offsetvalues" : {
-                    "type": "range | list",
-                    "range" : {
-                        "from" : "1",
-                        "to" : "3"
-                    },
-                    "list" : [
-                        {"item": "1"},
-                        {"item": "2")
-                     ]
-               }
-           }    
+            },
+            {
+                "name": "variant",
+                "type": "entity",
+                "reference": {
+                    "key" : "variant_id",
+                    "entity": "variant",
+                    "foreignkey": "id"
+                }
+            },
+            {
+                "name": "customer",
+                "type": "entity",
+                "reference": {
+                    "key" : "customer_id",
+                    "entity": "customer",
+                    "foreignkey": "id"
+                }
+            },
+            {
+                "name": "sale_date",
+                "type": "datetime",
+                "enricher" : "date"
+            },
+            {
+                "name": "gross_amount",
+                "type": "money"
+            },
+            {
+                "name": "net_amount",
+                "type": "money"
+            },
+            {
+                "name": "quantity",
+                "type": "double"
+            },
+            {
+                "name": "partner",
+                "type": "entity",
+                "reference": {
+                    "key" : "partner_id",
+                    "entity": "partner",
+                    "foreignkey": "id"
+                }
+            },
+            {
+                "name": "designer",
+                "type": "entity",
+                "reference": {
+                    "key" : "designer_id",
+                    "entity": "partner",
+                    "foreignkey": "id"
+                }
+            }
         ]
-  }
+    }
 }
-
 */
 
 // Some configs
@@ -244,7 +117,7 @@ var MongoClient = require('mongodb').MongoClient
 //  - each listener can receive up to 4 messages
 // With this configuration you could receive and parse 8 `message` events in parallel
 var queue = new SqsQueueParallel({
-    name: tenant + "-events",
+    name: "drillix-globalevents",
     maxNumberOfMessages: 4,
     concurrency: 2,
     region: region,
