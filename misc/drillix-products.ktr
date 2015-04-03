@@ -72,27 +72,6 @@
   <modified_date>2015&#x2f;03&#x2f;18 22&#x3a;23&#x3a;47.033</modified_date>
   </info>
   <notepads>
-    <notepad>
-      <note>This is the AWS secret key</note>
-      <xloc>368</xloc>
-      <yloc>317</yloc>
-      <width>182</width>
-      <heigth>27</heigth>
-      <fontname>Ubuntu</fontname>
-      <fontsize>11</fontsize>
-      <fontbold>N</fontbold>
-      <fontitalic>N</fontitalic>
-      <fontcolorred>0</fontcolorred>
-      <fontcolorgreen>0</fontcolorgreen>
-      <fontcolorblue>0</fontcolorblue>
-      <backgroundcolorred>255</backgroundcolorred>
-      <backgroundcolorgreen>205</backgroundcolorgreen>
-      <backgroundcolorblue>112</backgroundcolorblue>
-      <bordercolorred>100</bordercolorred>
-      <bordercolorgreen>100</bordercolorgreen>
-      <bordercolorblue>100</bordercolorblue>
-      <drawshadow>Y</drawshadow>
-    </notepad>
   </notepads>
   <connection>
     <name>darbydb</name>
@@ -119,8 +98,6 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Last Processed ID</from><to>Products</to><enabled>Y</enabled> </hop>
-  <hop> <from>Check Success</from><to>Update Last ID</to><enabled>Y</enabled> </hop>
   <hop> <from>Check Success</from><to>Abort</to><enabled>Y</enabled> </hop>
   <hop> <from>key</from><to>add accesskey</to><enabled>Y</enabled> </hop>
   <hop> <from>add accesskey</from><to>Add constants</to><enabled>Y</enabled> </hop>
@@ -129,6 +106,11 @@
   <hop> <from>HTTP Post</from><to>Check Success</to><enabled>Y</enabled> </hop>
   <hop> <from>Create JSON</from><to>key</to><enabled>Y</enabled> </hop>
   <hop> <from>Products</from><to>Create JSON</to><enabled>Y</enabled> </hop>
+  <hop> <from>Select values</from><to>Products</to><enabled>Y</enabled> </hop>
+  <hop> <from>Json Input</from><to>Select values</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Last Id</from><to>Json Input</to><enabled>Y</enabled> </hop>
+  <hop> <from>Check Success</from><to>Add constants 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants 2</from><to>Store last id</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Abort</name>
@@ -246,6 +228,39 @@
     </step>
 
   <step>
+    <name>Add constants 2</name>
+    <type>Constant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>keyid</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>PRODUCT</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>776</xloc>
+      <yloc>193</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Check Success</name>
     <type>FilterRows</type>
     <description/>
@@ -256,7 +271,7 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Update Last ID</send_true_to>
+<send_true_to>Add constants 2</send_true_to>
 <send_false_to>Abort</send_false_to>
     <compare>
 <condition>
@@ -270,6 +285,72 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>834</xloc>
       <yloc>92</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Create JSON</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>&#x2f;&#x2f;Script here&#xa;&#xa;var finaljson &#x3d; &#x27;&#x7b;&#x22;Events&#x22;&#x3a;&#x5b;&#x7b;&#x22;AddEvent&#x22;&#x3a;&#x7b;&#x22;account&#x22;&#x3a;&#x22;darby&#x22;, &#x22;object&#x22;&#x3a;&#x22;product&#x22;, &#x22;fields&#x22;&#x3a;&#x5b;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;name&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; name &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;description&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; description &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;photo_url&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; photo_url &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x5d;&#x7d;&#x7d;&#x5d;&#x7d;&#x27;&#x3b;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>finaljson</name>
+        <rename>finaljson</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>240</xloc>
+      <yloc>130</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get Last Id</name>
+    <type>MongoDbInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <hostname>ds029197.mongolab.com</hostname>
+    <port>29197</port>
+    <use_all_replica_members>N</use_all_replica_members>
+    <db_name>heroku_app34960699</db_name>
+    <fields_name/>
+    <collection>darby-lastid</collection>
+    <json_field_name>json</json_field_name>
+    <json_query>&#x7b;&#x22;_id&#x22;&#x3a;&#x7b;&#x22;keyid&#x22;&#x3a;&#x22;PRODUCT&#x22;&#x7d;&#x7d;</json_query>
+    <auth_user>lastid</auth_user>
+    <auth_password>Encrypted 2be98afc86aa7f2e4cb79a271cd86a6de</auth_password>
+    <auth_kerberos>N</auth_kerberos>
+    <connect_timeout/>
+    <socket_timeout/>
+    <read_preference>primary</read_preference>
+    <output_json>Y</output_json>
+    <query_is_pipeline>N</query_is_pipeline>
+    <execute_for_each_row>N</execute_for_each_row>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>252</xloc>
+      <yloc>322</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -326,6 +407,68 @@
     </step>
 
   <step>
+    <name>Json Input</name>
+    <type>JsonInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <addresultfile>N</addresultfile>
+    <readurl>N</readurl>
+    <IsIgnoreEmptyFile>N</IsIgnoreEmptyFile>
+    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
+    <ignoreMissingPath>N</ignoreMissingPath>
+    <rownum_field/>
+    <file>
+      <name/>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+    </file>
+    <fields>
+      <field>
+        <name>lastid</name>
+        <path>&#x24;.id.id</path>
+        <type>Number</type>
+        <format>&#x23;</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <IsInFields>Y</IsInFields>
+    <IsAFile>N</IsAFile>
+    <valueField>json</valueField>
+    <shortFileFieldName/>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>175</xloc>
+      <yloc>235</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Last Processed ID</name>
     <type>TableInput</type>
     <description/>
@@ -345,8 +488,8 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>50</xloc>
-      <yloc>159</yloc>
+      <xloc>51</xloc>
+      <yloc>257</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -407,7 +550,7 @@
     <connection>darbydb</connection>
     <sql>SELECT  &#x2a;&#xa;FROM spree_products&#xa;where id &#x3e; &#x3f;&#xa;order by id asc&#xa;limit 20&#xa;</sql>
     <limit>0</limit>
-    <lookup>Last Processed ID</lookup>
+    <lookup>Select values</lookup>
     <execute_each_row>N</execute_each_row>
     <variables_active>Y</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
@@ -415,6 +558,117 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>114</xloc>
       <yloc>31</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>lastid</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>92</xloc>
+      <yloc>130</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Store last id</name>
+    <type>MongoDbOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+
+    <mongo_host>ds029197.mongolab.com</mongo_host>
+
+    <mongo_port>29197</mongo_port>
+    <use_all_replica_members>N</use_all_replica_members>
+
+    <mongo_user>lastid</mongo_user>
+
+    <mongo_password>Encrypted 2be98afc86aa7f2e4cb79a271cd86a6de</mongo_password>
+    <auth_kerberos>N</auth_kerberos>
+
+    <mongo_db>heroku_app34960699</mongo_db>
+
+    <mongo_collection>darby-lastid</mongo_collection>
+
+    <batch_insert_size>100</batch_insert_size>
+    <connect_timeout/>
+    <socket_timeout/>
+    <read_preference>primary</read_preference>
+    <write_concern/>
+    <w_timeout/>
+    <journaled_writes>N</journaled_writes>
+
+    <truncate>N</truncate>
+
+    <update>Y</update>
+
+    <upsert>Y</upsert>
+
+    <multi>N</multi>
+
+    <modifier_update>N</modifier_update>
+    <write_retries>5</write_retries>
+    <write_retry_delay>10</write_retry_delay>
+
+    <mongo_fields>
+      <mongo_field>
+         <incoming_field_name>id</incoming_field_name>
+
+         <mongo_doc_path>id</mongo_doc_path>
+
+         <use_incoming_field_name_as_mongo_field_name>Y</use_incoming_field_name_as_mongo_field_name>
+
+         <update_match_field>N</update_match_field>
+
+         <modifier_update_operation>N&#x2f;A</modifier_update_operation>
+
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
+
+         <json_field>Y</json_field>
+
+      </mongo_field>
+      <mongo_field>
+         <incoming_field_name>keyid</incoming_field_name>
+
+         <mongo_doc_path>_id</mongo_doc_path>
+
+         <use_incoming_field_name_as_mongo_field_name>Y</use_incoming_field_name_as_mongo_field_name>
+
+         <update_match_field>Y</update_match_field>
+
+         <modifier_update_operation>N&#x2f;A</modifier_update_operation>
+
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
+
+         <json_field>N</json_field>
+
+      </mongo_field>
+    </mongo_fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>701</xloc>
+      <yloc>265</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -446,8 +700,8 @@
     </arguments>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>738</xloc>
-      <yloc>249</yloc>
+      <xloc>578</xloc>
+      <yloc>269</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -514,36 +768,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>350</xloc>
       <yloc>231</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Create JSON</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#x2f;&#x2f;Script here&#xa;&#xa;var finaljson &#x3d; &#x27;&#x7b;&#x22;Events&#x22;&#x3a;&#x5b;&#x7b;&#x22;AddEvent&#x22;&#x3a;&#x7b;&#x22;account&#x22;&#x3a;&#x22;darby&#x22;, &#x22;object&#x22;&#x3a;&#x22;product&#x22;, &#x22;fields&#x22;&#x3a;&#x5b;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;name&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; name &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;description&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; description &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;photo_url&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; photo_url &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x5d;&#x7d;&#x7d;&#x5d;&#x7d;&#x27;&#x3b;</jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>finaljson</name>
-        <rename>finaljson</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>    </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>240</xloc>
-      <yloc>130</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

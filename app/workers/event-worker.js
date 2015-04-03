@@ -6,98 +6,55 @@
 // STEP 3a : Redirect to association analysis queue
 
 /*
+1. push event to account queue: darby-events
+2. worker analyzes basic content (right account, access, etc) and pushes to drillix-globalevents
+3. worker analyzes global event queue, enriches the data and inserts into collection darby-COL where COL is the actual object from the event.
+4. worker checks if basket analysis needs to be done. If so, pushes another message to darby-analysis-association
+5. worker pulls from darby-analysis-association. Reads meta data to know which analysis to aggregate. Agregates into mongodb
+worker then looks at the analysis meta data and aggregates accordingly
+*/
+
+/*
 {
     "_id": {
-        "$oid": "55116969e4b05987cd0ca421"
+        "$oid": "55116a56e4b05987cd0ca42a"
     },
-    "meta": "object",
-    "metaid": "sale",
+    "meta": "basketanalysis",
+    "metaid": "basketanalysis1",
     "metaschema": {
-        "type": "transaction",
-        "fields": [
-            {
-                "name": "unique_sales_id",
-                "type": "int",
-                "transactiongroupid": "true"
-            },
-            {
-                "name": "line_number",
-                "type": "int",
-                "validation": [
-                    {
-                        "mandatory": "true",
-                        "range": {
-                            "from": "0",
-                            "to": "100"
-                        }
-                    }
-                ]
-            },
-            {
-                "name": "product",
-                "type": "entity",
-                "reference": {
-                    "key" : "product_id",
-                    "entity": "product",
-                    "foreignkey": "id"
-                }
-            },
-            {
-                "name": "variant",
-                "type": "entity",
-                "reference": {
-                    "key" : "variant_id",
-                    "entity": "variant",
-                    "foreignkey": "id"
-                }
-            },
-            {
-                "name": "customer",
-                "type": "entity",
-                "reference": {
-                    "key" : "customer_id",
-                    "entity": "customer",
-                    "foreignkey": "id"
-                }
-            },
-            {
-                "name": "sale_date",
-                "type": "datetime",
-                "enricher" : "date"
-            },
-            {
-                "name": "gross_amount",
-                "type": "money"
-            },
-            {
-                "name": "net_amount",
-                "type": "money"
-            },
-            {
-                "name": "quantity",
-                "type": "double"
-            },
-            {
-                "name": "partner",
-                "type": "entity",
-                "reference": {
-                    "key" : "partner_id",
-                    "entity": "partner",
-                    "foreignkey": "id"
-                }
-            },
-            {
-                "name": "designer",
-                "type": "entity",
-                "reference": {
-                    "key" : "designer_id",
-                    "entity": "partner",
-                    "foreignkey": "id"
-                }
-            }
-        ]
+        "baseobject" : "sales",
+        "granularityfield": "customer_id",
+        "description": "description",
+        "effective": {
+            "from": "xxx",
+            "to": "xxx"
+        },
+        "associations": [
+              "comparison" : {
+                  "basket" : [
+                    {"field" : "invoice_id"},
+                    {"field" : "product_id"},
+                  ],
+                  "incrementcountif" : {gross_amount > 0},
+                  "decrementcountif" : {gross_amount < 0},
+                  "countfield": {regular count (+1)},
+                  "combination" : {
+                     method: "cartesian"
+                  }
+			  }
+		]
+        
     }
 }
+
+queue 1: add and aggregate all transactions
+queue 2: 
+
+
+BROUGHT PROD A    BROUGHT PROD B   BROUGHT PROD A and B
+--------------    ---------------  --------------------
+
+
 */
 
 // Some configs

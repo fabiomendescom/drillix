@@ -72,27 +72,6 @@
   <modified_date>2015&#x2f;03&#x2f;18 22&#x3a;23&#x3a;47.033</modified_date>
   </info>
   <notepads>
-    <notepad>
-      <note>This is the AWS secret key</note>
-      <xloc>368</xloc>
-      <yloc>317</yloc>
-      <width>182</width>
-      <heigth>27</heigth>
-      <fontname>Ubuntu</fontname>
-      <fontsize>11</fontsize>
-      <fontbold>N</fontbold>
-      <fontitalic>N</fontitalic>
-      <fontcolorred>0</fontcolorred>
-      <fontcolorgreen>0</fontcolorgreen>
-      <fontcolorblue>0</fontcolorblue>
-      <backgroundcolorred>255</backgroundcolorred>
-      <backgroundcolorgreen>205</backgroundcolorgreen>
-      <backgroundcolorblue>112</backgroundcolorblue>
-      <bordercolorred>100</bordercolorred>
-      <bordercolorgreen>100</bordercolorgreen>
-      <bordercolorblue>100</bordercolorblue>
-      <drawshadow>Y</drawshadow>
-    </notepad>
   </notepads>
   <connection>
     <name>darbydb</name>
@@ -119,18 +98,112 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Last Processed ID</from><to>Product Sales</to><enabled>Y</enabled> </hop>
-  <hop> <from>Check Success</from><to>Update Last ID</to><enabled>Y</enabled> </hop>
   <hop> <from>Check Success</from><to>Abort</to><enabled>Y</enabled> </hop>
   <hop> <from>key</from><to>add accesskey</to><enabled>Y</enabled> </hop>
-  <hop> <from>add accesskey</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>Modified Java Script Value</to><enabled>Y</enabled> </hop>
-  <hop> <from>Modified Java Script Value</from><to>HTTP Post</to><enabled>Y</enabled> </hop>
-  <hop> <from>HTTP Post</from><to>Check Success</to><enabled>Y</enabled> </hop>
   <hop> <from>Product Sales</from><to>Change date to UTC</to><enabled>Y</enabled> </hop>
   <hop> <from>Change date to UTC</from><to>Create JSON</to><enabled>Y</enabled> </hop>
   <hop> <from>Create JSON</from><to>key</to><enabled>Y</enabled> </hop>
+  <hop> <from>Check Success</from><to>Add constants 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants 2</from><to>Store last id</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Last Id</from><to>Json Input</to><enabled>Y</enabled> </hop>
+  <hop> <from>Json Input</from><to>Select values2</to><enabled>Y</enabled> </hop>
+  <hop> <from>add accesskey</from><to>Add constants Kinesis</to><enabled>Y</enabled> </hop>
+  <hop> <from>AWS Kinesis</from><to>HTTP Post Kinesis</to><enabled>Y</enabled> </hop>
+  <hop> <from>HTTP Post Kinesis</from><to>Check Success</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants Kinesis</from><to>Run Date</to><enabled>Y</enabled> </hop>
+  <hop> <from>Select values2</from><to>Product Sales</to><enabled>Y</enabled> </hop>
+  <hop> <from>Run Date</from><to>AWS Kinesis</to><enabled>Y</enabled> </hop>
   </order>
+  <step>
+    <name>AWS Kinesis</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var request_parameters &#x3d; &#x27;&#x7b;&#x22;StreamName&#x22;&#x3a; &#x22;Foo&#x22;,&#x22;Data&#x22;&#x3a; &#x22;&#x27;&#x3b;&#xa;request_parameters_bin &#x3d; org.apache.commons.codec.binary.Base64.encodeBase64&#x28;new java.lang.String&#x28;finaljson&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;bin_string &#x3d; new java.lang.String&#x28;request_parameters_bin&#x29;&#x3b;&#xa;request_parameters &#x3d; request_parameters &#x2b; new java.lang.String&#x28;request_parameters_bin&#x29;&#x3b;&#xa;request_parameters &#x3d; request_parameters &#x2b; &#x27;&#x22;,&#x22;PartitionKey&#x22;&#x3a; &#x22;partitionKey&#x22;&#x7d;&#x27;&#x3b;&#xa;&#xa;var mac &#x3d; javax.crypto.Mac.getInstance&#x28;&#x22;HmacSHA256&#x22;&#x29;&#x3b;&#xa;&#xa;var method &#x3d; &#x22;POST&#x22;&#x3b;&#xa;&#x2f;&#x2f;var service &#x3d; &#x22;sqs&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var host &#x3d; &#x22;host&#x3a;sqs.us-east-1.amazonaws.com&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var region &#x3d; &#x22;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var endpoint&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var request_parameters &#x3d; &#x22;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var access_key&#x3b; &#x2f;&#x2f;coming from parameters&#xa;&#x2f;&#x2f;var secret_key&#x3b; &#x2f;&#x2f;coming from parameters&#xa;&#xa;var nowdate &#x3d; null&#x3b;&#xa;nowdate &#x3d; new Date&#x28;&#x29;&#x3b;&#xa;&#xa;timenow &#x3d; new java.util.GregorianCalendar&#x28;&#x29;&#x3b;&#xa;&#xa;var amz_date_format_date &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;yyyyMMdd&#x22;&#x29; &#xa;var amz_date_format_time &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;HHmmss&#x22;&#x29;&#x3b;&#xa;amz_date_format_date.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;amz_date_format_time.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;&#x2f;&#x2f;var amz_date &#x3d; amz_date_format_date.format&#x28;nowdate&#x29; &#x2b; &#x22;T&#x22; &#x2b; amz_date_format_time.format&#x28;nowdate&#x29; &#x2b; &#x22;Z&#x22;&#x3b;&#xa;&#xa;var n_format &#x3d; new java.Text.DecimalFormat&#x28; &#x22;00&#x22; &#x29;&#x3b;&#xa;var amz_date &#x3d; amz_date_format_date.format&#x28;nowdate&#x29; &#x2b; &#x22;T&#x22; &#x2b; n_format.format&#x28;timenow.get&#x28;Calendar.HOUR&#x29;&#x29; &#x2b; n_format.format&#x28;timenow.get&#x28;Calendar.MINUTE&#x29;&#x29; &#x2b; n_format.format&#x28;timenow.get&#x28;Calendar.SECOND&#x29;&#x29;&#x3b; &#xa;&#xa;var date_stamp_format &#x3d;  new java.text.SimpleDateFormat&#x28;&#x22;yyyyMMdd&#x22;&#x29;&#x3b;	&#xa;date_stamp_format.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;var date_stamp &#x3d; date_stamp_format.format&#x28;nowdate&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 1&#xa;&#x2f;&#x2f;Step 1 - define method. Done&#xa;&#x2f;&#x2f;Step 2 - Create canonical URI&#xa;&#x2f;&#x2f;var canonical_uri &#x3d; &#x22;&#x2f;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;Step 3 - Create the canonical query string&#xa;var canonical_querystring &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 4&#x3a; Create the canonical headers and signed headers&#xa;var canonical_headers &#x3d; &#x22;content-type&#x3a;&#x22; &#x2b; content_type &#x2b; &#x22;&#x5c;n&#x22; &#x2b; &#x22;host&#x3a;&#x22; &#x2b; host &#x2b; &#x22;&#x5c;n&#x22; &#x2b; &#x22;x-amz-date&#x3a;&#x22; &#x2b; amz_date &#x2b; &#x22;&#x5c;n&#x22; &#x2b; &#x22;x-amz-target&#x3a;&#x22; &#x2b; target &#x2b;  &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 5&#x3a; Create the list of signed headers&#xa;var signed_headers &#x3d; &#x22;content-type&#x3b;host&#x3b;x-amz-date&#x3b;x-amz-target&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 6&#x3a; Create payload hash&#xa;&#x2f;&#x2f;request_parameters &#x3d; &#x22;Action&#x3d;ListUsers&#x26;Version&#x3d;2010-05-08&#x22;&#x3b;&#xa;var payload_hash &#x3d; org.apache.commons.codec.digest.DigestUtils.sha256Hex&#x28;request_parameters&#x29;&#x3b;&#xa;&#x2f;&#x2f;Step 7&#x3a; Combine elements to create create canonical request&#xa;var canonical_request &#x3d; method &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_uri &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_querystring &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_headers &#x2b; &#x22;&#x5c;n&#x22; &#x2b; signed_headers &#x2b; &#x22;&#x5c;n&#x22; &#x2b; payload_hash&#x3b;&#xa;&#xa;&#x2f;&#x2f;canonical_request &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;POST&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x2f;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;content-type&#x3a;application&#x2f;x-www-form-urlencoded&#x3b; charset&#x3d;utf-8&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;host&#x3a;iam.amazonaws.com&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;x-amz-date&#x3a;20110909T233600Z&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;content-type&#x3b;host&#x3b;x-amz-date&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;b6359072c78d70ebee1e81adcbab4f01bf2c23245fa365ef83fe8f1f955085e2&#x22;&#x3b;&#xa;&#xa;var canonical_requesthex &#x3d; org.apache.commons.codec.digest.DigestUtils.sha256Hex&#x28;canonical_request&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 2&#x3a; CREATE THE STRING TO SIGN&#xa;var algorithm &#x3d; &#x22;AWS4-HMAC-SHA256&#x22;&#x3b;&#xa;var credential_scope &#x3d; date_stamp &#x2b; &#x22;&#x2f;&#x22; &#x2b; region &#x2b; &#x22;&#x2f;&#x22; &#x2b; service &#x2b; &#x22;&#x2f;&#x22; &#x2b; &#x27;aws4_request&#x27;&#x3b;&#xa;var string_to_sign &#x3d; algorithm &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  amz_date &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  credential_scope &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  canonical_requesthex&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 3&#x3a; CALCULATE THE SIGNATURE&#xa;&#xa;&#x2f;&#x2f;secret_key &#x3d; &#x22;wJalrXUtnFEMI&#x2f;K7MDENG&#x2b;bPxRfiCYEXAMPLEKEY&#x22;&#x3b;&#xa;&#x2f;&#x2f;date_stamp &#x3d; &#x22;20110909&#x22;&#x3b;&#xa;&#x2f;&#x2f;region &#x3d; &#x22;us-east-1&#x22;&#x3b;&#xa;&#x2f;&#x2f;service &#x3d; &#x22;iam&#x22;&#x3b;&#xa;&#xa;var kSecret &#x3d; new java.lang.String&#x28;&#x22;AWS4&#x22;&#x2b;secret_key&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kSecret, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kDate &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;date_stamp&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kDate, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kRegion &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;region&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kRegion, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kService &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;service&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kService, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kSigning &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;&#x22;aws4_request&#x22;&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;var signing_key &#x3d; kSigning&#x3b;&#xa;&#xa;&#x2f;&#x2f;var ttt &#x3d;  new java.lang.String&#x28;new org.apache.commons.codec.binary.Hex&#x28;&#x29;.encode&#x28;signing_key&#x29;,&#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;AWS4-HMAC-SHA256&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;20110909T233600Z&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;20110909&#x2f;us-east-1&#x2f;iam&#x2f;aws4_request&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;3511de7e95d28ecd39e9513b642aee07e54f4941150d8df8bf94b328ef7e55e2&#x22;&#x3b;&#xa;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;signing_key, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var signaturetmp &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;string_to_sign&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;var signaturehex &#x3d; new org.apache.commons.codec.binary.Hex&#x28;&#x29;.encode&#x28;signaturetmp&#x29;&#x3b;&#xa;var signature &#x3d; new java.lang.String&#x28;signaturehex , &#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 4&#x3a; ADD SIGNING INFORMATION TO THE REQUEST&#xa;var authorization_header &#x3d; algorithm &#x2b; &#x22; &#x22; &#x2b; &#x22;Credential&#x3d;&#x22; &#x2b; access_key &#x2b; &#x22;&#x2f;&#x22; &#x2b; credential_scope &#x2b; &#x22;, &#x22; &#x2b;  &#x22;SignedHeaders&#x3d;&#x22; &#x2b; signed_headers &#x2b; &#x22;, &#x22; &#x2b; &#x22;Signature&#x3d;&#x22; &#x2b; signature&#x3b;&#xa;&#xa;&#xa;&#xa;&#xa;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>authorization_header</name>
+        <rename>authorization_header</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>amz_date</name>
+        <rename>amz_date</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>request_parameters</name>
+        <rename>request_parameters</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>bin_string</name>
+        <rename>bin_string</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>617</xloc>
+      <yloc>135</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>AWS SQS</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var request_parameters &#x3d; &#x22;Action&#x3d;SendMessage&#x26;MessageBody&#x3d;&#x22;&#x3b;&#xa;request_parameters &#x3d; request_parameters &#x2b; java.net.URLEncoder.encode&#x28;finaljson&#x29;&#x3b;&#xa;&#xa;var mac &#x3d; javax.crypto.Mac.getInstance&#x28;&#x22;HmacSHA256&#x22;&#x29;&#x3b;&#xa;&#xa;var method &#x3d; &#x22;POST&#x22;&#x3b;&#xa;&#x2f;&#x2f;var service &#x3d; &#x22;sqs&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var host &#x3d; &#x22;host&#x3a;sqs.us-east-1.amazonaws.com&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var region &#x3d; &#x22;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var endpoint&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var request_parameters &#x3d; &#x22;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var access_key&#x3b; &#x2f;&#x2f;coming from parameters&#xa;&#x2f;&#x2f;var secret_key&#x3b; &#x2f;&#x2f;coming from parameters&#xa;&#xa;var amz_date_format_date &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;yyyyMMdd&#x22;&#x29; &#xa;var amz_date_format_time &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;HHmmss&#x22;&#x29;&#x3b;&#xa;amz_date_format_date.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;amz_date_format_time.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;var amz_date &#x3d; amz_date_format_date.format&#x28;new Date&#x28;&#x29;&#x29; &#x2b; &#x22;T&#x22; &#x2b; amz_date_format_time.format&#x28;new Date&#x28;&#x29;&#x29; &#x2b; &#x22;Z&#x22;&#x3b;&#xa;&#xa;var date_stamp_format &#x3d;  new java.text.SimpleDateFormat&#x28;&#x22;yyyyMMdd&#x22;&#x29;&#x3b;	&#xa;date_stamp_format.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;var date_stamp &#x3d; date_stamp_format.format&#x28;new Date&#x28;&#x29;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 1&#xa;&#x2f;&#x2f;Step 1 - define method. Done&#xa;&#x2f;&#x2f;Step 2 - Create canonical URI&#xa;&#x2f;&#x2f;var canonical_uri &#x3d; &#x22;&#x2f;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;Step 3 - Create the canonical query string&#xa;var canonical_querystring &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 4&#x3a; Create the canonical headers and signed headers&#xa;var canonical_headers &#x3d; &#x22;content-type&#x3a;&#x22; &#x2b; content_type &#x2b; &#x22;&#x5c;n&#x22; &#x2b; &#x22;host&#x3a;&#x22; &#x2b; host &#x2b; &#x22;&#x5c;n&#x22; &#x2b; &#x22;x-amz-date&#x3a;&#x22; &#x2b; amz_date &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 5&#x3a; Create the list of signed headers&#xa;var signed_headers &#x3d; &#x22;content-type&#x3b;host&#x3b;x-amz-date&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 6&#x3a; Create payload hash&#xa;&#x2f;&#x2f;request_parameters &#x3d; &#x22;Action&#x3d;ListUsers&#x26;Version&#x3d;2010-05-08&#x22;&#x3b;&#xa;var payload_hash &#x3d; org.apache.commons.codec.digest.DigestUtils.sha256Hex&#x28;request_parameters&#x29;&#x3b;&#xa;&#x2f;&#x2f;Step 7&#x3a; Combine elements to create create canonical request&#xa;var canonical_request &#x3d; method &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_uri &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_querystring &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_headers &#x2b; &#x22;&#x5c;n&#x22; &#x2b; signed_headers &#x2b; &#x22;&#x5c;n&#x22; &#x2b; payload_hash&#x3b;&#xa;&#xa;&#x2f;&#x2f;canonical_request &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;POST&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x2f;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;content-type&#x3a;application&#x2f;x-www-form-urlencoded&#x3b; charset&#x3d;utf-8&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;host&#x3a;iam.amazonaws.com&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;x-amz-date&#x3a;20110909T233600Z&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;content-type&#x3b;host&#x3b;x-amz-date&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;b6359072c78d70ebee1e81adcbab4f01bf2c23245fa365ef83fe8f1f955085e2&#x22;&#x3b;&#xa;&#xa;var canonical_requesthex &#x3d; org.apache.commons.codec.digest.DigestUtils.sha256Hex&#x28;canonical_request&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 2&#x3a; CREATE THE STRING TO SIGN&#xa;var algorithm &#x3d; &#x22;AWS4-HMAC-SHA256&#x22;&#x3b;&#xa;var credential_scope &#x3d; date_stamp &#x2b; &#x22;&#x2f;&#x22; &#x2b; region &#x2b; &#x22;&#x2f;&#x22; &#x2b; service &#x2b; &#x22;&#x2f;&#x22; &#x2b; &#x27;aws4_request&#x27;&#x3b;&#xa;var string_to_sign &#x3d; algorithm &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  amz_date &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  credential_scope &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  canonical_requesthex&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 3&#x3a; CALCULATE THE SIGNATURE&#xa;&#xa;&#x2f;&#x2f;secret_key &#x3d; &#x22;wJalrXUtnFEMI&#x2f;K7MDENG&#x2b;bPxRfiCYEXAMPLEKEY&#x22;&#x3b;&#xa;&#x2f;&#x2f;date_stamp &#x3d; &#x22;20110909&#x22;&#x3b;&#xa;&#x2f;&#x2f;region &#x3d; &#x22;us-east-1&#x22;&#x3b;&#xa;&#x2f;&#x2f;service &#x3d; &#x22;iam&#x22;&#x3b;&#xa;&#xa;var kSecret &#x3d; new java.lang.String&#x28;&#x22;AWS4&#x22;&#x2b;secret_key&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kSecret, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kDate &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;date_stamp&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kDate, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kRegion &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;region&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kRegion, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kService &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;service&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kService, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kSigning &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;&#x22;aws4_request&#x22;&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;var signing_key &#x3d; kSigning&#x3b;&#xa;&#xa;&#x2f;&#x2f;var ttt &#x3d;  new java.lang.String&#x28;new org.apache.commons.codec.binary.Hex&#x28;&#x29;.encode&#x28;signing_key&#x29;,&#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;AWS4-HMAC-SHA256&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;20110909T233600Z&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;20110909&#x2f;us-east-1&#x2f;iam&#x2f;aws4_request&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;3511de7e95d28ecd39e9513b642aee07e54f4941150d8df8bf94b328ef7e55e2&#x22;&#x3b;&#xa;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;signing_key, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var signaturetmp &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;string_to_sign&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;var signaturehex &#x3d; new org.apache.commons.codec.binary.Hex&#x28;&#x29;.encode&#x28;signaturetmp&#x29;&#x3b;&#xa;var signature &#x3d; new java.lang.String&#x28;signaturehex , &#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 4&#x3a; ADD SIGNING INFORMATION TO THE REQUEST&#xa;var authorization_header &#x3d; algorithm &#x2b; &#x22; &#x22; &#x2b; &#x22;Credential&#x3d;&#x22; &#x2b; access_key &#x2b; &#x22;&#x2f;&#x22; &#x2b; credential_scope &#x2b; &#x22;, &#x22; &#x2b;  &#x22;SignedHeaders&#x3d;&#x22; &#x2b; signed_headers &#x2b; &#x22;, &#x22; &#x2b; &#x22;Signature&#x3d;&#x22; &#x2b; signature&#x3b;&#xa;&#xa;&#xa;&#xa;&#xa;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>authorization_header</name>
+        <rename>authorization_header</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>amz_date</name>
+        <rename>amz_date</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>      <field>        <name>request_parameters</name>
+        <rename>request_parameters</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>497</xloc>
+      <yloc>378</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
   <step>
     <name>Abort</name>
     <type>Abort</type>
@@ -154,7 +227,145 @@
     </step>
 
   <step>
-    <name>Add constants</name>
+    <name>Add constants 2</name>
+    <type>Constant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>keyid</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>SALES</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>767</xloc>
+      <yloc>180</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Add constants Kinesis</name>
+    <type>Constant</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>region</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>us-east-1</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>service</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>kinesis</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>host</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>kinesis.us-east-1.amazonaws.com</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>endpoint</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>https&#x3a;&#x2f;&#x2f;kinesis.us-east-1.amazonaws.com</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>content_type</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>application&#x2f;x-amz-json-1.1</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>canonical_uri</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>&#x2f;</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>target</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>Kinesis_20131202.PutRecord</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>412</xloc>
+      <yloc>17</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Add constants SQS</name>
     <type>Constant</type>
     <description/>
     <distribute>Y</distribute>
@@ -240,8 +451,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>479</xloc>
-      <yloc>29</yloc>
+      <xloc>367</xloc>
+      <yloc>376</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -287,7 +498,7 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Update Last ID</send_true_to>
+<send_true_to>Add constants 2</send_true_to>
 <send_false_to>Abort</send_false_to>
     <compare>
 <condition>
@@ -320,7 +531,7 @@
     <optimizationLevel>9</optimizationLevel>
     <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#x2f;&#x2f;Script here&#xa;&#xa;var finaljson &#x3d; &#x27;&#x7b;&#x22;Events&#x22;&#x3a;&#x5b;&#x7b;&#x22;AddEvent&#x22;&#x3a;&#x7b;&#x22;account&#x22;&#x3a;&#x22;darby&#x22;, &#x22;object&#x22;&#x3a;&#x22;sale&#x22;, &#x22;fields&#x22;&#x3a;&#x5b;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;partner_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; designer_id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;net_amount&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_sale_net &#x2b; &#x27;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;gross_amount&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_sale_gross &#x2b; &#x27;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;unique_sale_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;product_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; product_id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;variant_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; product_variant_id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;line_number&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; line_item_id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;quantity&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_quantity &#x2b; &#x27;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;sale_date&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; sale_date_utc &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;customer_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; user_id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x5d;&#x7d;&#x7d;&#x5d;&#x7d;&#x27;&#x3b;</jsScript_script>
+        <jsScript_script>&#x2f;&#x2f;Script here&#xa;&#xa;var finaljson &#x3d; &#x27;&#x7b;&#x22;Events&#x22;&#x3a;&#x5b;&#x7b;&#x22;AddEvent&#x22;&#x3a;&#x7b;&#x22;account&#x22;&#x3a;&#x22;darby&#x22;, &#x22;object&#x22;&#x3a;&#x22;sale&#x22;, &#x22;fields&#x22;&#x3a;&#x5b;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;partner_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; designer_id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;net_amount&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_sale_net &#x2b; &#x27;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;gross_amount&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_sale_gross &#x2b; &#x27;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;unique_sale_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;product_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; product_id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;variant_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; product_variant_id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;line_number&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; line_item_id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;quantity&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_quantity &#x2b; &#x27;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;sale_date&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; sale_date_utc &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;customer_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; user_id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x5d;&#x7d;&#x7d;&#x5d;&#x7d;&#x27;&#x3b;</jsScript_script>
       </jsScript>    </jsScripts>    <fields>      <field>        <name>finaljson</name>
         <rename>finaljson</rename>
         <type>String</type>
@@ -329,14 +540,105 @@
         <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>240</xloc>
-      <yloc>130</yloc>
+      <xloc>259</xloc>
+      <yloc>127</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>HTTP Post</name>
+    <name>Get Last Id</name>
+    <type>MongoDbInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <hostname>ds029197.mongolab.com</hostname>
+    <port>29197</port>
+    <use_all_replica_members>N</use_all_replica_members>
+    <db_name>heroku_app34960699</db_name>
+    <fields_name/>
+    <collection>darby-lastid</collection>
+    <json_field_name>json</json_field_name>
+    <json_query>&#x7b;&#x22;_id&#x22;&#x3a;&#x7b;&#x22;keyid&#x22;&#x3a;&#x22;SALES&#x22;&#x7d;&#x7d;</json_query>
+    <auth_user>lastid</auth_user>
+    <auth_password>Encrypted 2be98afc86aa7f2e4cb79a271cd86a6de</auth_password>
+    <auth_kerberos>N</auth_kerberos>
+    <connect_timeout/>
+    <socket_timeout/>
+    <read_preference>primary</read_preference>
+    <output_json>Y</output_json>
+    <query_is_pipeline>N</query_is_pipeline>
+    <execute_for_each_row>N</execute_for_each_row>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>214</xloc>
+      <yloc>223</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>HTTP Post Kinesis</name>
+    <type>HTTPPOST</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <postafile>N</postafile>
+    <encoding>UTF-8</encoding>
+    <url>https&#x3a;&#x2f;&#x2f;kinesis.us-east-1.amazonaws.com</url>
+    <urlInField>N</urlInField>
+    <urlField/>
+    <requestEntity>request_parameters</requestEntity>
+    <httpLogin/>
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost/>
+    <proxyPort/>
+    <socketTimeout>10000</socketTimeout>
+    <connectionTimeout>10000</connectionTimeout>
+    <closeIdleConnectionsTime>-1</closeIdleConnectionsTime>
+    <lookup>
+      <arg>
+        <name>authorization_header</name>
+        <parameter>Authorization</parameter>
+        <header>Y</header>        </arg>
+      <arg>
+        <name>content_type</name>
+        <parameter>Content-Type</parameter>
+        <header>Y</header>        </arg>
+      <arg>
+        <name>amz_date</name>
+        <parameter>X-Amz-Date</parameter>
+        <header>Y</header>        </arg>
+      <arg>
+        <name>target</name>
+        <parameter>X-Amz-Target</parameter>
+        <header>Y</header>        </arg>
+      </lookup>
+    <result>
+      <name>result</name>
+      <code>httpresult</code>
+      <response_time/>
+      </result>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>714</xloc>
+      <yloc>29</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>HTTP Post SQS</name>
     <type>HTTPPOST</type>
     <description/>
     <distribute>Y</distribute>
@@ -380,8 +682,70 @@
       </result>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>700</xloc>
-      <yloc>30</yloc>
+      <xloc>743</xloc>
+      <yloc>382</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Json Input</name>
+    <type>JsonInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <addresultfile>N</addresultfile>
+    <readurl>N</readurl>
+    <IsIgnoreEmptyFile>N</IsIgnoreEmptyFile>
+    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
+    <ignoreMissingPath>N</ignoreMissingPath>
+    <rownum_field/>
+    <file>
+      <name/>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+    </file>
+    <fields>
+      <field>
+        <name>lastid</name>
+        <path>&#x24;.id.id</path>
+        <type>Number</type>
+        <format>&#x23;</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <IsInFields>Y</IsInFields>
+    <IsAFile>N</IsAFile>
+    <valueField>json</valueField>
+    <shortFileFieldName/>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>114</xloc>
+      <yloc>178</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -406,50 +770,8 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>52</xloc>
-      <yloc>157</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Modified Java Script Value</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var request_parameters &#x3d; &#x22;Action&#x3d;SendMessage&#x26;MessageBody&#x3d;&#x22;&#x3b;&#xa;request_parameters &#x3d; request_parameters &#x2b; java.net.URLEncoder.encode&#x28;finaljson&#x29;&#x3b;&#xa;&#xa;var mac &#x3d; javax.crypto.Mac.getInstance&#x28;&#x22;HmacSHA256&#x22;&#x29;&#x3b;&#xa;&#xa;var method &#x3d; &#x22;POST&#x22;&#x3b;&#xa;&#x2f;&#x2f;var service &#x3d; &#x22;sqs&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var host &#x3d; &#x22;host&#x3a;sqs.us-east-1.amazonaws.com&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var region &#x3d; &#x22;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var endpoint&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var request_parameters &#x3d; &#x22;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;var access_key&#x3b; &#x2f;&#x2f;coming from parameters&#xa;&#x2f;&#x2f;var secret_key&#x3b; &#x2f;&#x2f;coming from parameters&#xa;&#xa;var amz_date_format_date &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;yyyyMMdd&#x22;&#x29; &#xa;var amz_date_format_time &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;HHmmss&#x22;&#x29;&#x3b;&#xa;amz_date_format_date.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;amz_date_format_time.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;var amz_date &#x3d; amz_date_format_date.format&#x28;new Date&#x28;&#x29;&#x29; &#x2b; &#x22;T&#x22; &#x2b; amz_date_format_time.format&#x28;new Date&#x28;&#x29;&#x29; &#x2b; &#x22;Z&#x22;&#x3b;&#xa;&#xa;var date_stamp_format &#x3d;  new java.text.SimpleDateFormat&#x28;&#x22;yyyyMMdd&#x22;&#x29;&#x3b;	&#xa;date_stamp_format.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;var date_stamp &#x3d; date_stamp_format.format&#x28;new Date&#x28;&#x29;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 1&#xa;&#x2f;&#x2f;Step 1 - define method. Done&#xa;&#x2f;&#x2f;Step 2 - Create canonical URI&#xa;&#x2f;&#x2f;var canonical_uri &#x3d; &#x22;&#x2f;&#x22;&#x3b; coming from parameters&#xa;&#x2f;&#x2f;Step 3 - Create the canonical query string&#xa;var canonical_querystring &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 4&#x3a; Create the canonical headers and signed headers&#xa;var canonical_headers &#x3d; &#x22;content-type&#x3a;&#x22; &#x2b; content_type &#x2b; &#x22;&#x5c;n&#x22; &#x2b; &#x22;host&#x3a;&#x22; &#x2b; host &#x2b; &#x22;&#x5c;n&#x22; &#x2b; &#x22;x-amz-date&#x3a;&#x22; &#x2b; amz_date &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 5&#x3a; Create the list of signed headers&#xa;var signed_headers &#x3d; &#x22;content-type&#x3b;host&#x3b;x-amz-date&#x22;&#x3b;&#xa;&#x2f;&#x2f;Step 6&#x3a; Create payload hash&#xa;&#x2f;&#x2f;request_parameters &#x3d; &#x22;Action&#x3d;ListUsers&#x26;Version&#x3d;2010-05-08&#x22;&#x3b;&#xa;var payload_hash &#x3d; org.apache.commons.codec.digest.DigestUtils.sha256Hex&#x28;request_parameters&#x29;&#x3b;&#xa;&#x2f;&#x2f;Step 7&#x3a; Combine elements to create create canonical request&#xa;var canonical_request &#x3d; method &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_uri &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_querystring &#x2b; &#x22;&#x5c;n&#x22; &#x2b; canonical_headers &#x2b; &#x22;&#x5c;n&#x22; &#x2b; signed_headers &#x2b; &#x22;&#x5c;n&#x22; &#x2b; payload_hash&#x3b;&#xa;&#xa;&#x2f;&#x2f;canonical_request &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;POST&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x2f;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;content-type&#x3a;application&#x2f;x-www-form-urlencoded&#x3b; charset&#x3d;utf-8&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;host&#x3a;iam.amazonaws.com&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;x-amz-date&#x3a;20110909T233600Z&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;content-type&#x3b;host&#x3b;x-amz-date&#x22; &#x2b; &#x22;&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;canonical_request &#x3d; canonical_request &#x2b; &#x22;b6359072c78d70ebee1e81adcbab4f01bf2c23245fa365ef83fe8f1f955085e2&#x22;&#x3b;&#xa;&#xa;var canonical_requesthex &#x3d; org.apache.commons.codec.digest.DigestUtils.sha256Hex&#x28;canonical_request&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 2&#x3a; CREATE THE STRING TO SIGN&#xa;var algorithm &#x3d; &#x22;AWS4-HMAC-SHA256&#x22;&#x3b;&#xa;var credential_scope &#x3d; date_stamp &#x2b; &#x22;&#x2f;&#x22; &#x2b; region &#x2b; &#x22;&#x2f;&#x22; &#x2b; service &#x2b; &#x22;&#x2f;&#x22; &#x2b; &#x27;aws4_request&#x27;&#x3b;&#xa;var string_to_sign &#x3d; algorithm &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  amz_date &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  credential_scope &#x2b; &#x22;&#x5c;n&#x22; &#x2b;  canonical_requesthex&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 3&#x3a; CALCULATE THE SIGNATURE&#xa;&#xa;&#x2f;&#x2f;secret_key &#x3d; &#x22;wJalrXUtnFEMI&#x2f;K7MDENG&#x2b;bPxRfiCYEXAMPLEKEY&#x22;&#x3b;&#xa;&#x2f;&#x2f;date_stamp &#x3d; &#x22;20110909&#x22;&#x3b;&#xa;&#x2f;&#x2f;region &#x3d; &#x22;us-east-1&#x22;&#x3b;&#xa;&#x2f;&#x2f;service &#x3d; &#x22;iam&#x22;&#x3b;&#xa;&#xa;var kSecret &#x3d; new java.lang.String&#x28;&#x22;AWS4&#x22;&#x2b;secret_key&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kSecret, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kDate &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;date_stamp&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kDate, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kRegion &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;region&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kRegion, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kService &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;service&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;kService, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var kSigning &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;&#x22;aws4_request&#x22;&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;var signing_key &#x3d; kSigning&#x3b;&#xa;&#xa;&#x2f;&#x2f;var ttt &#x3d;  new java.lang.String&#x28;new org.apache.commons.codec.binary.Hex&#x28;&#x29;.encode&#x28;signing_key&#x29;,&#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; &#x22;&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;AWS4-HMAC-SHA256&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;20110909T233600Z&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;20110909&#x2f;us-east-1&#x2f;iam&#x2f;aws4_request&#x5c;n&#x22;&#x3b;&#xa;&#x2f;&#x2f;string_to_sign &#x3d; string_to_sign &#x2b; &#x22;3511de7e95d28ecd39e9513b642aee07e54f4941150d8df8bf94b328ef7e55e2&#x22;&#x3b;&#xa;&#xa;mac.init&#x28;new javax.crypto.spec.SecretKeySpec&#x28;signing_key, &#x22;HmacSHA256&#x22;&#x29;&#x29;&#x3b;&#xa;var signaturetmp &#x3d; mac.doFinal&#x28;new java.lang.String&#x28;string_to_sign&#x29;.getBytes&#x28;&#x22;UTF-8&#x22;&#x29;&#x29;&#x3b;&#xa;var signaturehex &#x3d; new org.apache.commons.codec.binary.Hex&#x28;&#x29;.encode&#x28;signaturetmp&#x29;&#x3b;&#xa;var signature &#x3d; new java.lang.String&#x28;signaturehex , &#x22;UTF-8&#x22;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;TASK 4&#x3a; ADD SIGNING INFORMATION TO THE REQUEST&#xa;var authorization_header &#x3d; algorithm &#x2b; &#x22; &#x22; &#x2b; &#x22;Credential&#x3d;&#x22; &#x2b; access_key &#x2b; &#x22;&#x2f;&#x22; &#x2b; credential_scope &#x2b; &#x22;, &#x22; &#x2b;  &#x22;SignedHeaders&#x3d;&#x22; &#x2b; signed_headers &#x2b; &#x22;, &#x22; &#x2b; &#x22;Signature&#x3d;&#x22; &#x2b; signature&#x3b;&#xa;&#xa;&#xa;&#xa;&#xa;</jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>authorization_header</name>
-        <rename>authorization_header</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>      <field>        <name>amz_date</name>
-        <rename>amz_date</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>      <field>        <name>request_parameters</name>
-        <rename>request_parameters</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>    </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>592</xloc>
-      <yloc>116</yloc>
+      <xloc>212</xloc>
+      <yloc>371</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -466,9 +788,9 @@
            <schema_name/>
            </partitioning>
     <connection>darbydb</connection>
-    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc&#xa;limit 20&#xa;</sql>
+    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc&#xa;limit 100&#xa;</sql>
     <limit>0</limit>
-    <lookup>Last Processed ID</lookup>
+    <lookup>Select values2</lookup>
     <execute_each_row>N</execute_each_row>
     <variables_active>Y</variables_active>
     <lazy_conversion_active>N</lazy_conversion_active>
@@ -476,6 +798,142 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>107</xloc>
       <yloc>17</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Run Date</name>
+    <type>SystemInfo</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>rundate</name>
+        <type>system date &#x28;variable&#x29;</type>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>558</xloc>
+      <yloc>13</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values2</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>lastid</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>37</xloc>
+      <yloc>110</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Store last id</name>
+    <type>MongoDbOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+
+    <mongo_host>ds029197.mongolab.com</mongo_host>
+
+    <mongo_port>29197</mongo_port>
+    <use_all_replica_members>N</use_all_replica_members>
+
+    <mongo_user>lastid</mongo_user>
+
+    <mongo_password>Encrypted 2be98afc86aa7f2e4cb79a271cd86a6de</mongo_password>
+    <auth_kerberos>N</auth_kerberos>
+
+    <mongo_db>heroku_app34960699</mongo_db>
+
+    <mongo_collection>darby-lastid</mongo_collection>
+
+    <batch_insert_size>100</batch_insert_size>
+    <connect_timeout/>
+    <socket_timeout/>
+    <read_preference>primary</read_preference>
+    <write_concern/>
+    <w_timeout/>
+    <journaled_writes>N</journaled_writes>
+
+    <truncate>N</truncate>
+
+    <update>Y</update>
+
+    <upsert>Y</upsert>
+
+    <multi>N</multi>
+
+    <modifier_update>N</modifier_update>
+    <write_retries>5</write_retries>
+    <write_retry_delay>10</write_retry_delay>
+
+    <mongo_fields>
+      <mongo_field>
+         <incoming_field_name>id</incoming_field_name>
+
+         <mongo_doc_path>id</mongo_doc_path>
+
+         <use_incoming_field_name_as_mongo_field_name>Y</use_incoming_field_name_as_mongo_field_name>
+
+         <update_match_field>N</update_match_field>
+
+         <modifier_update_operation>N&#x2f;A</modifier_update_operation>
+
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
+
+         <json_field>Y</json_field>
+
+      </mongo_field>
+      <mongo_field>
+         <incoming_field_name>keyid</incoming_field_name>
+
+         <mongo_doc_path>_id</mongo_doc_path>
+
+         <use_incoming_field_name_as_mongo_field_name>Y</use_incoming_field_name_as_mongo_field_name>
+
+         <update_match_field>Y</update_match_field>
+
+         <modifier_update_operation>N&#x2f;A</modifier_update_operation>
+
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
+
+         <json_field>N</json_field>
+
+      </mongo_field>
+    </mongo_fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>689</xloc>
+      <yloc>275</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -507,8 +965,8 @@
     </arguments>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>738</xloc>
-      <yloc>249</yloc>
+      <xloc>610</xloc>
+      <yloc>380</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
