@@ -1,62 +1,40 @@
-//./expresso ../../../app/workers/payloadRouterTester.js
+//expresso payloadRouterTester.js
 
-var payloadRouter       = require('/home/mendes/Documents/drillix/angular-seed/app/workers/payloadRouter');
+//mongodb client
+var MongoClient 		= require('mongodb').MongoClient, assert = require('assert');
+//config and credentials
+var drillixconfig		= require('drillixconfig');
+//router
+var payloadRouter       = require('payloadRouter');
+//load processors
+var addEventProcessor 	= require('addEventProcessor');
 
 module.exports = {
-    'test route to transaction': function(beforeExit, assert) {	    
+    'test route to Event Processor': function(beforeExit, assert) {	    
 	    
-		var payload = "Events": [
-        {
-            "AddEvent": {
-                "account": "darby",
-                "object": "sale",
-                "fields": [
-                    {
-                        "name": "partner_id",
-                        "value": "null"
-                    },
-                    {
-                        "name": "net_amount",
-                        "value": 5
-                    },
-                    {
-                        "name": "gross_amount",
-                        "value": 5
-                    },
-                    {
-                        "name": "unique_sale_id",
-                        "value": "13026"
-                    },
-                    {
-                        "name": "product_id",
-                        "value": "2056"
-                    },
-                    {
-                        "name": "variant_id",
-                        "value": "2846"
-                    },
-                    {
-                        "name": "line_number",
-                        "value": "174936"
-                    },
-                    {
-                        "name": "quantity",
-                        "value": 1
-                    },
-                    {
-                        "name": "sale_date",
-                        "value": "20141210T092038Z"
-                    },
-                    {
-                        "name": "customer_id",
-                        "value": "null"
-                    }
-                ]
-            }
-        }
-    ]	    
+	    var payload = {};
+	    payload.Process = {};
+	    payload.Process.Type = "AddEvent";
+	    payload.Process.Data = {};
+	    var addevent = {};
+	    addevent.account = "darby";
+	    addevent.object = "sale";	    
+	    var field = {};
+	    field.name = "partner_id";
+	    field.value = 1;
+	    var fields = [];
+	    fields.push(field); 
+	       	    
+	    payload.Process.Data = addevent;
+	    
+	    var processors = {};
+	    processors.addEvent = module.exports = {
+			process: function (payload, db, processors) {
+				return null;
+			}
+		};	    
 	    
 	    var db = null;
-        assert.equal(6, payloadRouter.route(payload,db));
+        assert.equal("AddEvent", payloadRouter.route(payload,db,processors));
     }
 };
