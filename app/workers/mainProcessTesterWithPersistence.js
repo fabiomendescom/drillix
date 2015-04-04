@@ -27,8 +27,8 @@ module.exports = {
 		records.push(record);
 		event.Records = records;
 				   
-		var result = mainprocess.handle(event,context,function() {
-			assert.equal("OK", result.status);		
+		var result = mainprocess.handle(event,context,function(result) {
+			assert.equal("OK", result[0].status);		
 		});
     }     
 };
