@@ -1,13 +1,20 @@
 
-var mainprocess = require('./mainProcess');
+var mainprocess = require('../mainProcess');
 
-module.exports = {	
-   'test sending events': function(beforeExit, assert) {	 
+var assert = require('chai').assert;
+
+
+describe('Main Process - Persistence', function(){
+  describe('Calls to main process', function(){
+    before(function() {
+        // runs before all tests in this block
 	    context = module.exports = {
 			done: function (a,b) {
 				return null;
 			}
-		};	
+		};	       
+    })	  
+    it('should get return ok from main process', function(done){	
 		var event = {};
 		var records = [];
 		var kinesis = {};
@@ -28,8 +35,11 @@ module.exports = {
 		event.Records = records;
 				   
 		var result = mainprocess.handle(event,context,function(result) {
-			assert.equal("OK", result[0].status);		
-		});
-    }     
-};
+			assert.equal("OK", result[0].status);	
+			done();	
+		});		
+    })
+  })
+})
+
 

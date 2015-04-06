@@ -8,7 +8,7 @@ var mainprocess 		= require('./mainProcess');
   
 exports.handler = function(event, context) {
 	mainprocess.handle(event,context, function(result) {
-		context.done(null, "Processed " + " Events Successfully"); 		
+		context.done(null, "Processed " + result.length +  " Events Successfully"); 		
 	});
 };
 
