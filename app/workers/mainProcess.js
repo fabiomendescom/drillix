@@ -147,5 +147,61 @@ module.exports = {
  * 9. Prune by wiping out anything less thann 2 in support
  * 
  * keep going until you have an empty frequency set. Then, return the set from the previous interation
+ * 
+ * 
+ * C1 Prod1 Period0
+ * C1 Prod2 Period0
+ * C1 Prod1 Period1
+ * C1 Prod4	Period3
+ * 
+ * 1. Group data into transactions
+ * 
+ * {"id" : "C1", "data" : ["Prod 1|Period201101", "Prod 2|Period201101", "Prod 1|Period201102", "Prod4|Period201103"]}
+
+
 */
+
+/*
+{
+    "meta": "basket",
+    "forbasket": {
+        "named": "basket2",
+        "description": "",
+        "effectivefrom": "xxx",
+        "effectiveuntil": "xxx",
+        "scopedby": "customer",
+        "definedby": "sales.customer_id",
+        "associate": {
+            "all": {
+                "absolutevalues": {
+                    "from": "sales.product_id"
+                }
+            }
+        },
+        "and": {
+            "specific": {
+                "relativevalues": {
+                    "from": "returns.sales_date_ym",
+                    "definedas": [
+                        "3"
+                    ]
+                }
+            }
+        },
+        "with": {
+            "all": {
+                "absolutevalues": {
+                    "from": "returns.product_id"
+                }
+            }
+        },
+        "where": {
+            "field": "sales.sale_amount",
+            "gt": 0
+        }
+    }
+}	
+*/			
+	
+ 
 
