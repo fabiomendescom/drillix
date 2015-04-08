@@ -247,12 +247,17 @@ module.exports = {
     "meta": "basket",
     "forbasket": {
         "named": "basket2",
-        "description": "",
+        "description": {
+			"en-US" : [
+				"($confidence$)% of customers who bought ($associate.items[0].value$) bought something else ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$). This scenario occurs ($support$)% of all transactions."
+			]
+        },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
         "basketuniquefield" : "customer_id",
         "support" : 000,
         "confidence" : 000,
+        "lift" : 000,
         "associate": {
 			"items": [
 				{
@@ -277,10 +282,13 @@ module.exports = {
 					"where": {
 						"record" : "exists"
 					},  
-					"within": {
-						"3" : "months",
-						"uniquenessdefinedbyfield" : "customer_id",
-						"from": "sales.sales_date_ym"
+					"timeframes": {
+						"from": "sales.sales_date_ym",
+						"frames" : [
+							"within": {
+								"3" : "months"
+							}
+						]
 					}     
 				}
 			]      
@@ -293,12 +301,17 @@ module.exports = {
     "meta": "basket",
     "forbasket": {
         "named": "basket2",
-        "description": "",
+        "description": {
+			"en-US" : [
+				"($confidence$)% of customers who bought ($associate.items[0].value$) also bought ($with.items[1].value$) ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+			]
+        },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
         "basketuniquefield" : "transaction_id",
         "support" : 000,
         "confidence" : 000,
+        "lift" : 000,
         "associate": {
 			"items" : [
 				{
@@ -331,12 +344,17 @@ module.exports = {
     "meta": "basket",
     "forbasket": {
         "named": "basket2",
-        "description": "",
+        "description": {
+			"en-US" : [
+				"($confidence$)% of customers who bought ($associate.items[0].value$) returned it ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+			]
+        },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
         "basketuniquefield" : "customer_id",
         "support" : 000,
         "confidence" : 000,
+        "lift" : 000,
         "associate": {
 			"items" : [
 				{
@@ -358,11 +376,13 @@ module.exports = {
 					"where": {
 						"record" : "exists"
 					},
-					"timeframe": {
-						"within": {
-							"6" : "months",
-							"from": "sales.sales_date_ym"
-						}
+					"timeframes": {
+						"from": "sales.sales_date_ym",
+						"frames" : [
+							"within": {
+								"6" : "months"
+							}
+						]
 					}  
 				}
 			]   
@@ -375,12 +395,17 @@ module.exports = {
     "meta": "basket",
     "forbasket": {
         "named": "basket2",
-        "description": "",
+        "description": {
+			"en-US" : [
+				"($confidence$)% of customers who bought ($associate.items[0].value$) returned it ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+			]
+        },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
         "basketuniquefield" : "customer_id",
         "support" : 000,
         "confidence" : 000,
+        "lift" : 000,
         "associate": {
 			"items" : [
 				{
@@ -403,10 +428,12 @@ module.exports = {
 						"record" : "exists"
 					},
 					"timeframe": {
-						"after": {
-							"6" : "months",
-							"from": "returns.sales_date_ym"
-						}
+						"from": "sales.sales_date_ym",
+						"frames" : [
+							"after": {
+								"3" : "weeks"
+							}
+						]
 					}    
 				} 
 			]
@@ -419,12 +446,17 @@ Customers who bought prod x and prod y also buy prod z
     "meta": "basket",
     "forbasket": {
         "named": "basket2",
-        "description": "",
+        "description": {
+			"en-US" : [
+				"($confidence$)% of customers who bought ($associate.items[0].value$) and ($associate.items[1].value$) also bought ($with.items[0].value$) ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+			]
+        },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
         "basketuniquefield" : "transaction_id",
         "support" : 000,
         "confidence" : 000,
+        "lift" : 000,
         "associate": {
 			"items" : [
 				{
