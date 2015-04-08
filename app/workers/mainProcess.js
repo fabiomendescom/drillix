@@ -153,15 +153,45 @@ module.exports = {
  * C1 Prod2 Period0
  * C1 Prod1 Period1
  * C1 Prod4	Period3
+ * C2 Prod1 Period0
+ * C2 Prod1 Period1
+ * 
+ * C1 Prod1 Period0 | C1 Prod2 Period0 diff = 0
+ * C1 Prod1 Period0 | C1 Prod1 Period1 diff = 1
+ * C1 Prod1 Period0 | C1 Prod1 Period3 diff = 3
+ * C1 Prod2 Period0 | C1 Prod1 Period1 diff = 1
+ * C1 Prod2 Period0 | C1 Prod4 Period3 diff = 3
+ * C1 Prod1 Period1 | C1 Prod4 Period3 diff = 2
+ * C1 Prod2 Period0 | C1 Prod1 Period1 diff = 1
+ * C1 Prod2 Period0 | C1 Prod4 Period3 diff = 3
+ * C1 Prod1 Period1 | C1 Prod4 Period3 diff = 2
+ * C2 Prod1 Period0 | C2 Prod1 Period1 diff = 1
  * 
  * 1. Group data into transactions
  * 
- * {"id" : "C1", "data" : ["Prod 1|Period201101", "Prod 2|Period201101", "Prod 1|Period201102", "Prod4|Period201103"]}
-
-
+ * {"id" : "C1", "data" : ["Prod1|Prod2|diff0","Prod1|Prod1|diff1","Prod1|Prod1|diff3", "Prod2|Prod1|diff1", "Prod2|Prod4|diff3",
+ *                         "Prod1|Prod4|diff2", "Prod2|Prod1|diff1", "Prod2|Prod4|diff3", "Prod1|Prod4|diff2"]}
+ * {"id" : "C2", "data" : ["Prod1|Prod1|diff1"]}
+ * 
+ * 2. Step 1: Transform tuples by content
+ * 
+ * {"tuples" : ["Prod1|Prod2|diff0"], "count" : 1} <- prune period 0s. They happened at the same time. Or, maybe think about using this combined with non-sequential above
+ * {"tuples" : ["Prod1|Prod1|diff1"], "count" : 2}
+ * {"tuples" : ["Prod1|Prod1|diff3"], "count" : 1}
+ * {"tuples" : ["Prod2|Prod1|diff1"], "count" : 1}
+ * {"tuples" : ["Prod2|Prod4|diff3"], "count" : 2}
+ * {"tuples" : ["Prod1|Prod4|diff2"], "count" : 2}
+ * {"tuples" : ["Prod2|Prod1|diff1"], "count" : 1}
+ * 
+ * 
+ * 
 */
 
+
+
 /*
+
+
 {
     "meta": "basket",
     "forbasket": {
@@ -169,38 +199,267 @@ module.exports = {
         "description": "",
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
-        "scopedby": "customer",
-        "definedby": "sales.customer_id",
+        "basketuniquefield" : "customer_id",
         "associate": {
-            "all": {
-                "absolutevalues": {
-                    "from": "sales.product_id"
-                }
-            }
-        },
-        "and": {
-            "specific": {
-                "relativevalues": {
-                    "from": "returns.sales_date_ym",
-                    "definedas": [
-                        "3"
-                    ]
-                }
-            }
+            "all | list | range | any": {
+                 "from": "sales.product_id"
+            },
+			"where": {
+				"record": "exists"
+			}, 		
+			"within": {
+				"week | month | year" : {
+					"from": "returns.sales_date_ym",
+					"inrange | inlist": [
+						"3"
+					]
+				}
+			}    					
         },
         "with": {
-            "all": {
-                "absolutevalues": {
-                    "from": "returns.product_id"
-                }
-            }
-        },
-        "where": {
-            "field": "sales.sale_amount",
-            "gt": 0
-        }
+            "all | list | range | some | same": {
+                "from": "returns.product_id"
+            },
+			"where": {
+				"condition": {
+					"field": "sales.sale_amount",
+					"gt": 0
+				}
+			},  
+			"within": {
+			    "#" : "months | year",
+				"transaction | week | month | year" : {
+					"uniquenessdefinedbyfield" : "transaction_id | customer_id",
+					"from": "returns.sales_date_ym",
+					"inrange | inlist | within": [
+						"3"
+					]
+				}
+			}           
+        }  
     }
 }	
+
+===========================================================================
+
+% of customers who bought product A and bought some product within 3 months
+{
+    "meta": "basket",
+    "forbasket": {
+        "named": "basket2",
+        "description": "",
+        "effectivefrom": "xxx",
+        "effectiveuntil": "xxx",
+        "basketuniquefield" : "customer_id",
+        "support" : 000,
+        "confidence" : 000,
+        "associate": {
+			"items": [
+				{
+					"list": {
+						"from": "sales.product_id",
+						"values" : [
+							"Prod A"
+						]
+					},
+					"where": {
+						"record": "exists"
+					}	
+				}
+			]				
+        },
+        "with": {
+			"items" : [
+				{
+					"some": {
+						"from": "sales.product_id"
+					},
+					"where": {
+						"record" : "exists"
+					},  
+					"within": {
+						"3" : "months",
+						"uniquenessdefinedbyfield" : "customer_id",
+						"from": "sales.sales_date_ym"
+					}     
+				}
+			]      
+        }  
+    }
+}	
+
+% of customers who bought 2 products together
+{
+    "meta": "basket",
+    "forbasket": {
+        "named": "basket2",
+        "description": "",
+        "effectivefrom": "xxx",
+        "effectiveuntil": "xxx",
+        "basketuniquefield" : "transaction_id",
+        "support" : 000,
+        "confidence" : 000,
+        "associate": {
+			"items" : [
+				{
+					"all": {
+						"from": "sales.product_id"
+					},
+					"where": {
+						"record": "exists"
+					}	
+				}
+			]				
+        },
+        "with": {
+			"items" : [
+				{
+					"all": {
+						"from": "sales.product_id"
+					},
+					"where": {
+						"record" : "exists"
+					}  
+				}
+			]      
+        }  
+    }
+}	
+
+% of customers who bought a product and returned it within 6 months
+{
+    "meta": "basket",
+    "forbasket": {
+        "named": "basket2",
+        "description": "",
+        "effectivefrom": "xxx",
+        "effectiveuntil": "xxx",
+        "basketuniquefield" : "customer_id",
+        "support" : 000,
+        "confidence" : 000,
+        "associate": {
+			"items" : [
+				{
+					"all": {
+						"from": "sales.product_id"
+					},
+					"where": {
+						"record": "exists"
+					}	
+				}
+			]				
+        },
+        "with": {
+			"items" : [
+				{
+					"same": {
+						"from": "returns.product_id"
+					},
+					"where": {
+						"record" : "exists"
+					},
+					"timeframe": {
+						"within": {
+							"6" : "months",
+							"from": "sales.sales_date_ym"
+						}
+					}  
+				}
+			]   
+        }  
+    }
+}
+
+% of customers who bought a product and returned it IN 3 weeks
+{
+    "meta": "basket",
+    "forbasket": {
+        "named": "basket2",
+        "description": "",
+        "effectivefrom": "xxx",
+        "effectiveuntil": "xxx",
+        "basketuniquefield" : "customer_id",
+        "support" : 000,
+        "confidence" : 000,
+        "associate": {
+			"items" : [
+				{
+					"all": {
+						"from": "sales.product_id"
+					},
+					"where": {
+						"record": "exists"
+					}	
+				}
+			]				
+        },
+        "with": {
+			"items" : [
+				{
+					"same": {
+						"from": "returns.product_id"
+					},
+					"where": {
+						"record" : "exists"
+					},
+					"timeframe": {
+						"after": {
+							"6" : "months",
+							"from": "returns.sales_date_ym"
+						}
+					}    
+				} 
+			]
+        }  
+    }
+}
+
+Customers who bought prod x and prod y also buy prod z
+{
+    "meta": "basket",
+    "forbasket": {
+        "named": "basket2",
+        "description": "",
+        "effectivefrom": "xxx",
+        "effectiveuntil": "xxx",
+        "basketuniquefield" : "transaction_id",
+        "support" : 000,
+        "confidence" : 000,
+        "associate": {
+			"items" : [
+				{
+					"all": {
+						"from": "sales.product_id"
+					},
+					"where": {
+						"record": "exists"
+					}	
+				},
+				{
+					"all": {
+						"from": "sales.product_id"
+					},
+					"where": {
+						"record": "exists"
+					}	
+				}
+			]				
+        },
+        "with": {
+			"items" : [
+				{
+					"all": {
+						"from": "sales.product_id"
+					},
+					"where": {
+						"record" : "exists"
+					}  
+				}
+			]      
+        }  
+    }
+}	
+
 */			
 	
  
