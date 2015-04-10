@@ -53,6 +53,9 @@ module.exports = {
 
 /*
  * https://www.youtube.com/watch?v=Hk1zFOMLTrw
+ * Confidence = itemset support / ante support
+ * Lift = itemset support / (ante support x conseq support)
+ * 
  * How the data is coming transactionally through the stream to start
  * T100 Prod 1
  * T100 Prod 3
@@ -72,116 +75,115 @@ module.exports = {
  * 
  * 1. Group data into transactions
  * 
- * {"id" : "T100", "data" : ["Prod 1", "Prod 3", "Prod 4"]}
- * {"id" : "T200", "data" : ["Prod 2", "Prod 3", "Prod 5"]}
- * {"id" : "T300", "data" : ["Prod 1", "Prod 2", "Prod 3", "Prod 5"]}
- * {"id" : "T400", "data" : ["Prod 2", "Prod 5"]}
- * {"id" : "T500", "data" : ["Prod 1", "Prod 3", "Prod 5"]}
+ * {"id" : "T100", "data" : ["((sales))Prod 1", "((sales))Prod 3", "((sales))Prod 4"]}
+ * {"id" : "T200", "data" : ["((sales))Prod 2", "((sales))Prod 3", "((sales))Prod 5"]}
+ * {"id" : "T300", "data" : ["((sales))Prod 1", "((sales))Prod 2", "((sales))Prod 3", "((sales))Prod 5"]}
+ * {"id" : "T400", "data" : ["((sales))Prod 2", "((sales))Prod 5"]}
+ * {"id" : "T500", "data" : ["((sales))Prod 1", "((sales))Prod 3", "((sales))Prod 5"]}
  * 
  * 2. Step 1: Transform tuples by content
  * 
- * {"tuples" : ["Prod 1"], "count" : 3}
- * {"tuples" : ["Prod 2"], "count" : 3}
- * {"tuples" : ["Prod 3"], "count" : 4}
- * {"tuples" : ["Prod 4"], "count" : 1}
- * {"tuples" : ["Prod 5"], "count" : 4}
+ * {"tuples" : ["((sales))Prod 1"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 2"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 3"], "count" : 4}
+ * {"tuples" : ["((sales))Prod 4"], "count" : 1}
+ * {"tuples" : ["((sales))Prod 5"], "count" : 4}
  * 
  * 3. Remove low support items (min support = 2)
  * 
- * {"tuples" : ["Prod 1"], "count" : 3}
- * {"tuples" : ["Prod 2"], "count" : 3}
- * {"tuples" : ["Prod 3"], "count" : 4}
- * {"tuples" : ["Prod 5"], "count" : 4}
+ * {"tuples" : ["((sales))Prod 1"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 2"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 3"], "count" : 4}
+ * {"tuples" : ["((sales))Prod 5"], "count" : 4}
  * 
  * 4. Step 2: combine in pairs
  * 
- * {"tuples" : ["Prod 1", "Prod 2"], "count" : 1}
- * {"tuples" : ["Prod 1", "Prod 3"], "count" : 3}
- * {"tuples" : ["Prod 1", "Prod 5"], "count" : 2}
- * {"tuples" : ["Prod 2", "Prod 3"], "count" : 2}
- * {"tuples" : ["Prod 2", "Prod 5"], "count" : 3}
- * {"tuples" : ["Prod 3", "Prod 5"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 2"], "count" : 1}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 3"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 5"], "count" : 2}
+ * {"tuples" : ["((sales))Prod 2", "((sales))Prod 3"], "count" : 2}
+ * {"tuples" : ["((sales))Prod 2", "((sales))Prod 5"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 3", "((sales))Prod 5"], "count" : 3}
  * 
  * 5. Remove low support items (min support = 2)
  * 
- * {"tuples" : ["Prod 1", "Prod 3"], "count" : 3}
- * {"tuples" : ["Prod 1", "Prod 5"], "count" : 2}
- * {"tuples" : ["Prod 2", "Prod 3"], "count" : 2}
- * {"tuples" : ["Prod 2", "Prod 5"], "count" : 3}
- * {"tuples" : ["Prod 3", "Prod 5"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 3"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 5"], "count" : 2}
+ * {"tuples" : ["((sales))Prod 2", "((sales))Prod 3"], "count" : 2}
+ * {"tuples" : ["((sales))Prod 2", "((sales))Prod 5"], "count" : 3}
+ * {"tuples" : ["((sales))Prod 3", "((sales))Prod 5"], "count" : 3}
  * 
  * 6. Step 3: combine in triples
  * 
- * {"tuples" : ["Prod 1", "Prod 2", "Prod 3"]}
- * {"tuples" : ["Prod 1", "Prod 2", "Prod 5"]}
- * {"tuples" : ["Prod 1", "Prod 3", "Prod 5"]}
- * {"tuples" : ["Prod 2", "Prod 3", "Prod 5"]}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 2", "((sales))Prod 3"]}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 2", "((sales))Prod 5"]}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 3", "((sales))Prod 5"]}
+ * {"tuples" : ["((sales))Prod 2", "((sales))Prod 3", "((sales))Prod 5"]}
  * 
  * 7. Get all combinations of the tuples in previous step
  * 
  * for Prod 1, Prod 2, Prod 3
- * {"tuple" : ["Prod 1", "Prod 2"], "appear" : 0}  <- first time it does not appear should stop algorithm
- * {"tuple" : ["Prod 1", "Prod 3"], "appear" : 1}
- * {"tuple" : ["Prod 2", "Prod 3"], "appear" : 1}
+ * "tuple" : ["((sales))Prod 1", "((sales))Prod 2"], "appear" : 0}  <- first time it does not appear should stop algorithm
+ * "tuple" : ["((sales))Prod 1", "((sales))Prod 3"], "appear" : 1}
+ * "tuple" : ["((sales))Prod 2", "((sales))Prod 3"], "appear" : 1}
  * 
  * for Prod 1, Prod 2, Prod 5
- * {"tuple" : ["Prod 1", "Prod 2"], "appear" : 0}  <- first time it does not appear should stop algorithm
- * {"tuple" : ["Prod 1", "Prod 5"], "appear" : 1}
- * {"tuple" : ["Prod 2", "Prod 5"], "appear" : 1}
+ * {"tuple" : ["((sales))Prod 1", "((sales))Prod 2"], "appear" : 0}  <- first time it does not appear should stop algorithm
+ * {"tuple" : ["((sales))Prod 1", "((sales))Prod 5"], "appear" : 1}
+ * {"tuple" : ["((sales))Prod 2", "((sales))Prod 5"], "appear" : 1}
  * 
  * For Prod 1, Prod 3, Prod 5
- * {"tuple" : ["Prod 1", "Prod 3"], "appear" : 1}  
- * {"tuple" : ["Prod 1", "Prod 5"], "appear" : 1}
- * {"tuple" : ["Prod 3", "Prod 5"], "appear" : 1}
+ * {"tuple" : ["((sales))Prod 1", "((sales))Prod 3"], "appear" : 1}  
+ * {"tuple" : ["((sales))Prod 1", "((sales))Prod 5"], "appear" : 1}
+ * {"tuple" : ["((sales))Prod 3", "((sales))Prod 5"], "appear" : 1}
  * 
  * For Prod 2, Prod 3, Prod 5
- * {"tuple" : ["Prod 2", "Prod 3"], "appear" : 1}  
- * {"tuple" : ["Prod 2", "Prod 5"], "appear" : 1}
- * {"tuple" : ["Prod 3", "Prod 5"], "appear" : 1}
+ * {"tuple" : ["((sales))Prod 2", "((sales))Prod 3"], "appear" : 1}  
+ * {"tuple" : ["((sales))Prod 2", "((sales))Prod 5"], "appear" : 1}
+ * {"tuple" : ["((sales))Prod 3", "((sales))Prod 5"], "appear" : 1}
  * 
  * 8. Count support for the tuples of 3
  * 
- * {"tuples" : ["Prod 1", "Prod 3", "Prod 5"], "count" : 2}
- * {"tuples" : ["Prod 2", "Prod 3", "Prod 5"], "count" : 2}
+ * {"tuples" : ["((sales))Prod 1", "((sales))Prod 3", "((sales))Prod 5"], "count" : 2}
+ * {"tuples" : ["((sales))Prod 2", "((sales))Prod 3", "((sales))Prod 5"], "count" : 2}
  * 
  * 9. Prune by wiping out anything less thann 2 in support
  * 
  * keep going until you have an empty frequency set. Then, return the set from the previous interation
  * 
  * 
- * C1 Prod1 Period0
- * C1 Prod2 Period0
- * C1 Prod1 Period1
- * C1 Prod4	Period3
- * C2 Prod1 Period0
- * C2 Prod1 Period1
  * 
- * C1 Prod1 Period0 | C1 Prod2 Period0 diff = 0
- * C1 Prod1 Period0 | C1 Prod1 Period1 diff = 1
- * C1 Prod1 Period0 | C1 Prod1 Period3 diff = 3
- * C1 Prod2 Period0 | C1 Prod1 Period1 diff = 1
- * C1 Prod2 Period0 | C1 Prod4 Period3 diff = 3
- * C1 Prod1 Period1 | C1 Prod4 Period3 diff = 2
- * C1 Prod2 Period0 | C1 Prod1 Period1 diff = 1
- * C1 Prod2 Period0 | C1 Prod4 Period3 diff = 3
- * C1 Prod1 Period1 | C1 Prod4 Period3 diff = 2
- * C2 Prod1 Period0 | C2 Prod1 Period1 diff = 1
+ * PERIOD 0 - March 1
+ * C1 Prod1 March 1 Period 0
+ * C1 Prod2 March 1 Period 0
+ * C1 Prod1 March 2 Period 1
+ * C1 Prod4	March 3 Period 2
+ * C2 Prod1 March 2 Period 2
+ * C2 Prod1 March 1 Period 2
  * 
- * 1. Group data into transactions
+ * C1 ((sales))Prod1 | ((sales))Prod2 | diff0
+ * C1 ((sales))Prod1 | ((sales))Prod1 | diff1
+ * C1 ((sales))Prod1 | ((sales))Prod4 | diff2
+ * C1 ((sales))Prod2 | ((sales))Prod1 | diff1
+ * C1 ((sales))Prod2 | ((sales))Prod4 | diff2
+ * C1 ((sales))Prod1 | ((sales))Prod4 | diff1
+ * C2 ((sales))Prod1 | ((sales))Prod1 | diff0
  * 
- * {"id" : "C1", "data" : ["Prod1|Prod2|diff0","Prod1|Prod1|diff1","Prod1|Prod1|diff3", "Prod2|Prod1|diff1", "Prod2|Prod4|diff3",
- *                         "Prod1|Prod4|diff2", "Prod2|Prod1|diff1", "Prod2|Prod4|diff3", "Prod1|Prod4|diff2"]}
- * {"id" : "C2", "data" : ["Prod1|Prod1|diff1"]}
+ * 
+ * 1. For every record coming in, consider it period 0 and save it. Then look up at the basket definition to know how far the
+ * period has to go (there could be many). Letś suppose "within 3 months". Search the db backwards "3 months or less" and see
+ * if you find a hit. If you do, add this record as "diff3" as well, since it means this record is within 3 months counting
+ * from the past. It will be considered a period0 and period3. They are always done in pairs
  * 
  * 2. Step 1: Transform tuples by content
  * 
- * {"tuples" : ["Prod1|Prod2|diff0"], "count" : 1} <- prune period 0s. They happened at the same time. Or, maybe think about using this combined with non-sequential above
- * {"tuples" : ["Prod1|Prod1|diff1"], "count" : 2}
- * {"tuples" : ["Prod1|Prod1|diff3"], "count" : 1}
- * {"tuples" : ["Prod2|Prod1|diff1"], "count" : 1}
- * {"tuples" : ["Prod2|Prod4|diff3"], "count" : 2}
- * {"tuples" : ["Prod1|Prod4|diff2"], "count" : 2}
- * {"tuples" : ["Prod2|Prod1|diff1"], "count" : 1}
+ * {"tuples" : ["((sales))Prod1|((returns))Prod2|diff0"], "count" : 1} <- prune period 0s. They happened at the same time. Or, maybe think about using this combined with non-sequential above
+ * {"tuples" : ["((sales))Prod1|((returns))Prod1|diff1"], "count" : 2}
+ * {"tuples" : ["((sales))Prod1|((returns))Prod1|diff3"], "count" : 1}
+ * {"tuples" : ["((sales))Prod2|((returns))Prod1|diff1"], "count" : 1}
+ * {"tuples" : ["((sales))Prod2|((returns))Prod4|diff3"], "count" : 2}
+ * {"tuples" : ["((sales))Prod1|((returns))Prod4|diff2"], "count" : 2}
+ * {"tuples" : ["((sales))Prod2|((returns))Prod1|diff1"], "count" : 1}
  * 
  * 
  * 
@@ -201,7 +203,7 @@ module.exports = {
         "effectiveuntil": "xxx",
         "basketuniquefield" : "customer_id",
         "associate": {
-            "all | list | range | any": {
+            "all | list | range | any(wildcard, a purcahse of any kind) | anyof(or item1 or item2, etc)": {
                  "from": "sales.product_id"
             },
 			"where": {
@@ -242,255 +244,317 @@ module.exports = {
 
 ===========================================================================
 
+TEMPLATES will be done in the future. This is just to validate the grammar
+and approach
+
 % of customers who bought product A and bought some product within 3 months
 {
-    "meta": "basket",
-    "forbasket": {
-        "named": "basket2",
-        "description": {
-			"en-US" : [
-				"($confidence$)% of customers who bought ($associate.items[0].value$) bought something else ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$). This scenario occurs ($support$)% of all transactions."
-			]
-        },
-        "effectivefrom": "xxx",
-        "effectiveuntil": "xxx",
-        "basketuniquefield" : "customer_id",
-        "support" : 000,
-        "confidence" : 000,
-        "lift" : 000,
-        "associate": {
-			"items": [
-				{
-					"list": {
-						"from": "sales.product_id",
-						"values" : [
-							"Prod A"
-						]
+	"meta": "basket",
+	"name" : "basketnew",
+	"template": {
+		"templatename" : "baskettemplate2",
+		"variables": [
+			{
+				"($products$)" : [
+					"Prod A"
+				],
+				"($numberof$)" : "3",
+				"($periodscale$)" : "months",
+				"($periodrange$)" : "within",
+				"($support$)" : "0",
+				"($confidence$)" : "0",
+				"($lift$)" : "0",
+				"($effectivefrom$)" : "xxx",
+				"($effectiveuntil$)" : "xxx",
+				"($description$)" : {
+					"foward" : {
+						"en-US" : [
+							"($confidence$)% of customers who bought ($associate.items[0].value$) bought something else ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$). This scenario occurs ($support$)% of all transactions."
+						],
 					},
-					"where": {
-						"record": "exists"
-					}	
-				}
-			]				
+					"inverse" : {
+					}
+				},
+				"($uniquefield$)" : "customer_id",
+				"($from$)" : "sales.product_id",
+				"($periodfield$)" : "sales.sales_date_ym",
+				"($condition$)" : "exists"
+			}
+		]
+	}
+
+}
+
+((sale))product_id
+
+{
+    "meta": "baskettemplate",
+    "name": "baskettemplate2",
+    "forbasket": {
+        "description": "($description$)",
+        "effectivefrom": "($effectivefrom$)",
+        "effectiveuntil": "($effectiveuntil$)",
+        "basketuniquefield": "($uniquefield$)",
+        "support": "($support$)",
+        "confidence": "($confidence$)",
+        "lift": "($lift$)",
+        "inverse" : "true,
+        "associate": {
+            "items": [
+                {
+                    "list": {
+                        "from": "($from$)",
+                        "values": "($products$)"
+                    },
+                    "where": {
+                        "record": "($condition$)"
+                    }
+                }
+            ]
         },
         "with": {
-			"items" : [
-				{
-					"some": {
-						"from": "sales.product_id"
-					},
-					"where": {
-						"record" : "exists"
-					},  
-					"timeframes": {
-						"from": "sales.sales_date_ym",
-						"frames" : [
-							"within": {
-								"3" : "months"
-							}
-						]
-					}     
-				}
-			]      
-        }  
+            "items": [
+                {
+                    "some": {
+                        "from": "($from$)"
+                    },
+                    "where": {
+                        "record": "($condition$)"
+                    },
+                    "timeframes": {
+                        "from": "($periodfield$)",
+                        "frames": [
+                            {
+                                "($periodrange$)": {
+                                    "($numberof$)": "($periodscale$)"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
     }
-}	
+}
 
 % of customers who bought 2 products together
 {
     "meta": "basket",
+    "name": "basket2",
     "forbasket": {
-        "named": "basket2",
         "description": {
-			"en-US" : [
-				"($confidence$)% of customers who bought ($associate.items[0].value$) also bought ($with.items[1].value$) ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
-			]
+            "en-US": [
+                "($confidence$)% of customers who bought ($associate.items[0].value$) also bought ($with.items[1].value$) ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+            ]
         },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
-        "basketuniquefield" : "transaction_id",
-        "support" : 000,
-        "confidence" : 000,
-        "lift" : 000,
+        "basketuniquefield": "transaction_id",
+        "support": "000",
+        "confidence": "000",
+        "lift": "000",
+        "inverse" : "true",
         "associate": {
-			"items" : [
-				{
-					"all": {
-						"from": "sales.product_id"
-					},
-					"where": {
-						"record": "exists"
-					}	
-				}
-			]				
+            "items": [
+                {
+                    "all": {
+                        "from": "sales.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    }
+                }
+            ]
         },
         "with": {
-			"items" : [
-				{
-					"all": {
-						"from": "sales.product_id"
-					},
-					"where": {
-						"record" : "exists"
-					}  
-				}
-			]      
-        }  
+            "items": [
+                {
+                    "all": {
+                        "from": "sales.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    }
+                }
+            ]
+        }
     }
-}	
+}
 
 % of customers who bought a product and returned it within 6 months
 {
     "meta": "basket",
+    "name": "basket2",
     "forbasket": {
-        "named": "basket2",
         "description": {
-			"en-US" : [
-				"($confidence$)% of customers who bought ($associate.items[0].value$) returned it ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
-			]
+			"forward": {
+				"en-US": [
+					"($confidence$)% of customers who bought ($associate.items[0].value$) returned it ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+				]
+			},
+			"inverse" : {
+			
+			}
         },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
-        "basketuniquefield" : "customer_id",
-        "support" : 000,
-        "confidence" : 000,
-        "lift" : 000,
+        "basketuniquefield": "customer_id",
+        "support": "000",
+        "confidence": "000",
+        "lift": "000",
+        "inverse" : "true",
         "associate": {
-			"items" : [
-				{
-					"all": {
-						"from": "sales.product_id"
-					},
-					"where": {
-						"record": "exists"
-					}	
-				}
-			]				
+            "items": [
+                {
+                    "all": {
+                        "from": "sales.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    }
+                }
+            ]
         },
         "with": {
-			"items" : [
-				{
-					"same": {
-						"from": "returns.product_id"
-					},
-					"where": {
-						"record" : "exists"
-					},
-					"timeframes": {
-						"from": "sales.sales_date_ym",
-						"frames" : [
-							"within": {
-								"6" : "months"
-							}
-						]
-					}  
-				}
-			]   
-        }  
+            "items": [
+                {
+                    "same": {
+                        "from": "returns.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    },
+                    "timeframes": {
+                        "from": "sales.sales_date_ym",
+                        "frames": [
+                            {
+                                "within": {
+                                    "6": "months"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
     }
 }
 
 % of customers who bought a product and returned it IN 3 weeks
 {
     "meta": "basket",
+    "name": "basket2",
     "forbasket": {
-        "named": "basket2",
         "description": {
-			"en-US" : [
-				"($confidence$)% of customers who bought ($associate.items[0].value$) returned it ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
-			]
+			"foward": {
+				"en-US": [
+					"($confidence$)% of customers who bought ($associate.items[0].value$) returned it ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+				]
+			},
+			"inverse" : {
+			
+			}
         },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
-        "basketuniquefield" : "customer_id",
-        "support" : 000,
-        "confidence" : 000,
-        "lift" : 000,
+        "basketuniquefield": "customer_id",
+        "support": "000",
+        "confidence": "000",
+        "lift": "000",
+        "inverse" : "true",
         "associate": {
-			"items" : [
-				{
-					"all": {
-						"from": "sales.product_id"
-					},
-					"where": {
-						"record": "exists"
-					}	
-				}
-			]				
+            "items": [
+                {
+                    "all": {
+                        "from": "sales.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    }
+                }
+            ]
         },
         "with": {
-			"items" : [
-				{
-					"same": {
-						"from": "returns.product_id"
-					},
-					"where": {
-						"record" : "exists"
-					},
-					"timeframe": {
-						"from": "sales.sales_date_ym",
-						"frames" : [
-							"after": {
-								"3" : "weeks"
-							}
-						]
-					}    
-				} 
-			]
-        }  
+            "items": [
+                {
+                    "same": {
+                        "from": "returns.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    },
+                    "timeframe": {
+                        "from": "sales.sales_date_ym",
+                        "frames": [
+                            {
+                                "after": {
+                                    "3": "weeks"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
     }
 }
 
 Customers who bought prod x and prod y also buy prod z
 {
     "meta": "basket",
+    "name": "basket2",
     "forbasket": {
-        "named": "basket2",
         "description": {
-			"en-US" : [
-				"($confidence$)% of customers who bought ($associate.items[0].value$) and ($associate.items[1].value$) also bought ($with.items[0].value$) ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
-			]
+			"foward" : {
+				"en-US": [
+					"($confidence$)% of customers who bought ($associate.items[0].value$) and ($associate.items[1].value$) also bought ($with.items[0].value$) ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+				]
+			},
+			"inverse" : {
+			
+			}
         },
         "effectivefrom": "xxx",
         "effectiveuntil": "xxx",
-        "basketuniquefield" : "transaction_id",
-        "support" : 000,
-        "confidence" : 000,
-        "lift" : 000,
+        "basketuniquefield": "transaction_id",
+        "support": "000",
+        "confidence": "000",
+        "lift": "000",
+        "inverse" : "true",
         "associate": {
-			"items" : [
-				{
-					"all": {
-						"from": "sales.product_id"
-					},
-					"where": {
-						"record": "exists"
-					}	
-				},
-				{
-					"all": {
-						"from": "sales.product_id"
-					},
-					"where": {
-						"record": "exists"
-					}	
-				}
-			]				
+            "items": [
+                {
+                    "all": {
+                        "from": "sales.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    }
+                },
+                {
+                    "all": {
+                        "from": "sales.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    }
+                }
+            ]
         },
         "with": {
-			"items" : [
-				{
-					"all": {
-						"from": "sales.product_id"
-					},
-					"where": {
-						"record" : "exists"
-					}  
-				}
-			]      
-        }  
+            "items": [
+                {
+                    "all": {
+                        "from": "sales.product_id"
+                    },
+                    "where": {
+                        "record": "exists"
+                    }
+                }
+            ]
+        }
     }
-}	
+}
 
 */			
 	
