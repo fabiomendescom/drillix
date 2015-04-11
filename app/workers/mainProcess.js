@@ -147,7 +147,7 @@ module.exports = {
  * {"tuples" : ["((sales))Prod 1", "((sales))Prod 3", "((sales))Prod 5"], "count" : 2}
  * {"tuples" : ["((sales))Prod 2", "((sales))Prod 3", "((sales))Prod 5"], "count" : 2}
  * 
- * 9. Prune by wiping out anything less thann 2 in support
+ * 9. Prune by wiping out anything less than 2 in support
  * 
  * keep going until you have an empty frequency set. Then, return the set from the previous interation
  * 
@@ -383,53 +383,53 @@ and approach
 
 % of customers who bought a product and returned it within 6 months
 {
-    "meta": "basket",
-    "name": "basket2",
-    "forbasket": {
-        "description": {
-			"forward": {
-				"en-US": [
-					"($confidence$)% of customers who bought ($associate.items[0].value$) returned it ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+    'meta': 'basket',
+    'name': 'basket2',
+    'forbasket': {
+        'description': {
+			'forward': {
+				'en-US': [
+					'($confidence$)% of customers who bought ($associate.items[0].value$) returned it ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)'
 				]
 			},
-			"inverse" : {
+			'inverse' : {
 			
 			}
         },
-        "effectivefrom": "xxx",
-        "effectiveuntil": "xxx",
-        "basketuniquefield": "customer_id",
-        "support": "000",
-        "confidence": "000",
-        "lift": "000",
-        "inverse" : "true",
-        "associate": {
-            "items": [
+        'effectivefrom': 'xxx',
+        'effectiveuntil': 'xxx',
+        'basketuniquefield': 'customer_id',
+        'support': '000',
+        'confidence': '000',
+        'lift': '000',
+        'inverse' : 'true',
+        'associate': {
+            'items': [
                 {
-                    "all": {
-                        "from": "sales.product_id"
+                    'all': {
+                        'from': 'sales.product_id'
                     },
-                    "where": {
-                        "record": "exists"
+                    'where': {
+                        'record': 'exists'
                     }
                 }
             ]
         },
-        "with": {
-            "items": [
+        'with': {
+            'items': [
                 {
-                    "same": {
-                        "from": "returns.product_id"
+                    'same': {
+                        'from': 'returns.product_id'
                     },
-                    "where": {
-                        "record": "exists"
+                    'where': {
+                        'record': 'exists'
                     },
-                    "timeframes": {
-                        "from": "sales.sales_date_ym",
-                        "frames": [
+                    'timeframes': {
+                        'from': 'sales.sales_date_ym',
+                        'frames': [
                             {
-                                "within": {
-                                    "6": "months"
+                                'within': {
+                                    '6': 'months'
                                 }
                             }
                         ]
@@ -501,54 +501,54 @@ and approach
 
 Customers who bought prod x and prod y also buy prod z
 {
-    "meta": "basket",
-    "name": "basket2",
-    "forbasket": {
-        "description": {
-			"foward" : {
-				"en-US": [
-					"($confidence$)% of customers who bought ($associate.items[0].value$) and ($associate.items[1].value$) also bought ($with.items[0].value$) ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)"
+    'meta': 'basket',
+    'name': 'basket2',
+    'forbasket': {
+        'description': {
+			'forward' : {
+				'en-US': [
+					'($confidence$)% of customers who bought ($associate.items[0].value$) and ($associate.items[1].value$) also bought ($with.items[0].value$) ($with.items.frame.name$) ($with.items.frame.quantity$) ($with.items.frame.unit$)'
 				]
 			},
-			"inverse" : {
+			'inverse' : {
 			
 			}
         },
-        "effectivefrom": "xxx",
-        "effectiveuntil": "xxx",
-        "basketuniquefield": "transaction_id",
-        "support": "000",
-        "confidence": "000",
-        "lift": "000",
-        "inverse" : "true",
-        "associate": {
-            "items": [
+        'effectivefrom': 'xxx',
+        'effectiveuntil': 'xxx',
+        'basketuniquefield': 'transaction_id',
+        'support': '000',
+        'confidence': '000',
+        'lift': '000',
+        'inverse' : 'true',
+        'associate': {
+            'items': [
                 {
-                    "all": {
-                        "from": "sales.product_id"
+                    'all': {
+                        'from': 'sales.product_id'
                     },
-                    "where": {
-                        "record": "exists"
+                    'where': {
+                        'record': 'exists'
                     }
                 },
                 {
-                    "all": {
-                        "from": "sales.product_id"
+                    'all': {
+                        'from': 'sales.product_id'
                     },
-                    "where": {
-                        "record": "exists"
+                    'where': {
+                        'record': 'exists'
                     }
                 }
             ]
         },
-        "with": {
-            "items": [
+        'with': {
+            'items': [
                 {
-                    "all": {
-                        "from": "sales.product_id"
+                    'all': {
+                        'from': 'sales.product_id'
                     },
-                    "where": {
-                        "record": "exists"
+                    'where': {
+                        'record': 'exists'
                     }
                 }
             ]
