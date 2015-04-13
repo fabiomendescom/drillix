@@ -169,6 +169,8 @@ module.exports = {
  * C1 ((sales))Prod1 | ((sales))Prod4 | diff1
  * C2 ((sales))Prod1 | ((sales))Prod1 | diff0
  * 
+ * C1 (sales Prod1 Period 0) | (sales Prod1 Period 6)
+ * T1 (sales Prod1) | (sales Prod2)
  * 
  * 1. For every record coming in, consider it period 0 and save it. Then look up at the basket definition to know how far the
  * period has to go (there could be many). Letś suppose "within 3 months". Search the db backwards "3 months or less" and see
