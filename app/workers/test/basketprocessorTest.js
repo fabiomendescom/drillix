@@ -231,7 +231,7 @@ describe('Basket Processor Test', function(){
 
 
   })	
-    
+ /*   
   describe('Test Template to User Config conversions - TBD', function(){
     it('Converts a template into a User Config', function(){	
 		assert.ok(1,'this is a stub. You need to finish this template later');
@@ -325,64 +325,17 @@ describe('Basket Processor Test', function(){
 				
     })
   })  
+*/
+
   describe('Test Aggregators', function(){
     it('Test Aggregator', function(){	
+		/*
 		var event = {};
 		var records = [];
 		var kinesis = {};
 		kinesis.partitionKey = "partitionKey-3";
 		kinesis.kinesisSchemaVersion = "1.0";
-		kinesis.data = '{\
-					"Process": {\
-						"Type": "AddEvent",\
-						"Data": {\
-							"account": "darby",\
-							"object": "sale",\
-							"fields": [\
-								{\
-									"name": "partner_id",\
-									"value": "null"\
-								},\
-								{\
-									"name": "net_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "gross_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "unique_sale_id",\
-									"value": "67369"\
-								},\
-								{\
-									"name": "product_id",\
-									"value": "2381"\
-								},\
-								{\
-									"name": "variant_id",\
-									"value": "3794"\
-								},\
-								{\
-									"name": "line_number",\
-									"value": "218514"\
-								},\
-								{\
-									"name": "quantity",\
-									"value": 1\
-								},\
-								{\
-									"name": "sale_date",\
-									"value": "20150206T115527Z"\
-								},\
-								{\
-									"name": "customer_id",\
-									"value": "59005"\
-								}\
-							]\
-						}\
-					}\
-		}';
+
 		kinesis.sequenceNumber ="49545115243490985018280067714973144582180062593244200961";
 		var record = {};
 		record.kinesis = kinesis;
@@ -395,213 +348,13 @@ describe('Basket Processor Test', function(){
 		record.awsRegion = "us-east-1";
 		
 		var record2 = JSON.parse(JSON.stringify(record));
-		record2.kinesis.data = '{\
-					"Process": {\
-						"Type": "AddEvent",\
-						"Data": {\
-							"account": "darby",\
-							"object": "sale",\
-							"fields": [\
-								{\
-									"name": "partner_id",\
-									"value": "null"\
-								},\
-								{\
-									"name": "net_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "gross_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "unique_sale_id",\
-									"value": "67369"\
-								},\
-								{\
-									"name": "product_id",\
-									"value": "2382"\
-								},\
-								{\
-									"name": "variant_id",\
-									"value": "3794"\
-								},\
-								{\
-									"name": "line_number",\
-									"value": "218514"\
-								},\
-								{\
-									"name": "quantity",\
-									"value": 1\
-								},\
-								{\
-									"name": "sale_date",\
-									"value": "20150206T115527Z"\
-								},\
-								{\
-									"name": "customer_id",\
-									"value": "59005"\
-								}\
-							]\
-						}\
-					}\
-		}';
+
 		var record3 = JSON.parse(JSON.stringify(record));
-		record3.kinesis.data = '{\
-					"Process": {\
-						"Type": "AddEvent",\
-						"Data": {\
-							"account": "darby",\
-							"object": "sale",\
-							"fields": [\
-								{\
-									"name": "partner_id",\
-									"value": "null"\
-								},\
-								{\
-									"name": "net_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "gross_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "unique_sale_id",\
-									"value": "67369"\
-								},\
-								{\
-									"name": "product_id",\
-									"value": "2383"\
-								},\
-								{\
-									"name": "variant_id",\
-									"value": "3794"\
-								},\
-								{\
-									"name": "line_number",\
-									"value": "218514"\
-								},\
-								{\
-									"name": "quantity",\
-									"value": 1\
-								},\
-								{\
-									"name": "sale_date",\
-									"value": "20150206T115527Z"\
-								},\
-								{\
-									"name": "customer_id",\
-									"value": "59005"\
-								}\
-							]\
-						}\
-					}\
-		}';		
+	
 		var record4 = JSON.parse(JSON.stringify(record));
-		record4.kinesis.data = '{\
-					"Process": {\
-						"Type": "AddEvent",\
-						"Data": {\
-							"account": "darby",\
-							"object": "sale",\
-							"fields": [\
-								{\
-									"name": "partner_id",\
-									"value": "null"\
-								},\
-								{\
-									"name": "net_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "gross_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "unique_sale_id",\
-									"value": "67380"\
-								},\
-								{\
-									"name": "product_id",\
-									"value": "2383"\
-								},\
-								{\
-									"name": "variant_id",\
-									"value": "3794"\
-								},\
-								{\
-									"name": "line_number",\
-									"value": "218514"\
-								},\
-								{\
-									"name": "quantity",\
-									"value": 1\
-								},\
-								{\
-									"name": "sale_date",\
-									"value": "20150206T115527Z"\
-								},\
-								{\
-									"name": "customer_id",\
-									"value": "59005"\
-								}\
-							]\
-						}\
-					}\
-		}';	
+
 		var record5 = JSON.parse(JSON.stringify(record));
-		record5.kinesis.data = '{\
-					"Process": {\
-						"Type": "AddEvent",\
-						"Data": {\
-							"account": "darby",\
-							"object": "sale",\
-							"fields": [\
-								{\
-									"name": "partner_id",\
-									"value": "null"\
-								},\
-								{\
-									"name": "net_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "gross_amount",\
-									"value": 29\
-								},\
-								{\
-									"name": "unique_sale_id",\
-									"value": "67380"\
-								},\
-								{\
-									"name": "product_id",\
-									"value": "2384"\
-								},\
-								{\
-									"name": "variant_id",\
-									"value": "3794"\
-								},\
-								{\
-									"name": "line_number",\
-									"value": "218514"\
-								},\
-								{\
-									"name": "quantity",\
-									"value": 1\
-								},\
-								{\
-									"name": "sale_date",\
-									"value": "20150206T115527Z"\
-								},\
-								{\
-									"name": "customer_id",\
-									"value": "59005"\
-								}\
-							]\
-						}\
-					}\
-		}';			
+		
 				
 		records.push(record);
 		records.push(record2);
@@ -609,104 +362,182 @@ describe('Basket Processor Test', function(){
 		records.push(record4);
 		records.push(record5);									
 		event.Records = records;		
+		*/
+
+		var record1 = JSON.parse('{\
+							"account": "darby",\
+							"object": "sale",\
+							"fields": {\
+									"partner_id" : "null",\
+									"net_amount" : "29",\
+									"gross_amount" : "29",\
+									"unique_sale_id" : "67369",\
+									"product_id" : "2381",\
+									"variant_id": "3794",\
+									"line_number" : "218514",\
+									"quantity": "1",\
+									"sale_date": "20150206T115527Z",\
+									"customer_id":"59005"\
+							}\
+		}');
 		
-		var systemconfig = JSON.parse('{ \
-			"configs" : [ \
-				{ \
-					"aggregators" : [ \
-						{ \
-							"basketdefinition" : { \
-								"basketkeyalias" : {\
-									"basketkeyalias" : "TRANSACTION", \
-									"objects" : [\
-										{\
-											"object" : "sale", \
-											"key" : "unique_sale_id", \
-											"basketfieldaliases" : [\
-												{\
-													"basketfieldalias" : "PRODUCT_ID",\
-													"field" : "product_id"\
-												}\
-											]\
-										},\
-										{\
-											"object" : "returns", \
-											"key" : "original_unique_sale_id", \
-											"basketfieldaliases" : [\
-												{\
-													"basketfieldalias" : "PRODUCT_ID",\
-													"field" : "product_id"\
-												}\
-											]\
-										}\
-									]\
-								}\
-							},\
-							"tuplestotrack" : [ \
-								{\
-									"basketfields" : [\
-										{\
-											"filter" : "all", \
-											"basketfieldalias" : "PRODUCT_ID"\
-										} \
-									]\
-								},\
-								{\
-									"basketfields" : [\
-										{\
-											"filter" : "all", \
-											"basketfieldalias" : "PRODUCT_ID"\
-										},\
-										{\
-											"filter" : "all", \
-											"basketfieldalias" : "PRODUCT_ID"\
-										}\
-									]\
-								}\
-							] \
-						}\
-					] \
-				} \
-			] \
+		var record2  = JSON.parse('{\
+							"account": "darby",\
+							"object": "sale",\
+							"fields": {\
+									"partner_id" : "null",\
+									"net_amount" : "29",\
+									"gross_amount" : "29",\
+									"unique_sale_id" : "67369",\
+									"product_id" : "2382",\
+									"variant_id": "3794",\
+									"line_number" : "218514",\
+									"quantity": "1",\
+									"sale_date": "20150206T115527Z",\
+									"customer_id":"59005"\
+							}\
+		}');		
+
+		var record3 = JSON.parse('{\
+							"account": "darby",\
+							"object": "sale",\
+							"fields": {\
+									"partner_id" : "null",\
+									"net_amount" : "29",\
+									"gross_amount" : "29",\
+									"unique_sale_id" : "67369",\
+									"product_id" : "2383",\
+									"variant_id": "3794",\
+									"line_number" : "218514",\
+									"quantity": "1",\
+									"sale_date": "20150206T115527Z",\
+									"customer_id":"59005"\
+							}\
 		}');	
 		
-		var expectedoutput = '{\
+		var record4 = JSON.parse('{\
+							"account": "darby",\
+							"object": "sale",\
+							"fields": {\
+									"partner_id" : "null",\
+									"net_amount" : "29",\
+									"gross_amount" : "29",\
+									"unique_sale_id" : "67369",\
+									"product_id" : "2383",\
+									"variant_id": "3794",\
+									"line_number" : "218514",\
+									"quantity": "1",\
+									"sale_date": "20150206T115527Z",\
+									"customer_id":"59005"\
+							}\
+		}');	
+		
+		var record5 = JSON.parse('{\
+							"account": "darby",\
+							"object": "sale",\
+							"fields": {\
+									"partner_id" : "null",\
+									"net_amount" : "29",\
+									"gross_amount" : "29",\
+									"unique_sale_id" : "67369",\
+									"product_id" : "2384",\
+									"variant_id": "3794",\
+									"line_number" : "218514",\
+									"quantity": "1",\
+									"sale_date": "20150206T115527Z",\
+									"customer_id":"59005"\
+							}\
+		}');	
+		
+		var addtransactionrecords = [];		
+		addtransactionrecords.push(record1);
+		addtransactionrecords.push(record2);
+		addtransactionrecords.push(record3);
+		addtransactionrecords.push(record4);
+		addtransactionrecords.push(record5);				
+
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "unique_sale_id",\
+					"objectfield" : "product_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "TRANSACTION_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			]\
+		}');		
+				
+		var expectedoutput = JSON.parse('{\
 			"aggregators" : [\
 				{\
 					"basketkeyalias" : "TRANSACTION", \
 					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "YYYY/MM", \
 					"data" : [\
-						{\
-							"values" : [	\
-								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
-								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
-								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}		\
-							]	\
-						}\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
 					]\
 				},\
 				{\
 					"basketkeyalias" : "TRANSACTION", \
 					"basketkeyaliasvalue" : "67380", \
+					"periodrelevance" : "YYYY/MM", \
 					"data" : [\
-						{\
-							"values" : [	\
-								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"},		\
-								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2384"} \
-							]	\
-						}\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"},\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2384"} \
 					]\
 				}\
 			]\
-		}';
+		}');
+		
+
+		var actualresult = processor.runAggregator(addtransactionrecords, systemconfig);
+		
+		assert.deepEqual(actualresult,expectedoutput);
+		
 		
 		//This should go to another test case. 
 		//this deals with time based accumulators by the nature of the tuples
-		var expectedoutput2 = '{\
+		/*var expectedoutput2 = '{\
 			"aggregators" : [\
 				{\
 					"basketkeyalias" : "CUSTOMER", \
 					"basketkeyaliasvalue" : "59005", \
+					"periodrelevance" : "YYYY/MM", \
 					"data" : [\
 						{\
 							"values" : [	\
@@ -721,9 +552,8 @@ describe('Basket Processor Test', function(){
 					]\
 				}\
 			]\
-		}';		
+		}';		*/
 		
-		assert.notOk(1,'this is a stub');
     })
   })  
   describe('Test Counters', function(){
@@ -733,6 +563,7 @@ describe('Basket Processor Test', function(){
 				{\
 					"basketkeyalias" : "TRANSACTION", \
 					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "YYYY/MM", \
 					"data" : [\
 						{\
 							"values" : [	\
@@ -746,6 +577,7 @@ describe('Basket Processor Test', function(){
 				{\
 					"basketkeyalias" : "TRANSACTION", \
 					"basketkeyaliasvalue" : "67380", \
+					"periodrelevance" : "YYYY/MM", \
 					"data" : [\
 						{\
 							"values" : [	\
@@ -761,24 +593,28 @@ describe('Basket Processor Test', function(){
 		var expectedoutput = '{\
 			"tuples": [\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}		\
 					],\
 					"count" : "1"\
 				},	\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}					\
 					],\
 					"count" : "1"\
 				},			\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}					\
 					],\
 					"count" : "1"\
 				},									\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"} \
@@ -786,6 +622,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"} \
@@ -793,6 +630,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"},\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"} \
@@ -800,6 +638,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}\
 					],\
@@ -812,6 +651,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},	\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"},\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2384"} \
@@ -826,6 +666,7 @@ describe('Basket Processor Test', function(){
 				{\
 					"basketkeyalias" : "CUSTOMER", \
 					"basketkeyaliasvalue" : "59005", \
+					"periodrelevance" : "YYYY/MM", \
 					"data" : [\
 						{\
 							"values" : [	\
@@ -845,24 +686,28 @@ describe('Basket Processor Test', function(){
 		var expectedoutput2 = '{\
 			"tuples": [\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},		\
 					],\
 					"count" : "1"\
 				},	\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"},		\
 					],\
 					"count" : "1"\
 				},	\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"},		\
 					],\
 					"count" : "1"\
 				},	\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},		\
 						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"} \
@@ -870,6 +715,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},	\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"},		\
 						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"} \
@@ -877,6 +723,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},			\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"},		\
 						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"} \
@@ -884,6 +731,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},									\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},		\
 						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"} \
@@ -891,6 +739,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},		\
 						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"} \
@@ -898,6 +747,7 @@ describe('Basket Processor Test', function(){
 					"count" : "1"\
 				},\
 				{\
+					"periodrelevance" : "YYYY/MM", \
 					"tuple" : [\
 						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"},		\
 						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"} \
@@ -910,4 +760,81 @@ describe('Basket Processor Test', function(){
 		assert.notOk(1,'this is a stub');
     })
   })    
+  describe('Test Confidence Calculators', function(){
+    it('Test Confidence Calculator', function(){	
+		var inputvalue = '{\
+			"tuples": [\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},		\
+					],\
+					"count" : "1"\
+				},	\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"},		\
+					],\
+					"count" : "1"\
+				},	\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"},		\
+					],\
+					"count" : "1"\
+				},	\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},		\
+						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"} \
+					],\
+					"count" : "1"\
+				},	\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"},		\
+						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"} \
+					],\
+					"count" : "1"\
+				},			\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"},		\
+						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"} \
+					],\
+					"count" : "1"\
+				},									\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},		\
+						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"} \
+					],\
+					"count" : "1"\
+				},\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},		\
+						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"} \
+					],\
+					"count" : "1"\
+				},\
+				{\
+					"periodrelevance" : "YYYY/MM", \
+					"tuple" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"},		\
+						{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"} \
+					],\
+					"count" : "1"\
+				}\
+			]\
+	    }';	
+	})
+  })		
 })

@@ -1,7 +1,7 @@
 
 module.exports = {
 	
-	// This function will receive a template data and a user config variables and will
+	// TBD This function will receive a template data and a user config variables and will
 	// return a modified UserConfig with all variables replaced and ready to be processed
 	/* 
 	* returns: userconfig
@@ -10,7 +10,7 @@ module.exports = {
 		//TBD
 	},
 
-	//this function converts the user config array format that is more friendly to configure
+	// TBD This function converts the user config array format that is more friendly to configure
 	//to a system one more helpful for the processing
 	/*
 	* returns: systemconfig
@@ -55,6 +55,24 @@ module.exports = {
 	},
 
 
+	extractAddTransactionsFromEventRecords: function(eventrecords, transactionsextractor, dataextractor) {
+		var transactionextractor = function(eventrecords) {
+			return transactionrecords.Records;
+		};
+		var dataextractor = function(individualrecord) {
+			return individualrecord.kinesis.data.Process.AddEvent.Data;
+		};
+		
+		var recordoutput = [];
+		var records = transactionextractor(eventrecords);
+		for (i = 0; i < records.length; i++) {
+			var record = dataextractor(records[i]);
+			recordoutput.push(record);
+		}	
+		return recordoutput;	
+	},
+	
+	
 
 	/* input:
 	 * 
@@ -64,8 +82,58 @@ module.exports = {
 	 * 
 	 * returns: aggregatorrecords
 	*/
-	runAggregator: function(transactionrecords, systemconfig, transactionsextractor) {
-	
+	runAggregator: function(addtransactionrecords, systemconfig) {
+		var getMapping = function(obj, systemconfig) {
+			for (j = 0; j < systemconfig.mappings.length; j++) {
+				if (systemconfig.mappings[j].object == obj) {
+					return systemconfig.mappings[j];
+				}
+			}
+			return null;
+		}
+		
+		var aggregators = [];
+		var item = {};		
+		//find the position that matches with the current object
+		for (i = 0; i < addtransactionrecords.length; i++) {
+			var objectname = addtransactionrecords[i].object;
+			var mapping = getMapping(objectname, systemconfig);
+			if (mapping != null) {
+				item.basketkeyalias = mapping.basketkeyalias;
+				item.basketkeyaliasvalue = addtransactionrecords[i].fields[mapping.objectkey];
+				item.periodrelevance = "YYYY/MM";
+				item.data = [];
+				for (x = 0; x < mapping.objectfields.length; x++) {					
+					var field = mapping.objectfields[x];
+					var fielditem = {};
+					fielditem.basketfieldalias = field.basketfieldname;
+					fielditem.basketfieldaliasvalue = addtransactionrecords[i].fields[field.fieldname];
+					item.data.push(fielditem);
+				}
+				aggregators.push(item);
+			}
+		}
+		console.log(aggregators);
+		return aggregators;
+		
+		
+			/*
+				{\
+					"basketkeyalias" : "TRANSACTION", \
+					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "YYYY/MM", \
+					"data" : [\
+						{\
+							"values" : [	\
+								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+							]	\
+						}\
+					]\
+				},\		
+			*/	
+					
 	},
 
 	/*
