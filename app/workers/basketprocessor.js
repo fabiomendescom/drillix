@@ -6,15 +6,18 @@ module.exports = {
 	/* 
 	* returns: userconfig
 	*/
+	/*
 	convertTemplateToUserConfig: function(templateconfig, userconfigvariables) {
 		//TBD
 	},
+	*/
 
 	// TBD This function converts the user config array format that is more friendly to configure
 	//to a system one more helpful for the processing
 	/*
 	* returns: systemconfig
 	*/
+	/*
 	convertUserConfigToSystemConfig: function(userconfig) {
 		var output = {};
 		var result = {};
@@ -53,7 +56,7 @@ module.exports = {
 		
 		//TBD....................
 	},
-
+*/
 
 	extractAddTransactionsFromEventRecords: function(eventrecords, transactionsextractor, dataextractor) {
 		var transactionextractor = function(eventrecords) {
@@ -84,56 +87,67 @@ module.exports = {
 	*/
 	runAggregator: function(addtransactionrecords, systemconfig) {
 		var getMapping = function(obj, systemconfig) {
-			for (j = 0; j < systemconfig.mappings.length; j++) {
+			for (var j = 0; j < systemconfig.mappings.length; j++) {
 				if (systemconfig.mappings[j].object == obj) {
 					return systemconfig.mappings[j];
 				}
 			}
 			return null;
 		}
+		// if it finds the datatoget in aggregator then returns it, otherwise return a new object
+		var getDataForTransactionId = function(datatoget,datavalue, dataperiod, aggregator) {
+			for (var i = 0; i < aggregator.length; i++) {
+				if (aggregator[i].basketkeyaliasvalue == datavalue) {
+					return aggregator[i];
+				}
+			}
+			item = new Object();
+			item.basketkeyalias = datatoget;
+			item.basketkeyaliasvalue = datavalue;
+			item.periodrelevance = dataperiod;
+			item.data = [];		
+			return item;	
+		}
+		
+		var addToAggregator = function(item,aggregators) {
+			var found = false;
+			for (var i = 0; i < aggregators.length; i++) {
+				if (aggregators[i].basketkeyaliasvalue == item.basketkeyaliasvalue) {
+					found = true;
+				}
+			}			
+			if (found==false) {
+				aggregators.push(item);
+			}
+		}
 		
 		var aggregators = [];
-		var item = {};		
+		var items = {};
 		//find the position that matches with the current object
-		for (i = 0; i < addtransactionrecords.length; i++) {
+		for (var i = 0; i < addtransactionrecords.length; i++) {
 			var objectname = addtransactionrecords[i].object;
-			var mapping = getMapping(objectname, systemconfig);
+			var mapping = getMapping(objectname, systemconfig);		
 			if (mapping != null) {
-				item.basketkeyalias = mapping.basketkeyalias;
-				item.basketkeyaliasvalue = addtransactionrecords[i].fields[mapping.objectkey];
-				item.periodrelevance = "YYYY/MM";
-				item.data = [];
-				for (x = 0; x < mapping.objectfields.length; x++) {					
+				var relevanceperiodfield = addtransactionrecords[i].fields[mapping.objectperiodrelevance];
+				var relevanceperiod = relevanceperiodfield.substr(0,4) + "/" + relevanceperiodfield.substr(4,2);
+				item = getDataForTransactionId(mapping.basketkeyalias,addtransactionrecords[i].fields[mapping.objectkey], relevanceperiod, aggregators);				
+				for (var x = 0; x < mapping.objectfields.length; x++) {					
 					var field = mapping.objectfields[x];
 					var fielditem = {};
 					fielditem.basketfieldalias = field.basketfieldname;
 					fielditem.basketfieldaliasvalue = addtransactionrecords[i].fields[field.fieldname];
+					if(field.hasOwnProperty("periodtype")) {
+						fielditem.periodtype = field.periodtype;
+						fielditem.periodoffset = "0";
+					}
 					item.data.push(fielditem);
 				}
-				aggregators.push(item);
+				addToAggregator(item,aggregators);
 			}
 		}
-		console.log(aggregators);
-		return aggregators;
+		items.aggregators = aggregators;
 		
-		
-			/*
-				{\
-					"basketkeyalias" : "TRANSACTION", \
-					"basketkeyaliasvalue" : "67369", \
-					"periodrelevance" : "YYYY/MM", \
-					"data" : [\
-						{\
-							"values" : [	\
-								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
-								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
-								{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
-							]	\
-						}\
-					]\
-				},\		
-			*/	
-					
+		return items;			
 	},
 
 	/*
@@ -142,8 +156,9 @@ module.exports = {
 	* persistedaggregatorrecords which will come from a data storage so counters can be added 
 	* properly
 	*/
+	/*
 	runCounter: function(aggregatorrecords) {
 	
 	}
-
+	*/
 };

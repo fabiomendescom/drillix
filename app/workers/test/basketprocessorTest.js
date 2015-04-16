@@ -328,7 +328,7 @@ describe('Basket Processor Test', function(){
 */
 
   describe('Test Aggregators', function(){
-    it('Test Aggregator', function(){	
+    it('Test Aggregator - normal aggregation', function(){	
 		/*
 		var event = {};
 		var records = [];
@@ -422,7 +422,7 @@ describe('Basket Processor Test', function(){
 									"partner_id" : "null",\
 									"net_amount" : "29",\
 									"gross_amount" : "29",\
-									"unique_sale_id" : "67369",\
+									"unique_sale_id" : "67380",\
 									"product_id" : "2383",\
 									"variant_id": "3794",\
 									"line_number" : "218514",\
@@ -439,7 +439,7 @@ describe('Basket Processor Test', function(){
 									"partner_id" : "null",\
 									"net_amount" : "29",\
 									"gross_amount" : "29",\
-									"unique_sale_id" : "67369",\
+									"unique_sale_id" : "67380",\
 									"product_id" : "2384",\
 									"variant_id": "3794",\
 									"line_number" : "218514",\
@@ -461,7 +461,6 @@ describe('Basket Processor Test', function(){
 				{\
 					"object" : "sale",\
 					"objectkey" : "unique_sale_id",\
-					"objectfield" : "product_id",\
 					"objectperiodrelevance" : "sale_date",\
 					"basketname" : "SALES",\
 					"basketaction" : "BUY", \
@@ -503,9 +502,9 @@ describe('Basket Processor Test', function(){
 		var expectedoutput = JSON.parse('{\
 			"aggregators" : [\
 				{\
-					"basketkeyalias" : "TRANSACTION", \
+					"basketkeyalias" : "TRANSACTION_ID", \
 					"basketkeyaliasvalue" : "67369", \
-					"periodrelevance" : "YYYY/MM", \
+					"periodrelevance" : "2015/02", \
 					"data" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
@@ -513,9 +512,9 @@ describe('Basket Processor Test', function(){
 					]\
 				},\
 				{\
-					"basketkeyalias" : "TRANSACTION", \
+					"basketkeyalias" : "TRANSACTION_ID", \
 					"basketkeyaliasvalue" : "67380", \
-					"periodrelevance" : "YYYY/MM", \
+					"periodrelevance" : "2015/02", \
 					"data" : [\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"},\
 						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2384"} \
@@ -529,33 +528,132 @@ describe('Basket Processor Test', function(){
 		
 		assert.deepEqual(actualresult,expectedoutput);
 		
+    })
+    
+    it('Test Aggregator - including time based accumulators', function(){	
+		var record1 = JSON.parse('{\
+							"account": "darby",\
+							"object": "sale",\
+							"fields": {\
+									"partner_id" : "null",\
+									"net_amount" : "29",\
+									"gross_amount" : "29",\
+									"unique_sale_id" : "67369",\
+									"product_id" : "2381",\
+									"variant_id": "3794",\
+									"line_number" : "218514",\
+									"quantity": "1",\
+									"sale_date": "20150206T115527Z",\
+									"customer_id":"59005"\
+							}\
+		}');
 		
-		//This should go to another test case. 
-		//this deals with time based accumulators by the nature of the tuples
-		/*var expectedoutput2 = '{\
-			"aggregators" : [\
+		var record2  = JSON.parse('{\
+							"account": "darby",\
+							"object": "sale",\
+							"fields": {\
+									"partner_id" : "null",\
+									"net_amount" : "29",\
+									"gross_amount" : "29",\
+									"unique_sale_id" : "67369",\
+									"product_id" : "2382",\
+									"variant_id": "3794",\
+									"line_number" : "218514",\
+									"quantity": "1",\
+									"sale_date": "20150206T115527Z",\
+									"customer_id":"59005"\
+							}\
+		}');		
+
+		var record3 = JSON.parse('{\
+							"account": "darby",\
+							"object": "sale",\
+							"fields": {\
+									"partner_id" : "null",\
+									"net_amount" : "29",\
+									"gross_amount" : "29",\
+									"unique_sale_id" : "67369",\
+									"product_id" : "2383",\
+									"variant_id": "3794",\
+									"line_number" : "218514",\
+									"quantity": "1",\
+									"sale_date": "20150206T115527Z",\
+									"customer_id":"59005"\
+							}\
+		}');
+		
+		var addtransactionrecords = [];		
+		addtransactionrecords.push(record1);
+		addtransactionrecords.push(record2);
+		addtransactionrecords.push(record3);				
+
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
 				{\
-					"basketkeyalias" : "CUSTOMER", \
-					"basketkeyaliasvalue" : "59005", \
-					"periodrelevance" : "YYYY/MM", \
-					"data" : [\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
 						{\
-							"values" : [	\
-								{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
-								{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
-								{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
-								{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
-								{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
-								{"periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
-							]	\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offset" : "6"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
 			]\
-		}';		*/
+		}');	
+				
+		//this deals with time based accumulators by the nature of the tuples
+		var expectedoutput = JSON.parse('{\
+			"aggregators" : [\
+				{\
+					"basketkeyalias" : "CUSTOMER_ID", \
+					"basketkeyaliasvalue" : "59005", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				}\
+			]\
+		}');
 		
-    })
+		var actualresult = processor.runAggregator(addtransactionrecords, systemconfig);
+		
+		assert.deepEqual(actualresult,expectedoutput);			
+	});
   })  
+  /*
   describe('Test Counters', function(){
     it('Test Counter', function(){	
 		var inputrecord = '{\
@@ -836,5 +934,6 @@ describe('Basket Processor Test', function(){
 			]\
 	    }';	
 	})
-  })		
+  })	
+  */	
 })
