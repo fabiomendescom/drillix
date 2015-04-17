@@ -328,7 +328,252 @@ describe('Basket Processor Test', function(){
 */
 
   describe('Test Aggregators', function(){
-    it('Test Aggregator - normal aggregation', function(){	
+	it('getMapping: normal operation', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "unique_sale_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "TRANSACTION_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var mapping = processor.getMapping("sale", systemconfig);	
+		
+		var expectedresult = JSON.parse('{\
+			"object":"sale",\
+			"objectkey":"unique_sale_id",\
+			"objectperiodrelevance":"sale_date",\
+			"basketname":"SALES",\
+			"basketaction":"BUY",\
+			"basketkeyalias":"TRANSACTION_ID",\
+			"objectfields":[\
+				{"fieldname":"product_id","basketfieldname":"PRODUCT_ID"}\
+			]\
+		}');	
+		
+		assert.deepEqual(mapping,expectedresult);
+	})  
+	
+	it('getDataForTransactionId: does not find data to get and creates one', function() {
+
+		var aggregator = JSON.parse('{\
+			"aggregators" : [\
+				{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				}\
+			]\
+		}');		
+
+		var output = processor.getDataForTransactionId("DATANOTFOUND","unique_sale_id", "2015/02", aggregator);
+		
+		var expectedoutput = JSON.parse('{\
+			"basketkeyalias":"DATANOTFOUND",\
+			"basketkeyaliasvalue":"unique_sale_id",\
+			"periodrelevance":"2015/02",\
+			"data":[\
+			]\
+		}');
+		
+		assert.deepEqual(output,expectedoutput);
+		
+	})			
+
+	it('addToAggregator: item already exists', function() {
+		var item = 	JSON.parse('{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+		}');
+						
+		var aggregator1 = JSON.parse('[\
+				{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				}\
+		]');	
+		var aggregator2 = JSON.parse('[\
+				{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				}\
+		]');	
+				
+		processor.addToAggregator(item,aggregator1);	
+		
+		assert.deepEqual(aggregator1,aggregator2);
+				
+	})	
+
+	it('addToAggregator: item does not exist', function() {
+		var item = 	JSON.parse('{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "NEWTRANSNUMBER", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381x"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382x"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383x"}  \
+					]\
+		}');
+						
+		var aggregator1 = JSON.parse('[\
+				{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				}\
+		]');	
+		var aggregator2 = JSON.parse('[\
+				{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				},\
+				{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "NEWTRANSNUMBER", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381x"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382x"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383x"}  \
+					]\
+				}\
+		]');	
+				
+		processor.addToAggregator(item,aggregator1);	
+		
+		assert.deepEqual(aggregator1,aggregator2);
+				
+	})	
+			
+	it('getDataForTransactionId: finds the data in aggregator', function() {
+
+		var aggregator = JSON.parse('{\
+			"aggregators" : [\
+				{\
+					"basketkeyalias" : "TRANSACTION_IDxx", \
+					"basketkeyaliasvalue" : "67369x", \
+					"periodrelevance" : "2015/01", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381x"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382x"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383x"}  \
+					]\
+				},\
+				{\
+					"basketkeyalias" : "TRANSACTION_ID", \
+					"basketkeyaliasvalue" : "67369", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				},\
+				{\
+					"basketkeyalias" : "TRANSACTION_IDxxx", \
+					"basketkeyaliasvalue" : "67369r", \
+					"periodrelevance" : "2015/03", \
+					"data" : [\
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381x"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382x"}, \
+						{"basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383x"}  \
+					]\
+				}\
+			]\
+		}');		
+
+		var output = processor.getDataForTransactionId("TRANSACTION_ID","unique_sale_id", "2015/02", aggregator);
+		
+		var expectedoutput = JSON.parse('{\
+			"basketkeyalias":"TRANSACTION_ID",\
+			"basketkeyaliasvalue":"unique_sale_id",\
+			"periodrelevance":"2015/02",\
+			"data":[\
+			]\
+		}');
+		
+		assert.deepEqual(output,expectedoutput);
+		
+	})				
+
+	it('getMapping: null values', function() {
+		var mapping = null;	
+		var expectedresult = null;
+		assert.deepEqual(mapping,expectedresult);
+	})	
+			
+    it('runAggregator: Normal aggregation', function(){	
 		/*
 		var event = {};
 		var records = [];
@@ -530,7 +775,7 @@ describe('Basket Processor Test', function(){
 		
     })
     
-    it('Test Aggregator - including time based accumulators', function(){	
+    it('runAggregator: Including time based aggregators', function(){	
 		var record1 = JSON.parse('{\
 							"account": "darby",\
 							"object": "sale",\
@@ -640,9 +885,9 @@ describe('Basket Processor Test', function(){
 					"basketkeyaliasvalue" : "59005", \
 					"periodrelevance" : "2015/02", \
 					"data" : [\
-						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
-						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
-						{"periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
 					]\
 				}\
 			]\
@@ -651,8 +896,46 @@ describe('Basket Processor Test', function(){
 		var actualresult = processor.runAggregator(addtransactionrecords, systemconfig);
 		
 		assert.deepEqual(actualresult,expectedoutput);			
-	});
+	})
+	
+	it('addPeriodOffsetTuples: ', function() {
+		var input = JSON.parse('{\
+			"aggregators" : [\
+				{\
+					"basketkeyalias" : "CUSTOMER_ID", \
+					"basketkeyaliasvalue" : "59005", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedoutput = JSON.parse('{\
+			"aggregators" : [\
+				{\
+					"basketkeyalias" : "CUSTOMER_ID", \
+					"basketkeyaliasvalue" : "59005", \
+					"periodrelevance" : "2015/02", \
+					"data" : [\
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
+						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+					]\
+				}\
+			]\
+		}');	
+		
+			
+			
+	})	  
   })  
+  
+
+  
   /*
   describe('Test Counters', function(){
     it('Test Counter', function(){	
