@@ -328,6 +328,282 @@ describe('Basket Processor Test', function(){
 */
 
   describe('Test Aggregators', function(){
+	it('validateSystemConfig: normal flow. Valid', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "6"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresult = [];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);
+	})		 
+	
+	it('validateSystemConfig: No "mappings"', function() {
+		var systemconfig = JSON.parse('{ \
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "6"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresult = ["Config does not have a 'mappings' property"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		console.log(JSON.stringify(validation));
+		assert.deepEqual(validation,expectedresult);
+	})	
+	
+	it('validateSystemConfig: No "tuples"', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			]\
+		}');		
+		
+		var expectedresult = ["Config does not have a 'tuples' property"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		console.log(JSON.stringify(validation));
+		assert.deepEqual(validation,expectedresult);
+	})			
+
+	it('validateSystemConfig: "mappings" not an array', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : \
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				},\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "6"\
+						}\
+					]\
+				}\
+			]\
+		}');			
+		
+		var expectedresult = ["'mappings' property must be an array"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		console.log(JSON.stringify(validation));
+		assert.deepEqual(validation,expectedresult);
+	})		
+		  
+	it('validateSystemConfig: tuples must be an array', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : \
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				}\
+		}');	
+		
+		var expectedresult = ["'tuples' property must be an array"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);
+	})		
+	
+	it('validateSystemConfig: "mappings" is empty ', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "6"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresult = ["'mappings' array must not be empty"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);
+	})		
+
+	it('validateSystemConfig: "tuples" must not be empty', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+			]\
+		}');	
+		
+		var expectedresult = ["'tuples' array must not be empty"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);
+	})		
+			  
+		  
+		  
 	it('getMapping: normal operation', function() {
 		var systemconfig = JSON.parse('{ \
 			"mappings" : [\
@@ -371,6 +647,11 @@ describe('Basket Processor Test', function(){
 				}\
 			]\
 		}');	
+		
+		var expectedresultvalidation = [];
+		var validateresult = processor.validateSystemConfig(systemconfig);
+		
+		assert.deepEqual(validateresult,expectedresultvalidation);
 		
 		var mapping = processor.getMapping("sale", systemconfig);	
 		
@@ -572,6 +853,78 @@ describe('Basket Processor Test', function(){
 		var expectedresult = null;
 		assert.deepEqual(mapping,expectedresult);
 	})	
+	
+	it('getObjectField: normal flow', function() {
+		
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID",\
+							"timebaseditems" : [\
+								{\
+									"periodtype" : "month",\
+									"offset" : "6"\
+								}\
+							]\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresultvalidation = [];
+		var validateresult = processor.validateSystemConfig(systemconfig);
+		
+		assert.deepEqual(validateresult,expectedresultvalidation);		
+		
+		expectedresult = JSON.parse('{\
+			"fieldname":"product_id",\
+			"basketfieldname":"PRODUCT_ID",\
+			"timebaseditems":[\
+				{\
+					"periodtype":"month",\
+					"offset":"6"\
+				}\
+			]\
+		}');
+		
+		var result = processor.getObjectField("sale","PRODUCT_ID",systemconfig);
+		 
+		assert.deepEqual(result,expectedresult);
+	})		
 			
     it('runAggregator: Normal aggregation', function(){	
 		/*
@@ -742,7 +1095,12 @@ describe('Basket Processor Test', function(){
 					]\
 				}\
 			]\
-		}');		
+		}');
+		
+		var expectedresultvalidation = [];
+		var validateresult = processor.validateSystemConfig(systemconfig);
+		
+		assert.deepEqual(validateresult,expectedresultvalidation);				
 				
 		var expectedoutput = JSON.parse('{\
 			"aggregators" : [\
@@ -845,8 +1203,12 @@ describe('Basket Processor Test', function(){
 						{\
 							"fieldname" : "product_id",\
 							"basketfieldname" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offset" : "6"\
+							"timebaseditems" : [\
+								{\
+									"periodtype" : "month",\
+									"offset" : "6"\
+								}\
+							]\
 						}\
 					]\
 				}\
@@ -876,6 +1238,11 @@ describe('Basket Processor Test', function(){
 				}\
 			]\
 		}');	
+		
+		var expectedresultvalidation = [];
+		var validateresult = processor.validateSystemConfig(systemconfig);
+		
+		assert.deepEqual(validateresult,expectedresultvalidation);		
 				
 		//this deals with time based accumulators by the nature of the tuples
 		var expectedoutput = JSON.parse('{\
@@ -899,16 +1266,69 @@ describe('Basket Processor Test', function(){
 	})
 	
 	it('addPeriodOffsetTuples: ', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "6"\
+						}\
+					]\
+				}\
+			]\
+		}');
+		
+		var expectedresultvalidation = [];
+		var validateresult = processor.validateSystemConfig(systemconfig);
+		
+		assert.deepEqual(validateresult,expectedresultvalidation);					
+		
 		var input = JSON.parse('{\
 			"aggregators" : [\
 				{\
+					"object" : "sale", \
 					"basketkeyalias" : "CUSTOMER_ID", \
 					"basketkeyaliasvalue" : "59005", \
 					"periodrelevance" : "2015/02", \
 					"data" : [\
-						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
-						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
-						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+						{"perioddate": "20150106T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"perioddate": "20150606T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"perioddate": "20150706T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},  \
+						{"perioddate": "20150606T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"} \
 					]\
 				}\
 			]\
@@ -917,20 +1337,25 @@ describe('Basket Processor Test', function(){
 		var expectedoutput = JSON.parse('{\
 			"aggregators" : [\
 				{\
+					"object" : "sale", \
 					"basketkeyalias" : "CUSTOMER_ID", \
 					"basketkeyaliasvalue" : "59005", \
 					"periodrelevance" : "2015/02", \
 					"data" : [\
-						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
-						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"}, \
-						{"perioddate": "20150206T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2383"}  \
+						{"perioddate": "20150106T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"perioddate": "20150606T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
+						{"perioddate": "20150606T115527Z","periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381", "weight" : "0"}, \
+						{"perioddate": "20150706T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},  \
+						{"perioddate": "20150706T115527Z","periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381", "weight" : "0"},  \
+						{"perioddate": "20150606T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"} \
 					]\
 				}\
 			]\
 		}');	
 		
+		var output = processor.addPeriodOffsetTuples(input,systemconfig);
 			
-			
+		assert.deepEqual(output,expectedoutput);		
 	})	  
   })  
   

@@ -81,6 +81,138 @@ module.exports = {
 	*/
 
 	/*
+	 * Validates that the system is valid
+	*/
+	validateSystemConfig: function(systemconfig) {
+		var errors = [];
+		
+		if(systemconfig.hasOwnProperty("mappings") == false) {
+			errors.push("Config does not have a 'mappings' property");
+		} else {
+			if(systemconfig.mappings.hasOwnProperty("length")==false) {
+				errors.push("'mappings' property must be an array");
+			} else {
+				if(systemconfig.mappings.length == 0) {
+					errors.push("'mappings' array must not be empty");
+				} else {
+					for (var x = 0; x < systemconfig.mappings.length; x++) {
+						if(systemconfig.mappings[x].hasOwnProperty("object")==false) {
+							errors.push("'object' property does not exist in 'mappings' at index " + x);
+						};
+						if(systemconfig.mappings[x].hasOwnProperty("objectkey")==false) {
+							errors.push("'objectkey' property does not exist in 'mappings' at index " + x);
+						};			
+						if(systemconfig.mappings[x].hasOwnProperty("objectperiodrelevance")==false) {
+							errors.push("'objectperiodrelevance' property does not exist in 'mappings' at index " + x);
+						};		
+						if(systemconfig.mappings[x].hasOwnProperty("basketname")==false) {
+							errors.push("'basketname' property does not exist in 'mappings' at index " + x);
+						};
+						if(systemconfig.mappings[x].hasOwnProperty("basketaction")==false) {
+							errors.push("'basketaction' property does not exist in 'mappings' at index " + x);
+						};			
+						if(systemconfig.mappings[x].hasOwnProperty("basketkeyalias")==false) {
+							errors.push("'basketkeyalias' property does not exist in 'mappings' at index " + x);
+						};				
+						if(systemconfig.mappings[x].hasOwnProperty("objectfields")==false) {
+							errors.push("'objectfields' property does not exist in 'mappings' at index " + x);
+							if(systemconfig.mappings[x].objectfields.hasOwnProperty("length")==false) {
+								errors.push("'objectfields' must be an array in 'mappings' at index " + x);
+							} else {
+								if(systemconfig.mappings[x].objectfields.length == 0) {
+									errors.push("'objectfields' must be an array in 'mappings' at index " + x);
+								} else {
+									for (var y = 0; y < systemconfig.mappings[x].objectfields.length; y++) {
+										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("fieldname")==false) {
+											errors.push("'fieldname' does not exist at index " + y + " in 'mappings' at index " + x);
+										};
+										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("basketfieldname")==false) {
+											errors.push("'basketfieldname' does not exist at index " + y + " in 'mappings' at index " + x);
+										};		
+										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("timebaseditems")==false) {
+											errors.push("'timebaseditems' does not exist at index " + y + " in 'mappings' at index " + x);
+										} else {
+											if(systemconfig.mappings[x].objectfields[y].timebaseditems.hasOwnProperty("length")==false) {
+												errors.push("'timebaseditems' must be an array in 'objectfields' at index " + x);
+											} else {
+												if(systemconfig.mappings[x].objectfields[y].timebaseditems.length == 0) {
+													errors.push("'timebaseditems' must be an array in 'objectfields' at index " + x);
+												} else {
+													for (var z = 0; z < systemconfig.mappings[x].objectfields[y].timebaseditems.length; z++) {
+														if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].hasOwnProperty("periodtype")==false) {
+															errors.push("'periodtype' property does not exist at index " + x + " objectfields " + y);
+														} else {
+															if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].periodtype == "month") {
+																//leave blank. This condition is not an error. It is ok.
+															} else {
+																errors.push("'periodtype' property contains invalid value " + x + " objectfields " + y);
+															}
+														};
+														if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].hasOwnProperty("offsettype")==false) {
+															errors.push("'offsettype' property does not exist at index " + x + " objectfields " + y);
+														} else {
+															var t = systemconfig.mappings[x].objectfields[y].timebaseditems[z].offsettype;
+															if(offsettype != "within" && offsettype != "after" && offsettype != "exact") {
+																errors.push("'offsettype' property value must be 'within', 'after' or 'exact' at index " + x + " objectfields " + y);
+															}	
+														}
+														if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].hasOwnProperty("offset")==false) {
+															errors.push("'offset' property does not exist at index " + x + " objectfields " + y);
+														} else {
+															if(typeof systemconfig.mappings[x].objectfields[y].timebaseditems[z].offset === "number") {
+																errors.push("'offset' property does not exist at index " + x + " objectfields " + y);
+																if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].offset <= 0) {
+																	errors.push("'offset' cannot be zero or negative at index " + x + " objectfields " + y);
+																}
+															};	
+														};														
+													}
+												}	
+											}
+										};																			
+									}
+								}
+							}
+						};																																
+					}
+				}
+			};			
+		};
+		if(systemconfig.hasOwnProperty("tuples") == false) {
+			errors.push("Config does not have a 'tuples' property");
+		} else {
+			if(systemconfig.tuples.hasOwnProperty("length")==false) {
+				errors.push("'tuples' property must be an array");
+			} else {
+				if(systemconfig.tuples.length == 0) {
+					errors.push("'tuples' array must not be empty");
+				} else {
+					for (var x = 0; x < systemconfig.tuples.length; x++) {
+						if(systemconfig.tuples[x].hasOwnProperty("name") == false) {
+							errors.push("'name' property missing from tuple at index " + x);
+						};
+						if(systemconfig.tuples[x].hasOwnProperty("basketfields") == false) {
+							errors.push("'basketfields' property missing from tuple at index " + x);
+						} else {
+							if(systemconfig.tuples[x].basketfields.hasOwnProperty("length")==false) {
+								errors.push("'basketfields' property must be an array from tuple at index " + x);
+							} else {
+								if(systemconfig.tuples[x].basketfields == 0) {
+									errors.push("'basketfields' array must not be empty from tuple at index " + x);
+								}
+							}
+						};
+					}
+				}				
+			};		
+		};
+		//TODO: THIS NEEDS TO BE FINISHED. ADD VALIDATION THNAT THE ALIASES USED IN TUPLES HAVE BEEN DEFINED IN MAPPINGS
+		
+		
+		return errors;		
+	},
+
+	/*
 	 * 
 	*/
 	getMapping: function(obj, systemconfig) {
@@ -91,6 +223,22 @@ module.exports = {
 			}
 			return null;
 	},	
+	
+	/*
+	 * 
+	*/
+	getObjectField: function(objectname, fieldname, systemconfig) {
+		for (var x = 0; x < systemconfig.mappings.length; x++) {
+			if (systemconfig.mappings[x].object == objectname) {
+				for (var j = 0; j < systemconfig.mappings[x].objectfields.length; j++) {
+					if(systemconfig.mappings[x].objectfields[j].basketfieldname == fieldname) {
+						return systemconfig.mappings[x].objectfields[j];
+					}
+				}
+			}
+		}
+		return null;
+	},		
 
 	/*
 	 * if it finds the datatoget in aggregator then returns it, otherwise return a new object
@@ -151,6 +299,7 @@ module.exports = {
 					fielditem.basketfieldalias = field.basketfieldname;
 					fielditem.basketfieldaliasvalue = addtransactionrecords[i].fields[field.fieldname];
 					if(field.hasOwnProperty("periodtype")) {
+						fielditem.perioddate = addtransactionrecords[i].fields[mapping.objectperiodrelevance]
 						fielditem.periodtype = field.periodtype;
 						fielditem.periodoffset = "0";	
 					}
@@ -170,8 +319,50 @@ module.exports = {
 	 * elements inside the tuples are within period offset of other tuples. If so, then it 
 	 * writes a new element to the tuple to reflect this
 	*/
-	addPeriodOffsetTuples: function(aggregator) {
-		
+	addPeriodOffsetTuples: function(aggregator, systemconfig) {
+		for (var i = 0; i < aggregator.aggregators.length; i++) {
+			var mapping = this.getMapping(aggregator.aggregators[i].object, systemconfig);			
+			for (var j = 0; j < aggregator.aggregators[i].data.length; j++) {
+				for (var x = j; x < aggregator.aggregators[i].data.length; x++) {
+					if(x!=j) {
+						//make sure they are on the same periodtype
+						if(aggregator.aggregators[i].data[j].periodtype == aggregator.aggregators[i].data[x].periodtype) {
+							var objectfield = this.getObjectField(aggregator.aggregators[i].object,aggregator.aggregators[i].data[j].basketfieldalias,systemconfig);
+							for (var y = 0; y < objectfield.timebaseditems.length; y++) {
+								//check if timebase is the same as the aggregation being looked at
+								if(objectfield.timebaseditems[y].periodtype == aggregator.aggregators[i].data[j].periodtype) {
+									//check if applying the offset matches
+									var offset = objectfield.timebaseditems[y].offset;
+									var tuple1 = aggregator.aggregators[i].data[j];
+									var tuple2 = aggregator.aggregators[i].data[x];
+									//order is in ascending order
+									var firsttuple;
+									var secondtuple;
+									if (tuple1.perioddate > tuple2.perioddate) {
+										firsttuple = tuple2;
+										secondtuple = tuple1;
+									} else {
+										firsttuple = tuple1;
+										secondtuple = tuple2;
+									}
+									//Check if this tuple fits the offset
+									firsttupledate = new Date(firsttuple.perioddate.substr(0,4)+"-"+firsttuple.perioddate.substr(4,2)+"-"+firsttuple.perioddate.substr(6,2)+" "+firsttuple.perioddate.substr(9,2)+":"+firsttuple.perioddate.substr(11,2));
+									secondtupledate = new Date(secondtuple.perioddate.substr(0,4)+"-"+secondtuple.perioddate.substr(4,2)+"-"+secondtuple.perioddate.substr(6,2)+" "+secondtuple.perioddate.substr(9,2)+":"+secondtuple.perioddate.substr(11,2));
+									comparedate = new Date(firsttupledate.getTime());
+									//now see which comparison you must do
+
+										comparedate.setMonth(comparedate.getMonth()+offset);
+										if(comparedate < secondtupledate) {
+										
+										}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+				
 		return aggregator;
 	},
 	
@@ -190,9 +381,6 @@ module.exports = {
 
 	/*
 	* returns: counterrecords
-	* This function will receive the accumulatorrecords coming from runAggregator, but also will receive
-	* persistedaggregatorrecords which will come from a data storage so counters can be added 
-	* properly
 	*/
 	runCounter: function(aggregatorrecords) {
 	
