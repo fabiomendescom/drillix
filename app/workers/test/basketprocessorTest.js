@@ -415,7 +415,7 @@ describe('Basket Processor Test', function(){
 		var expectedresult = ["Config does not have a 'mappings' property"];
 		
 		var validation = processor.validateSystemConfig(systemconfig);
-		console.log(JSON.stringify(validation));
+
 		assert.deepEqual(validation,expectedresult);
 	})	
 	
@@ -442,7 +442,7 @@ describe('Basket Processor Test', function(){
 		var expectedresult = ["Config does not have a 'tuples' property"];
 		
 		var validation = processor.validateSystemConfig(systemconfig);
-		console.log(JSON.stringify(validation));
+
 		assert.deepEqual(validation,expectedresult);
 	})			
 
@@ -495,7 +495,7 @@ describe('Basket Processor Test', function(){
 		var expectedresult = ["'mappings' property must be an array"];
 		
 		var validation = processor.validateSystemConfig(systemconfig);
-		console.log(JSON.stringify(validation));
+
 		assert.deepEqual(validation,expectedresult);
 	})		
 		  
@@ -600,9 +600,155 @@ describe('Basket Processor Test', function(){
 		
 		var validation = processor.validateSystemConfig(systemconfig);
 		assert.deepEqual(validation,expectedresult);
-	})		
-			  
-		  
+	})	
+	
+	it('validateSystemConfig: Object fields must not be empty', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "6"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresult = ["'objectfields' must not be empty in 'mappings' at index 0"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);
+	})				
+	
+	it('validateSystemConfig: Basketfields empty', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+							} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresult = ["'basketfields' array must not be empty from tuple at index 1"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);
+	})				  
+
+	it('validateSystemConfig: Invalid offset type', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldname" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "WRONG", \
+							"offset" : "6"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresult = ["Invalid offset type at index 1"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);
+	})	
+
+/*
+ * 
+ */		  
 		  
 	it('getMapping: normal operation', function() {
 		var systemconfig = JSON.parse('{ \
@@ -1278,7 +1424,10 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldname" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "6"\
 						}\
 					]\
 				}\
@@ -1290,7 +1439,7 @@ describe('Basket Processor Test', function(){
 						{\
 							"filter" : "all", \
 							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+						} \
 					]\
 				},\
 				{\

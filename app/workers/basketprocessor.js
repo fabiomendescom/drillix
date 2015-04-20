@@ -114,13 +114,12 @@ module.exports = {
 						if(systemconfig.mappings[x].hasOwnProperty("basketkeyalias")==false) {
 							errors.push("'basketkeyalias' property does not exist in 'mappings' at index " + x);
 						};				
-						if(systemconfig.mappings[x].hasOwnProperty("objectfields")==false) {
-							errors.push("'objectfields' property does not exist in 'mappings' at index " + x);
+						if(systemconfig.mappings[x].hasOwnProperty("objectfields")==true) {					
 							if(systemconfig.mappings[x].objectfields.hasOwnProperty("length")==false) {
 								errors.push("'objectfields' must be an array in 'mappings' at index " + x);
 							} else {
 								if(systemconfig.mappings[x].objectfields.length == 0) {
-									errors.push("'objectfields' must be an array in 'mappings' at index " + x);
+									errors.push("'objectfields' must not be empty in 'mappings' at index " + x);
 								} else {
 									for (var y = 0; y < systemconfig.mappings[x].objectfields.length; y++) {
 										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("fieldname")==false) {
@@ -129,50 +128,11 @@ module.exports = {
 										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("basketfieldname")==false) {
 											errors.push("'basketfieldname' does not exist at index " + y + " in 'mappings' at index " + x);
 										};		
-										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("timebaseditems")==false) {
-											errors.push("'timebaseditems' does not exist at index " + y + " in 'mappings' at index " + x);
-										} else {
-											if(systemconfig.mappings[x].objectfields[y].timebaseditems.hasOwnProperty("length")==false) {
-												errors.push("'timebaseditems' must be an array in 'objectfields' at index " + x);
-											} else {
-												if(systemconfig.mappings[x].objectfields[y].timebaseditems.length == 0) {
-													errors.push("'timebaseditems' must be an array in 'objectfields' at index " + x);
-												} else {
-													for (var z = 0; z < systemconfig.mappings[x].objectfields[y].timebaseditems.length; z++) {
-														if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].hasOwnProperty("periodtype")==false) {
-															errors.push("'periodtype' property does not exist at index " + x + " objectfields " + y);
-														} else {
-															if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].periodtype == "month") {
-																//leave blank. This condition is not an error. It is ok.
-															} else {
-																errors.push("'periodtype' property contains invalid value " + x + " objectfields " + y);
-															}
-														};
-														if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].hasOwnProperty("offsettype")==false) {
-															errors.push("'offsettype' property does not exist at index " + x + " objectfields " + y);
-														} else {
-															var t = systemconfig.mappings[x].objectfields[y].timebaseditems[z].offsettype;
-															if(offsettype != "within" && offsettype != "after" && offsettype != "exact") {
-																errors.push("'offsettype' property value must be 'within', 'after' or 'exact' at index " + x + " objectfields " + y);
-															}	
-														}
-														if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].hasOwnProperty("offset")==false) {
-															errors.push("'offset' property does not exist at index " + x + " objectfields " + y);
-														} else {
-															if(typeof systemconfig.mappings[x].objectfields[y].timebaseditems[z].offset === "number") {
-																errors.push("'offset' property does not exist at index " + x + " objectfields " + y);
-																if(systemconfig.mappings[x].objectfields[y].timebaseditems[z].offset <= 0) {
-																	errors.push("'offset' cannot be zero or negative at index " + x + " objectfields " + y);
-																}
-															};	
-														};														
-													}
-												}	
-											}
-										};																			
 									}
 								}
 							}
+						} else {
+							errors.push("'objectfields' property does not exist in 'mappings' at index " + x);
 						};																																
 					}
 				}
@@ -199,6 +159,21 @@ module.exports = {
 							} else {
 								if(systemconfig.tuples[x].basketfields == 0) {
 									errors.push("'basketfields' array must not be empty from tuple at index " + x);
+								} else {
+									for(var xx = 0; xx < systemconfig.tuples[x].basketfields.length; xx++) {
+										if(systemconfig.tuples[x].basketfields[xx].hasOwnProperty("offsettype")) {
+											var offsettype = systemconfig.tuples[x].basketfields[xx].offsettype;
+											if(offsettype != "within" && offsettype != "after" && offsettype != "exact") {
+												errors.push("Invalid offset type at index " + x);
+											}
+										}	
+										if(systemconfig.tuples[x].basketfields[xx].hasOwnProperty("periodtype")) {
+											var periodtype = systemconfig.tuples[x].basketfields[xx].periodtype;
+											if(periodtype != "month") {
+												errors.push("Invalid period type at index " + x);
+											}
+										}											
+									}
 								}
 							}
 						};
@@ -328,11 +303,12 @@ module.exports = {
 						//make sure they are on the same periodtype
 						if(aggregator.aggregators[i].data[j].periodtype == aggregator.aggregators[i].data[x].periodtype) {
 							var objectfield = this.getObjectField(aggregator.aggregators[i].object,aggregator.aggregators[i].data[j].basketfieldalias,systemconfig);
-							for (var y = 0; y < objectfield.timebaseditems.length; y++) {
+
 								//check if timebase is the same as the aggregation being looked at
-								if(objectfield.timebaseditems[y].periodtype == aggregator.aggregators[i].data[j].periodtype) {
+								if(objectfield.periodtype == aggregator.aggregators[i].data[j].periodtype) {
 									//check if applying the offset matches
-									var offset = objectfield.timebaseditems[y].offset;
+									var offset = objectfield.offset;
+									var offsettype = objectfield.offsettype;
 									var tuple1 = aggregator.aggregators[i].data[j];
 									var tuple2 = aggregator.aggregators[i].data[x];
 									//order is in ascending order
@@ -348,15 +324,23 @@ module.exports = {
 									//Check if this tuple fits the offset
 									firsttupledate = new Date(firsttuple.perioddate.substr(0,4)+"-"+firsttuple.perioddate.substr(4,2)+"-"+firsttuple.perioddate.substr(6,2)+" "+firsttuple.perioddate.substr(9,2)+":"+firsttuple.perioddate.substr(11,2));
 									secondtupledate = new Date(secondtuple.perioddate.substr(0,4)+"-"+secondtuple.perioddate.substr(4,2)+"-"+secondtuple.perioddate.substr(6,2)+" "+secondtuple.perioddate.substr(9,2)+":"+secondtuple.perioddate.substr(11,2));
-									comparedate = new Date(firsttupledate.getTime());
+									firsttupledateplusoffset = new Date(firsttupledate.getTime());
 									//now see which comparison you must do
-
-										comparedate.setMonth(comparedate.getMonth()+offset);
-										if(comparedate < secondtupledate) {
-										
+									var periodtype = aggregator.aggregators[i].data[j].periodtype;
+									if(periodtype == "month") {
+										firsttupledateplusoffset.setMonth(firsttupledateplusoffset.getMonth()+offset);
+										if(offsettype == "within") {
+											if(firsttupledateplusoffset < secondtupledate) {
+												//add this to tuple array. Add the secondtuple
+											}
+										} else if (offsettype == "after"){
+											if(firsttupledateplusoffset > secondtupledate) {
+												//add this to tuple array. Add the secondtuple
+											}										
 										}
+									}	
 								}
-							}
+							
 						}
 					}
 				}
