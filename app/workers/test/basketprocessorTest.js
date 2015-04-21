@@ -340,6 +340,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -352,24 +353,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						} \
-					]\
-				},\
-				{\
-					"name" : "TUPLEB",\
-					"basketfields" : [\
-						{\
-							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-						},\
-						{\
-							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
-							"offset" : "6"\
-						}\
 					]\
 				}\
 			]\
@@ -389,8 +374,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+							"fieldinstanceid" : "1"\
+						}\
 					]\
 				},\
 				{\
@@ -398,14 +383,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
-							"offset" : "6"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -431,6 +413,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -458,6 +441,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -469,8 +453,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+							"fieldinstanceid" : "1"\
+						} \
 					]\
 				},\
 				{\
@@ -478,14 +462,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
-							"offset" : "6"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -511,6 +492,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -523,8 +505,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+							"fieldinstanceid" : "1"\
+						} \
 					]\
 				}\
 		}');	
@@ -545,8 +527,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+							"fieldinstanceid" : "1"\
+						} \
 					]\
 				},\
 				{\
@@ -554,14 +536,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
-							"offset" : "6"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -586,6 +565,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1", \
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -621,8 +601,8 @@ describe('Basket Processor Test', function(){
 					"name" : "TUPLEA",\
 					"basketfields" : [\
 						{\
-							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1",\
+							"filter" : "all" \
 							} \
 					]\
 				},\
@@ -631,14 +611,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
-							"offset" : "6"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -663,6 +640,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -675,8 +653,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+							"fieldinstanceid" : "1"\
+						} \
 					]\
 				},\
 				{\
@@ -705,99 +683,47 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
-							"basketfieldalias" : "PRODUCT_ID"\
-						}\
-					]\
-				}\
-			],\
-			"tuples" : [\
-				{\
-					"name" : "TUPLEA",\
-					"basketfields" : [\
-						{\
-							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-						} \
-					]\
-				},\
-				{\
-					"name" : "TUPLEB",\
-					"basketfields" : [\
-						{\
-							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-						},\
-						{\
-							"filter" : "all", \
 							"basketfieldalias" : "PRODUCT_ID",\
 							"periodtype" : "month",\
-							"offsettype" : "WRONG", \
-							"offset" : "6"\
-						}\
-					]\
-				}\
-			]\
-		}');	
-		
-		var expectedresult = ["Invalid offset type at index 1"];
-		
-		var validation = processor.validateSystemConfig(systemconfig);
-		assert.deepEqual(validation,expectedresult);
-	})	
-
-	it('validateSystemConfig: Invalid offset type', function() {
-		var systemconfig = JSON.parse('{ \
-			"mappings" : [\
-				{\
-					"object" : "sale",\
-					"objectkey" : "customer_id",\
-					"objectperiodrelevance" : "sale_date",\
-					"basketname" : "SALES",\
-					"basketaction" : "BUY", \
-					"basketkeyalias" : "CUSTOMER_ID",\
-					"objectfields" : [\
-						{\
-							"fieldname" : "product_id",\
-							"basketfieldalias" : "PRODUCT_ID"\
-						}\
-					]\
-				}\
-			],\
-			"tuples" : [\
-				{\
-					"name" : "TUPLEA",\
-					"basketfields" : [\
-						{\
-							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-						} \
-					]\
-				},\
-				{\
-					"name" : "TUPLEB",\
-					"basketfields" : [\
-						{\
-							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-						},\
-						{\
-							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
+							"offsettype" : "within",\
 							"offset" : "x"\
 						}\
 					]\
 				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"fieldinstanceid" : "1"\
+						} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"fieldinstanceid" : "1"\
+						},\
+						{\
+							"filter" : "all", \
+							"fieldinstanceid" : "1"\
+						}\
+					]\
+				}\
 			]\
 		}');	
 		
-		var expectedresult = ["Invalid offset type at index 1"];
+		var expectedresult = ["Invalid offset type at index 0"];
 		
 		var validation = processor.validateSystemConfig(systemconfig);
-		assert.deepEqual(validation,expectedresult);		
-	})
+		assert.deepEqual(validation,expectedresult);
+	})	
 
 	it('validateSystemConfig: Negative value in offset', function() {
 		var systemconfig = JSON.parse('{ \
@@ -811,8 +737,12 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
-							"basketfieldalias" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "-5"\
 						}\
 					]\
 				}\
@@ -823,7 +753,7 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						} \
 					]\
 				},\
@@ -832,26 +762,51 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
-							"offset" : "-5"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
 			]\
 		}');	
 		
-		var expectedresult = ["Offset must be greater than 0 at index 1"];
+		var expectedresult = ["Offset must be greater than 0 at index 0"];
 		
 		var validation = processor.validateSystemConfig(systemconfig);
 		assert.deepEqual(validation,expectedresult);		
 	})
 
+	it('validateSystemConfig: fieldinstanceid inconsistent', function() {
+		
+	})
+	
+	it('validateSystemConfig: fieldinstanceid missing', function() {
+		
+	})	
+	
+	it('validateSystemConfig: fieldinstanceid not numeric', function() {
+		
+	})	
+	
+	it('validateSystemConfig: invalid field on mappings', function() {
+		
+	})	
+	
+	it('validateSystemConfig: invalid field on tuples', function() {
+		
+	})		
+	
+	it('validateSystemConfig: invalid field on objectfields', function() {
+		
+	})	
+	
+	it('validateSystemConfig: invalid field on basketfields', function() {
+		
+	})			
+	
 /*
  * 
  */		  
@@ -868,6 +823,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "TRANSACTION_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -880,8 +836,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+							"fieldinstanceid" : "1"\
+						}\
 					]\
 				},\
 				{\
@@ -889,11 +845,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -915,7 +871,7 @@ describe('Basket Processor Test', function(){
 			"basketaction":"BUY",\
 			"basketkeyalias":"TRANSACTION_ID",\
 			"objectfields":[\
-				{"fieldname":"product_id","basketfieldalias":"PRODUCT_ID"}\
+				{"fieldinstanceid":"1","fieldname":"product_id","basketfieldalias":"PRODUCT_ID"}\
 			]\
 		}');	
 		
@@ -1119,6 +1075,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -1131,8 +1088,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+							"fieldinstanceid" : "1"\
+						}\
 					]\
 				},\
 				{\
@@ -1140,11 +1097,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -1157,6 +1114,7 @@ describe('Basket Processor Test', function(){
 		assert.deepEqual(validateresult,expectedresultvalidation);		
 		
 		expectedresult = JSON.parse('{\
+			"fieldinstanceid" : "1",\
 			"fieldname":"product_id",\
 			"basketfieldalias":"PRODUCT_ID"\
 		}');
@@ -1305,6 +1263,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "TRANSACTION_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID"\
 						}\
@@ -1317,8 +1276,8 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+							"fieldinstanceid" : "1"\
+						} \
 					]\
 				},\
 				{\
@@ -1326,11 +1285,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -1441,6 +1400,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID",\
 							"periodtype" : "month",\
@@ -1456,7 +1416,7 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						} \
 					]\
 				},\
@@ -1465,14 +1425,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
-							"offset" : "6"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -1517,6 +1474,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID",\
 							"periodtype" : "month",\
@@ -1532,7 +1490,7 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						} \
 					]\
 				},\
@@ -1541,14 +1499,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "within", \
-							"offset" : "6"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\
@@ -1614,6 +1569,7 @@ describe('Basket Processor Test', function(){
 					"basketkeyalias" : "CUSTOMER_ID",\
 					"objectfields" : [\
 						{\
+							"fieldinstanceid" : "1",\
 							"fieldname" : "product_id",\
 							"basketfieldalias" : "PRODUCT_ID",\
 							"periodtype" : "month",\
@@ -1629,7 +1585,7 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						} \
 					]\
 				},\
@@ -1638,14 +1594,11 @@ describe('Basket Processor Test', function(){
 					"basketfields" : [\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"fieldinstanceid" : "1"\
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID",\
-							"periodtype" : "month",\
-							"offsettype" : "after", \
-							"offset" : "3"\
+							"fieldinstanceid" : "1"\
 						}\
 					]\
 				}\

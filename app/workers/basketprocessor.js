@@ -133,11 +133,33 @@ module.exports = {
 							} else {								
 								for (var xx=0;xx < systemconfig.mappings[x].objectfields.length;xx++) {
 									for (var property in systemconfig.mappings[x].objectfields[xx]) {
-										if (property!="fieldname" && property!="basketfieldalias" && property!="periodtype" && property!="offsettype" && property!="offset") {
+										if (property!="fieldname" && property!="fieldinstanceid" && property!="basketfieldalias" && property!="periodtype" && property!="offsettype" && property!="offset") {
 											errors.push("Property " + property + " is invalid");
 										}
-									}
-								}																
+									}							
+									if(systemconfig.mappings[x].objectfields[xx].hasOwnProperty("offsettype")) {
+										var offsettype = systemconfig.mappings[x].objectfields[xx].offsettype;
+										if(offsettype != "within" && offsettype != "after" && offsettype != "exact") {
+											errors.push("Invalid offset type at index " + x);
+										}
+									}	
+									if(systemconfig.mappings[x].objectfields[xx].hasOwnProperty("periodtype")) {
+										var periodtype = systemconfig.mappings[x].objectfields[xx].periodtype;
+										if(periodtype != "month") {
+											errors.push("Invalid period type at index " + x);
+										}
+									}	
+									if(systemconfig.mappings[x].objectfields[xx].hasOwnProperty("offsettype")) {
+										var offset = systemconfig.mappings[x].objectfields[xx].offset;
+										if(isNaN(parseFloat(offset))) {
+											errors.push("Invalid offset type at index " + x);
+										} else {
+											if(parseFloat(offset) < 0) {
+												errors.push("Offset must be greater than 0 at index " + x);
+											}
+										}
+									}																
+								}																								
 								if(systemconfig.mappings[x].objectfields.length == 0) {
 									errors.push("'objectfields' must not be empty in 'mappings' at index " + x);
 								} else {
@@ -186,7 +208,7 @@ module.exports = {
 							} else {								
 								for (var xx=0;xx < systemconfig.tuples[x].basketfields.length;xx++) {
 									for (var property in systemconfig.tuples[x].basketfields[xx]) {
-										if (property!="filter" && property!="basketfieldalias" && property!="periodtype" && property!="offsettype" && property!="offset") {
+										if (property!="filter" && property!="fieldinstanceid") {
 											errors.push("Property " + property + " is invalid");
 										}
 									}
@@ -194,30 +216,7 @@ module.exports = {
 								if(systemconfig.tuples[x].basketfields == 0) {
 									errors.push("'basketfields' array must not be empty from tuple at index " + x);
 								} else {
-									for(var xx = 0; xx < systemconfig.tuples[x].basketfields.length; xx++) {
-										if(systemconfig.tuples[x].basketfields[xx].hasOwnProperty("offsettype")) {
-											var offsettype = systemconfig.tuples[x].basketfields[xx].offsettype;
-											if(offsettype != "within" && offsettype != "after" && offsettype != "exact") {
-												errors.push("Invalid offset type at index " + x);
-											}
-										}	
-										if(systemconfig.tuples[x].basketfields[xx].hasOwnProperty("periodtype")) {
-											var periodtype = systemconfig.tuples[x].basketfields[xx].periodtype;
-											if(periodtype != "month") {
-												errors.push("Invalid period type at index " + x);
-											}
-										}	
-										if(systemconfig.tuples[x].basketfields[xx].hasOwnProperty("offsettype")) {
-											var offset = systemconfig.tuples[x].basketfields[xx].offset;
-											if(isNaN(parseFloat(offset))) {
-												errors.push("Invalid offset type at index " + x);
-											} else {
-												if(parseFloat(offset) < 0) {
-													errors.push("Offset must be greater than 0 at index " + x);
-												}
-											}
-										}																					
-									}
+
 								}
 							}
 						};
