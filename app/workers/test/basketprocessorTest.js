@@ -341,7 +341,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -353,7 +353,7 @@ describe('Basket Processor Test', function(){
 						{\
 							"filter" : "all", \
 							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+						} \
 					]\
 				},\
 				{\
@@ -432,7 +432,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -459,7 +459,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				},\
@@ -512,7 +512,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -587,7 +587,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -664,7 +664,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -706,7 +706,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -746,6 +746,112 @@ describe('Basket Processor Test', function(){
 		assert.deepEqual(validation,expectedresult);
 	})	
 
+	it('validateSystemConfig: Invalid offset type', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldalias" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "x"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresult = ["Invalid offset type at index 1"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);		
+	})
+
+	it('validateSystemConfig: Negative value in offset', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldalias" : "PRODUCT_ID"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "-5"\
+						}\
+					]\
+				}\
+			]\
+		}');	
+		
+		var expectedresult = ["Offset must be greater than 0 at index 1"];
+		
+		var validation = processor.validateSystemConfig(systemconfig);
+		assert.deepEqual(validation,expectedresult);		
+	})
+
 /*
  * 
  */		  
@@ -763,7 +869,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -809,7 +915,7 @@ describe('Basket Processor Test', function(){
 			"basketaction":"BUY",\
 			"basketkeyalias":"TRANSACTION_ID",\
 			"objectfields":[\
-				{"fieldname":"product_id","basketfieldname":"PRODUCT_ID"}\
+				{"fieldname":"product_id","basketfieldalias":"PRODUCT_ID"}\
 			]\
 		}');	
 		
@@ -1014,13 +1120,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID",\
-							"timebaseditems" : [\
-								{\
-									"periodtype" : "month",\
-									"offset" : "6"\
-								}\
-							]\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -1058,13 +1158,7 @@ describe('Basket Processor Test', function(){
 		
 		expectedresult = JSON.parse('{\
 			"fieldname":"product_id",\
-			"basketfieldname":"PRODUCT_ID",\
-			"timebaseditems":[\
-				{\
-					"periodtype":"month",\
-					"offset":"6"\
-				}\
-			]\
+			"basketfieldalias":"PRODUCT_ID"\
 		}');
 		
 		var result = processor.getObjectField("sale","PRODUCT_ID",systemconfig);
@@ -1212,7 +1306,7 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID"\
 						}\
 					]\
 				}\
@@ -1348,13 +1442,10 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID",\
-							"timebaseditems" : [\
-								{\
-									"periodtype" : "month",\
-									"offset" : "6"\
-								}\
-							]\
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "1"\
 						}\
 					]\
 				}\
@@ -1366,7 +1457,7 @@ describe('Basket Processor Test', function(){
 						{\
 							"filter" : "all", \
 							"basketfieldalias" : "PRODUCT_ID"\
-							} \
+						} \
 					]\
 				},\
 				{\
@@ -1378,13 +1469,16 @@ describe('Basket Processor Test', function(){
 						},\
 						{\
 							"filter" : "all", \
-							"basketfieldalias" : "PRODUCT_ID"\
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "within", \
+							"offset" : "6"\
 						}\
 					]\
 				}\
 			]\
-		}');	
-		
+		}');
+				
 		var expectedresultvalidation = [];
 		var validateresult = processor.validateSystemConfig(systemconfig);
 		
@@ -1411,7 +1505,7 @@ describe('Basket Processor Test', function(){
 		assert.deepEqual(actualresult,expectedoutput);			
 	})
 	
-	it('addPeriodOffsetTuples: ', function() {
+	it('addPeriodOffsetTuples: normal flow - offsettype "within"', function() {
 		var systemconfig = JSON.parse('{ \
 			"mappings" : [\
 				{\
@@ -1424,10 +1518,10 @@ describe('Basket Processor Test', function(){
 					"objectfields" : [\
 						{\
 							"fieldname" : "product_id",\
-							"basketfieldname" : "PRODUCT_ID",\
+							"basketfieldalias" : "PRODUCT_ID",\
 							"periodtype" : "month",\
 							"offsettype" : "within", \
-							"offset" : "6"\
+							"offset" : "1"\
 						}\
 					]\
 				}\
@@ -1481,9 +1575,89 @@ describe('Basket Processor Test', function(){
 					]\
 				}\
 			]\
-		}');	
+		}');			
 		
 		var expectedoutput = JSON.parse('{\
+			"aggregators":[\
+				{\
+					"object":"sale",\
+					"basketkeyalias":"CUSTOMER_ID",\
+					"basketkeyaliasvalue":"59005",\
+					"periodrelevance":"2015/02",\
+					"data":[\
+						{"perioddate":"20150106T115527Z","periodtype":"month","periodoffset":"0","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+						{"perioddate":"20150606T115527Z","periodtype":"month","periodoffset":"0","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+						{"perioddate":"20150706T115527Z","periodtype":"month","periodoffset":"0","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+						{"perioddate":"20150606T115527Z","periodtype":"month","periodoffset":"0","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2382"},\
+						{"perioddate":"20150606T115527Z","periodtype":"month","periodoffset":"1","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+						{"perioddate":"20150706T115527Z","periodtype":"month","periodoffset":"1","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+						{"perioddate":"20150606T115527Z","periodtype":"month","periodoffset":"1","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2382"}\
+					]\
+				}\
+			]\
+		}');
+		
+		var output = processor.addPeriodOffsetTuples(input,systemconfig);
+			
+		assert.deepEqual(output,expectedoutput);		
+	})	  
+
+	it('addPeriodOffsetTuples: normal flow - offsettype "after"', function() {
+		var systemconfig = JSON.parse('{ \
+			"mappings" : [\
+				{\
+					"object" : "sale",\
+					"objectkey" : "customer_id",\
+					"objectperiodrelevance" : "sale_date",\
+					"basketname" : "SALES",\
+					"basketaction" : "BUY", \
+					"basketkeyalias" : "CUSTOMER_ID",\
+					"objectfields" : [\
+						{\
+							"fieldname" : "product_id",\
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "after", \
+							"offset" : "3"\
+						}\
+					]\
+				}\
+			],\
+			"tuples" : [\
+				{\
+					"name" : "TUPLEA",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						} \
+					]\
+				},\
+				{\
+					"name" : "TUPLEB",\
+					"basketfields" : [\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID"\
+						},\
+						{\
+							"filter" : "all", \
+							"basketfieldalias" : "PRODUCT_ID",\
+							"periodtype" : "month",\
+							"offsettype" : "after", \
+							"offset" : "3"\
+						}\
+					]\
+				}\
+			]\
+		}');
+		
+		var expectedresultvalidation = [];
+		var validateresult = processor.validateSystemConfig(systemconfig);
+		
+		assert.deepEqual(validateresult,expectedresultvalidation);					
+		
+		var input = JSON.parse('{\
 			"aggregators" : [\
 				{\
 					"object" : "sale", \
@@ -1493,22 +1667,42 @@ describe('Basket Processor Test', function(){
 					"data" : [\
 						{"perioddate": "20150106T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
 						{"perioddate": "20150606T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"}, \
-						{"perioddate": "20150606T115527Z","periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381", "weight" : "0"}, \
 						{"perioddate": "20150706T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381"},  \
-						{"perioddate": "20150706T115527Z","periodtype": "month", "periodoffset" : "6", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2381", "weight" : "0"},  \
 						{"perioddate": "20150606T115527Z","periodtype": "month", "periodoffset" : "0", "basketfieldalias" : "PRODUCT_ID", "basketfieldaliasvalue" : "2382"} \
 					]\
 				}\
 			]\
-		}');	
+		}');			
+		
+		var expectedoutput = JSON.parse('{\
+				"aggregators":[\
+					{\
+						"object":"sale",\
+						"basketkeyalias":"CUSTOMER_ID",\
+						"basketkeyaliasvalue":"59005",\
+						"periodrelevance":"2015/02",\
+						"data":[\
+							{"perioddate":"20150106T115527Z","periodtype":"month","periodoffset":"0","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+							{"perioddate":"20150606T115527Z","periodtype":"month","periodoffset":"0","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+							{"perioddate":"20150706T115527Z","periodtype":"month","periodoffset":"0","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+							{"perioddate":"20150606T115527Z","periodtype":"month","periodoffset":"0","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2382"},\
+							{"perioddate":"20150706T115527Z","periodtype":"month","periodoffset":"3","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"},\
+							{"perioddate":"20150606T115527Z","periodtype":"month","periodoffset":"3","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2382"},\
+							{"perioddate":"20150706T115527Z","periodtype":"month","periodoffset":"3","basketfieldalias":"PRODUCT_ID","basketfieldaliasvalue":"2381"}\
+						]\
+					}\
+				]\
+		}')
+
 		
 		var output = processor.addPeriodOffsetTuples(input,systemconfig);
 			
 		assert.deepEqual(output,expectedoutput);		
-	})	  
+	})	
+
   })  
   
-
+  
   
   /*
   describe('Test Counters', function(){

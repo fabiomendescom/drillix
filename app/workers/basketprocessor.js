@@ -85,13 +85,26 @@ module.exports = {
 	*/
 	validateSystemConfig: function(systemconfig) {
 		var errors = [];
+
+		for (var property in systemconfig) {
+			if (property!="tuples" && property!="mappings") {
+				errors.push("Property " + property + " is invalid");
+			}
+		}
 		
 		if(systemconfig.hasOwnProperty("mappings") == false) {
 			errors.push("Config does not have a 'mappings' property");
 		} else {
 			if(systemconfig.mappings.hasOwnProperty("length")==false) {
-				errors.push("'mappings' property must be an array");
+				errors.push("'mappings' property must be an array");											
 			} else {
+				for (var x=0;x < systemconfig.mappings.length;x++) {
+					for (var property in systemconfig.mappings[x]) {
+						if (property!="object" && property!="objectkey" && property!="objectperiodrelevance" && property!="basketname" && property!="basketaction" && property!="basketkeyalias" && property!="objectfields") {
+							errors.push("Property " + property + " is invalid");
+						}
+					}
+				}					
 				if(systemconfig.mappings.length == 0) {
 					errors.push("'mappings' array must not be empty");
 				} else {
@@ -117,7 +130,14 @@ module.exports = {
 						if(systemconfig.mappings[x].hasOwnProperty("objectfields")==true) {					
 							if(systemconfig.mappings[x].objectfields.hasOwnProperty("length")==false) {
 								errors.push("'objectfields' must be an array in 'mappings' at index " + x);
-							} else {
+							} else {								
+								for (var xx=0;xx < systemconfig.mappings[x].objectfields.length;xx++) {
+									for (var property in systemconfig.mappings[x].objectfields[xx]) {
+										if (property!="fieldname" && property!="basketfieldalias" && property!="periodtype" && property!="offsettype" && property!="offset") {
+											errors.push("Property " + property + " is invalid");
+										}
+									}
+								}																
 								if(systemconfig.mappings[x].objectfields.length == 0) {
 									errors.push("'objectfields' must not be empty in 'mappings' at index " + x);
 								} else {
@@ -125,8 +145,8 @@ module.exports = {
 										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("fieldname")==false) {
 											errors.push("'fieldname' does not exist at index " + y + " in 'mappings' at index " + x);
 										};
-										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("basketfieldname")==false) {
-											errors.push("'basketfieldname' does not exist at index " + y + " in 'mappings' at index " + x);
+										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("basketfieldalias")==false) {
+											errors.push("'basketfieldalias' does not exist at index " + y + " in 'mappings' at index " + x);
 										};		
 									}
 								}
@@ -144,9 +164,16 @@ module.exports = {
 			if(systemconfig.tuples.hasOwnProperty("length")==false) {
 				errors.push("'tuples' property must be an array");
 			} else {
+				for (var x=0;x < systemconfig.tuples.length;x++) {
+					for (var property in systemconfig.tuples[x]) {
+						if (property!="name" && property!="basketfields") {
+							errors.push("Property " + property + " is invalid");
+						}
+					}
+				}						
 				if(systemconfig.tuples.length == 0) {
 					errors.push("'tuples' array must not be empty");
-				} else {
+				} else {				
 					for (var x = 0; x < systemconfig.tuples.length; x++) {
 						if(systemconfig.tuples[x].hasOwnProperty("name") == false) {
 							errors.push("'name' property missing from tuple at index " + x);
@@ -156,7 +183,14 @@ module.exports = {
 						} else {
 							if(systemconfig.tuples[x].basketfields.hasOwnProperty("length")==false) {
 								errors.push("'basketfields' property must be an array from tuple at index " + x);
-							} else {
+							} else {								
+								for (var xx=0;xx < systemconfig.tuples[x].basketfields.length;xx++) {
+									for (var property in systemconfig.tuples[x].basketfields[xx]) {
+										if (property!="filter" && property!="basketfieldalias" && property!="periodtype" && property!="offsettype" && property!="offset") {
+											errors.push("Property " + property + " is invalid");
+										}
+									}
+								}																	
 								if(systemconfig.tuples[x].basketfields == 0) {
 									errors.push("'basketfields' array must not be empty from tuple at index " + x);
 								} else {
@@ -172,7 +206,17 @@ module.exports = {
 											if(periodtype != "month") {
 												errors.push("Invalid period type at index " + x);
 											}
-										}											
+										}	
+										if(systemconfig.tuples[x].basketfields[xx].hasOwnProperty("offsettype")) {
+											var offset = systemconfig.tuples[x].basketfields[xx].offset;
+											if(isNaN(parseFloat(offset))) {
+												errors.push("Invalid offset type at index " + x);
+											} else {
+												if(parseFloat(offset) < 0) {
+													errors.push("Offset must be greater than 0 at index " + x);
+												}
+											}
+										}																					
 									}
 								}
 							}
@@ -181,6 +225,7 @@ module.exports = {
 				}				
 			};		
 		};
+			
 		//TODO: THIS NEEDS TO BE FINISHED. ADD VALIDATION THNAT THE ALIASES USED IN TUPLES HAVE BEEN DEFINED IN MAPPINGS
 		
 		
@@ -206,7 +251,7 @@ module.exports = {
 		for (var x = 0; x < systemconfig.mappings.length; x++) {
 			if (systemconfig.mappings[x].object == objectname) {
 				for (var j = 0; j < systemconfig.mappings[x].objectfields.length; j++) {
-					if(systemconfig.mappings[x].objectfields[j].basketfieldname == fieldname) {
+					if(systemconfig.mappings[x].objectfields[j].basketfieldalias == fieldname) {
 						return systemconfig.mappings[x].objectfields[j];
 					}
 				}
@@ -271,7 +316,7 @@ module.exports = {
 				for (var x = 0; x < mapping.objectfields.length; x++) {					
 					var field = mapping.objectfields[x];
 					var fielditem = {};
-					fielditem.basketfieldalias = field.basketfieldname;
+					fielditem.basketfieldalias = field.basketfieldalias;
 					fielditem.basketfieldaliasvalue = addtransactionrecords[i].fields[field.fieldname];
 					if(field.hasOwnProperty("periodtype")) {
 						fielditem.perioddate = addtransactionrecords[i].fields[mapping.objectperiodrelevance]
@@ -295,6 +340,7 @@ module.exports = {
 	 * writes a new element to the tuple to reflect this
 	*/
 	addPeriodOffsetTuples: function(aggregator, systemconfig) {
+		var thingstoadd = [];
 		for (var i = 0; i < aggregator.aggregators.length; i++) {
 			var mapping = this.getMapping(aggregator.aggregators[i].object, systemconfig);			
 			for (var j = 0; j < aggregator.aggregators[i].data.length; j++) {
@@ -332,19 +378,28 @@ module.exports = {
 										if(offsettype == "within") {
 											if(firsttupledateplusoffset < secondtupledate) {
 												//add this to tuple array. Add the secondtuple
+												var toadd = JSON.parse(JSON.stringify(secondtuple));
+												toadd.periodoffset = offset;
+												thingstoadd.push(toadd);
 											}
 										} else if (offsettype == "after"){
 											if(firsttupledateplusoffset > secondtupledate) {
 												//add this to tuple array. Add the secondtuple
+												var toadd = JSON.parse(JSON.stringify(secondtuple));
+												toadd.periodoffset = offset;
+												thingstoadd.push(toadd);
 											}										
 										}
 									}	
-								}
-							
+								}						
 						}
 					}
 				}
 			}
+			for (var xxx = 0; xxx < thingstoadd.length; xxx++) {
+				aggregator.aggregators[i].data.push(thingstoadd[xxx]);
+			}
+			thingstoadd = [];
 		}
 				
 		return aggregator;
