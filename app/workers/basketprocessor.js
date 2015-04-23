@@ -100,7 +100,7 @@ module.exports = {
 			} else {
 				for (var x=0;x < systemconfig.mappings.length;x++) {
 					for (var property in systemconfig.mappings[x]) {
-						if (property!="object" && property!="objectkey" && property!="objectperiodrelevance" && property!="basketname" && property!="basketaction" && property!="basketkeyalias" && property!="objectfields") {
+						if (property!="object" && property!="objectkey" && property!="objecttransactiondate" && property!="objectperiodrelevance" && property!="basketname" && property!="basketaction" && property!="basketkeyalias" && property!="objectfields") {
 							errors.push("Property " + property + " is invalid");
 						}
 					}
@@ -118,22 +118,25 @@ module.exports = {
 						if(systemconfig.mappings[x].hasOwnProperty("objectperiodrelevance")==false) {
 							errors.push("'objectperiodrelevance' property does not exist in 'mappings' at index " + x);
 						};		
+						if(systemconfig.mappings[x].hasOwnProperty("objecttransactiondate")==false) {
+							errors.push("'objecttransactiondate' property does not exist in 'mappings' at index " + x);
+						};							
 						if(systemconfig.mappings[x].hasOwnProperty("basketname")==false) {
 							errors.push("'basketname' property does not exist in 'mappings' at index " + x);
 						};
 						if(systemconfig.mappings[x].hasOwnProperty("basketaction")==false) {
 							errors.push("'basketaction' property does not exist in 'mappings' at index " + x);
 						};			
-						if(systemconfig.mappings[x].hasOwnProperty("basketkeyalias")==false) {
-							errors.push("'basketkeyalias' property does not exist in 'mappings' at index " + x);
-						};				
+						//if(systemconfig.mappings[x].hasOwnProperty("basketkeyalias")==false) {
+						//	errors.push("'basketkeyalias' property does not exist in 'mappings' at index " + x);
+						//};				
 						if(systemconfig.mappings[x].hasOwnProperty("objectfields")==true) {					
 							if(systemconfig.mappings[x].objectfields.hasOwnProperty("length")==false) {
 								errors.push("'objectfields' must be an array in 'mappings' at index " + x);
 							} else {								
 								for (var xx=0;xx < systemconfig.mappings[x].objectfields.length;xx++) {
 									for (var property in systemconfig.mappings[x].objectfields[xx]) {
-										if (property!="fieldname" && property!="fieldinstanceid" && property!="basketfieldalias" && property!="periodtype" && property!="offsettype" && property!="offset") {
+										if (property!="fieldname" && property!="fieldinstanceid" && property!="fieldname" && property!="periodtype" && property!="offsettype" && property!="offset") {
 											errors.push("Property " + property + " is invalid");
 										}
 									}							
@@ -164,12 +167,15 @@ module.exports = {
 									errors.push("'objectfields' must not be empty in 'mappings' at index " + x);
 								} else {
 									for (var y = 0; y < systemconfig.mappings[x].objectfields.length; y++) {
+										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("fieldinstanceid")==false) {
+											errors.push("fieldinstanceid' does not exist at index " + y + " in 'mappings' at index " + x);
+										};										
 										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("fieldname")==false) {
 											errors.push("'fieldname' does not exist at index " + y + " in 'mappings' at index " + x);
 										};
-										if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("basketfieldalias")==false) {
-											errors.push("'basketfieldalias' does not exist at index " + y + " in 'mappings' at index " + x);
-										};		
+										//if(systemconfig.mappings[x].objectfields[y].hasOwnProperty("fieldname")==false) {
+										//	errors.push("'fieldname' does not exist at index " + y + " in 'mappings' at index " + x);
+										//};		
 									}
 								}
 							}
@@ -188,7 +194,7 @@ module.exports = {
 			} else {
 				for (var x=0;x < systemconfig.tuples.length;x++) {
 					for (var property in systemconfig.tuples[x]) {
-						if (property!="name" && property!="basketfields") {
+						if (property!="name" && property!="fields") {
 							errors.push("Property " + property + " is invalid");
 						}
 					}
@@ -200,23 +206,26 @@ module.exports = {
 						if(systemconfig.tuples[x].hasOwnProperty("name") == false) {
 							errors.push("'name' property missing from tuple at index " + x);
 						};
-						if(systemconfig.tuples[x].hasOwnProperty("basketfields") == false) {
-							errors.push("'basketfields' property missing from tuple at index " + x);
+						if(systemconfig.tuples[x].hasOwnProperty("fields") == false) {
+							errors.push("'fields' property missing from tuple at index " + x);
 						} else {
-							if(systemconfig.tuples[x].basketfields.hasOwnProperty("length")==false) {
-								errors.push("'basketfields' property must be an array from tuple at index " + x);
+							if(systemconfig.tuples[x].fields.hasOwnProperty("length")==false) {
+								errors.push("'fields' property must be an array from tuple at index " + x);
 							} else {								
-								for (var xx=0;xx < systemconfig.tuples[x].basketfields.length;xx++) {
-									for (var property in systemconfig.tuples[x].basketfields[xx]) {
+								for (var xx=0;xx < systemconfig.tuples[x].fields.length;xx++) {
+									for (var property in systemconfig.tuples[x].fields[xx]) {
 										if (property!="filter" && property!="fieldinstanceid") {
 											errors.push("Property " + property + " is invalid");
 										}
 									}
+									if(systemconfig.tuples[x].fields[xx].hasOwnProperty("fieldinstanceid")==false) {
+										errors.push("'fieldinstanceid' missing from fields at index " + x);
+									}
 								}																	
-								if(systemconfig.tuples[x].basketfields == 0) {
-									errors.push("'basketfields' array must not be empty from tuple at index " + x);
+								if(systemconfig.tuples[x].fields.length == 0) {
+									errors.push("'fields' array must not be empty from tuple at index " + x);
 								} else {
-
+									
 								}
 							}
 						};
@@ -250,7 +259,7 @@ module.exports = {
 		for (var x = 0; x < systemconfig.mappings.length; x++) {
 			if (systemconfig.mappings[x].object == objectname) {
 				for (var j = 0; j < systemconfig.mappings[x].objectfields.length; j++) {
-					if(systemconfig.mappings[x].objectfields[j].basketfieldalias == fieldname) {
+					if(systemconfig.mappings[x].objectfields[j].fieldname == fieldname) {
 						return systemconfig.mappings[x].objectfields[j];
 					}
 				}
@@ -309,16 +318,18 @@ module.exports = {
 			var mapping = this.getMapping(objectname, systemconfig);	
 			// if mapping is found
 			if (mapping != null) {
-				var relevanceperiodfield = addtransactionrecords[i].fields[mapping.objectperiodrelevance];
-				var relevanceperiod = relevanceperiodfield.substr(0,4) + "/" + relevanceperiodfield.substr(4,2);
+				//var relevanceperiodfield = addtransactionrecords[i].fields[mapping.objectperiodrelevance];
+				//var relevanceperiod = relevanceperiodfield.substr(0,4) + "/" + relevanceperiodfield.substr(4,2);
+				var relevanceperiod = addtransactionrecords[i].fields[mapping.objectperiodrelevance];
+				var objecttransactiondate = addtransactionrecords[i].fields[mapping.objecttransactiondate];
 				item = this.getDataForTransactionId(mapping.basketkeyalias,addtransactionrecords[i].fields[mapping.objectkey], relevanceperiod, aggregators);				
 				for (var x = 0; x < mapping.objectfields.length; x++) {					
 					var field = mapping.objectfields[x];
 					var fielditem = {};
-					fielditem.basketfieldalias = field.basketfieldalias;
-					fielditem.basketfieldaliasvalue = addtransactionrecords[i].fields[field.fieldname];
+					fielditem.fieldname = field.fieldname;
+					fielditem.fieldnamevalue = addtransactionrecords[i].fields[field.fieldname];
 					if(field.hasOwnProperty("periodtype")) {
-						fielditem.perioddate = addtransactionrecords[i].fields[mapping.objectperiodrelevance]
+						fielditem.perioddate = addtransactionrecords[i].fields[mapping.objecttransactiondate]
 						fielditem.periodtype = field.periodtype;
 						fielditem.periodoffset = "0";	
 					}
@@ -347,7 +358,7 @@ module.exports = {
 					if(x!=j) {
 						//make sure they are on the same periodtype
 						if(aggregator.aggregators[i].data[j].periodtype == aggregator.aggregators[i].data[x].periodtype) {
-							var objectfield = this.getObjectField(aggregator.aggregators[i].object,aggregator.aggregators[i].data[j].basketfieldalias,systemconfig);
+							var objectfield = this.getObjectField(aggregator.aggregators[i].object,aggregator.aggregators[i].data[j].fieldname,systemconfig);
 
 								//check if timebase is the same as the aggregation being looked at
 								if(objectfield.periodtype == aggregator.aggregators[i].data[j].periodtype) {
