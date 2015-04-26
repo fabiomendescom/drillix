@@ -1,5 +1,84 @@
+var jsonPath = require('JSONPath');
 
 module.exports = {
+	
+	enrich: function(payload, enrichconfig) {
+		
+	},
+	
+	convertToBuckets: function(payload, buckettemplatearray) {
+		var buckettemplatearraystring = JSON.stringify(buckettemplatearray);
+
+		var result = buckettemplatearraystring;
+		var result2 = result;
+		var re = /"<<(.*?)>>"/g
+		while( res = re.exec(result) ) {
+			var temp = '"' + jsonPath.eval(payload, res[1]) + '"';
+			result2 =  result2.replace(res[0], temp);
+		}
+			
+		return JSON.parse(result2);
+	},
+	
+	createBucketTuples: function(bucketarray) {
+		for (x = 0; x < arraytoshuffle.length; x++) {
+			for (y = 0; y < arraytoshuffle.length; y++) {
+				
+			}
+		}
+	},
+	
+	associateBucketTuples: function(buckettuplesarray, associationconfigarray) {
+		var associatedtuples = {};
+		associatedtuples.associatedtuples = [];
+		//loop through the configurations		
+		for(xx = 0; xx < associationconfigarray.length; xx++) {
+			var associationconditions = associationconfigarray[xx].associationconditions;
+			var associationconditionsstring = JSON.stringify(associationconditions);
+			var result = associationconditionsstring;
+			
+			//loop through the array of tuples
+			for(yy = 0; yy < buckettuplesarray.tuples.length; yy++) {
+				//first check if the tuple size matches the current config tuple size, otherwise it is an automatic mismatch
+				if(buckettuplesarray.tuples[yy].tuple.size == associationconfigarray[xx].tuplesize) {			
+					var result2 = result;
+					var re = /"<<(.*?)>>"/g
+					while( res = re.exec(result) ) {
+						var temp = '"' + jsonPath.eval(buckettuplesarray.tuples[yy].tuple, res[1]) + '"';
+						result2 =  result2.replace(res[0], temp);
+					}
+					//now see if the match on the association condition works
+					var matched = true;
+					var resultobject = JSON.parse(result2);
+					for(x = 0; x < resultobject.length; x++) {
+						if(resultobject[x].match != resultobject[x]["with"]) {
+							matched = false;
+						}
+					};
+					if(matched) {
+						var item = associationconfigarray[xx].then;
+						var bucket = JSON.stringify(item);
+						var xresult = bucket;
+						var xresult2 = xresult;
+						var xre = /"<<(.*?)>>"/g
+						while( xres = xre.exec(xresult) ) {
+							var xtemp = '"' + jsonPath.eval(buckettuplesarray.tuples[yy].tuple, xres[1]) + '"';
+							xresult2 =  xresult2.replace(xres[0], xtemp);
+						}
+						//put this in the associated tuple. Match
+						associatedtuples.associatedtuples.push(JSON.parse(xresult2));
+						//console.log(JSON.stringify(JSON.parse(xresult2)));
+					}
+				}						
+			}							
+		}		
+		return associatedtuples;
+	},
+	
+	addBuckets: function(bucket1, bucket2) {
+	
+	},
+	
 	
 	// TBD This function will receive a template data and a user config variables and will
 	// return a modified UserConfig with all variables replaced and ready to be processed
