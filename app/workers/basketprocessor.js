@@ -5,30 +5,125 @@ module.exports = {
 	enrich: function(payload, enrichconfig) {
 		
 	},
-	
-	convertToBuckets: function(payload, buckettemplatearray) {
+
+	/*
+	 * DESCRIPTION: 
+	 * Takes any payload and an array of templates. By using the array of templates, the function will transform
+	 * the payload to the various bucket templates
+	 * INPUT: 
+	 * - Any json payload
+	 * RETURN;
+	 * - Array of buckets created by the templates
+	*/	
+	createBuckets: function(payload, buckettemplatearray) {
 		var buckettemplatearraystring = JSON.stringify(buckettemplatearray);
 
 		var result = buckettemplatearraystring;
-		var result2 = result;
 		var re = /"<<(.*?)>>"/g
 		while( res = re.exec(result) ) {
 			var temp = '"' + jsonPath.eval(payload, res[1]) + '"';
 			result2 =  result2.replace(res[0], temp);
 		}
 			
+		console.log("createBuckets ==> " + result2);	
 		return JSON.parse(result2);
 	},
 	
-	createBucketTuples: function(bucketarray) {
-		for (x = 0; x < arraytoshuffle.length; x++) {
-			for (y = 0; y < arraytoshuffle.length; y++) {
-				
-			}
-		}
+	createSubsetsOfSize: function(bucketarray, tuplesize) {
+			var set = bucketarray; 
+			var setLength = set.length;
+			var result = [];
+			
+			// define the subset length and initialize the first subset
+			var subsetLength = tuplesize;
+			var aSubset = new Array(subsetLength+1);
+
+			var i;
+			for( i = 0 ; i < subsetLength ; i++ ) aSubset[i]=i;
+
+			// place a guard at the end
+			aSubset[subsetLength] = setLength;
+
+			// generate each of the posible subsets 
+			// This is just a sum with carry where the value of each of the "digits" 
+			// is in the range [i..subset[i+1])
+			var r = 0, start = 0;
+			do {
+				var tuple = {};
+				tuple.tuple = [];				
+				// print the subset
+				for( i = 0 ; i < subsetLength ; i++ ) {
+					tuple.tuple.push(set[aSubset[i]]);
+				};
+				result.push(JSON.parse(JSON.stringify(tuple)));
+
+				// calculate the next subset
+				for( i = start, r = 1 ; i < subsetLength ; i++ ) {
+					aSubset[i]++;
+					if (aSubset[i] < aSubset[i+1]) { 
+						start = ( i==0 ? 0 : i-1 ); 
+						r = 0; 
+						break; 
+					} else { 
+						aSubset[i] = i 
+					};
+				};
+			} while (r == 0);		
+			return result;
 	},
 	
-	associateBucketTuples: function(buckettuplesarray, associationconfigarray) {
+	/*
+	 * DESCRIPTION:
+	 * This function takes an array of an array and flattens it into a single one dimensional array
+	 * INPUT:
+	 * - array to flatten (double array)
+	 * OUTPUT:
+	 * - single array flattened
+	*/
+	flattenArray: function(arraytoflatten) {
+		var result = [];
+		for(x = 0; x < arraytoflatten.length; x++) {
+			for(y = 0; y < arraytoflatten[x].length; y++) {
+				result.push(arraytoflatten[x][y]);
+			}
+		}
+		return result;
+	},
+
+	/*
+	 * DESCRIPTION: 
+	 * This function will take an array of buckets and will create a combination
+	 * INPUT: 
+	 * - 
+	 * RETURN;
+	 * - 
+	*/		
+	createBucketTuples: function(bucketarray) {
+			var results = [];
+		   	var set = 'abcdefg'.split('');
+		   	var maxsize = 5;
+		   	for(i = 2; i <= maxsize; i++) {
+				results.push(this.createSubsetsOfSize(set, i));
+			}						
+			
+			var finalresult = this.flattenArray(results);
+			
+			return finalresult;
+	},
+	
+	/*
+	 * DESCRIPTION: 
+	 * Takes an array of tuples and a configuration array as inputs and applies
+	 * the configuration in a way to match first the tuple count. If the tuple count (how many buckets are in the tuple) matches
+	 * the tuple array index item, then it will match the keys. If they match, it will apply the "then" directive from
+	 * the configuration in order to create an associated tuple, that is, one that associated the right tuples together.
+	 * INPUT: 
+	 * - buckettuplesarray - an array of tuples that will be associated
+	 * - associationconfigarray - an array of configuration items showing the matches necessary to associate
+	 * RETURN;
+	 * - An array of associated tuples
+	*/
+	createAssociatedBucketTuples: function(buckettuplesarray, associationconfigarray) {
 		var associatedtuples = {};
 		associatedtuples.associatedtuples = [];
 		//loop through the configurations		
@@ -67,15 +162,16 @@ module.exports = {
 						}
 						//put this in the associated tuple. Match
 						associatedtuples.associatedtuples.push(JSON.parse(xresult2));
-						//console.log(JSON.stringify(JSON.parse(xresult2)));
 					}
 				}						
 			}							
 		}		
+		console.log("createAssociatedBucketTuples ==> " + JSON.stringify(associatedtuples));	
+		
 		return associatedtuples;
 	},
 	
-	addBuckets: function(bucket1, bucket2) {
+	aggregateBuckets: function(bucket1, bucket2) {
 	
 	},
 	
