@@ -338,6 +338,7 @@ describe('Basket Processor Test', function(){
  
 */
   describe('Test Aggregators', function(){
+
 	it('Enrich Transaction', function() {
 
 		var record1 = JSON.parse('{\
@@ -532,6 +533,258 @@ describe('Basket Processor Test', function(){
 		// We need some kind of config file for enrichment....		
 
 	});	
+
+	it('getHighestTupleSize', function() {
+
+		var associationconfig1 = JSON.parse('{\
+			"tuplesize": "2",\
+			"associationconditions" : [\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].field>>",\
+					"with" : "CUSTOMER_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].value>>",\
+					"with" : "<<$.buckets[1].bucket.keys[0].value>>"\
+				},\
+				{\
+					"match" : "<<$.buckets[1].bucket.keys[0].field>>",\
+					"with" : "CUSTOMER_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].value>>",\
+					"with" : "<<$.buckets[1].bucket.keys[0].value>>"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.items[0].field>>",\
+					"with" : "PRODUCT_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[1].bucket.items[0].field>>",\
+					"with" : "PRODUCT_ID"\
+				}\
+			],\
+			"then" : {\
+				"bucket" : {\
+					"keys" : [	\
+						{\
+							"field" : "CUSTOMER_ID", \
+							"value": "<<$.buckets[0].bucket.keys[0].value>>" \
+						},\
+						{\
+							"field" : "DATE_OF_SALE", \
+							"value" : "<<$.buckets[0].bucket.keys[1].value>>" \
+						}\
+					],\
+					"items" : [\
+						{\
+							"field" : "PRODUCT_ID", \
+							"values" : [ \
+								{\
+									"value" : "<<$.buckets[0].bucket.items[0].values[0].value>>",\
+									"tags" : [\
+										{\
+											"tag" : "verb",\
+											"value" : "BUY"\
+										}\
+									]\
+								}\
+							] \
+						},\
+						{\
+							"field" : "PRODUCT_ID", \
+							"values" : [ \
+								{\
+									"value" : "<<$.buckets[1].bucket.items[0].values[0].value>>",\
+									"tags" : [\
+										{\
+											"tag" : "verb",\
+											"value" : "BUY"\
+										}\
+									]\
+								}\
+							] \
+						}\
+					],\
+					"aggregations": [\
+						{\
+							"type" : "count",\
+							"value" : 1\
+						}\
+					]\
+				}\
+			}\
+		}');	
+		
+		var associationconfig2 = JSON.parse('{\
+			"tuplesize": "2",\
+			"associationconditions" : [\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].field>>",\
+					"with" : "CUSTOMER_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].value>>",\
+					"with" : "<<$.buckets[1].bucket.keys[0].value>>"\
+				},\
+				{\
+					"match" : "<<$.buckets[1].bucket.keys[0].field>>",\
+					"with" : "CUSTOMER_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].value>>",\
+					"with" : "<<$.buckets[1].bucket.keys[0].value>>"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.items[0].field>>",\
+					"with" : "PRODUCT_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[1].bucket.items[0].field>>",\
+					"with" : "PRODUCT_ID"\
+				}\
+			],\
+			"then" : {\
+				"bucket" : {\
+					"keys" : [	\
+						{\
+							"field" : "CUSTOMER_ID", \
+							"value": "<<$.buckets[0].bucket.keys[0].value>>" \
+						},\
+						{\
+							"field" : "DATE_OF_SALE", \
+							"value" : "<<$.buckets[0].bucket.keys[1].value>>" \
+						}\
+					],\
+					"items" : [\
+						{\
+							"field" : "PRODUCT_ID", \
+							"values" : [ \
+								{\
+									"value" : "<<$.buckets[0].bucket.items[0].values[0].value>>",\
+									"tags" : [\
+										{\
+											"tag" : "verb",\
+											"value" : "BUY"\
+										}\
+									]\
+								}\
+							] \
+						},\
+						{\
+							"field" : "PRODUCT_ID", \
+							"values" : [ \
+								{\
+									"value" : "<<$.buckets[1].bucket.items[0].values[0].value>>",\
+									"tags" : [\
+										{\
+											"tag" : "verb",\
+											"value" : "BUY"\
+										}\
+									]\
+								}\
+							] \
+						}\
+					],\
+					"aggregations": [\
+						{\
+							"type" : "count",\
+							"value" : 1\
+						}\
+					]\
+				}\
+			}\
+		}');	
+		
+		var associationconfig3 = JSON.parse('{\
+			"tuplesize": 5,\
+			"associationconditions" : [\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].field>>",\
+					"with" : "CUSTOMER_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].value>>",\
+					"with" : "<<$.buckets[1].bucket.keys[0].value>>"\
+				},\
+				{\
+					"match" : "<<$.buckets[1].bucket.keys[0].field>>",\
+					"with" : "CUSTOMER_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].value>>",\
+					"with" : "<<$.buckets[1].bucket.keys[0].value>>"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.items[0].field>>",\
+					"with" : "PRODUCT_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[1].bucket.items[0].field>>",\
+					"with" : "PRODUCT_ID"\
+				}\
+			],\
+			"then" : {\
+				"bucket" : {\
+					"keys" : [	\
+						{\
+							"field" : "CUSTOMER_ID", \
+							"value": "<<$.buckets[0].bucket.keys[0].value>>" \
+						},\
+						{\
+							"field" : "DATE_OF_SALE", \
+							"value" : "<<$.buckets[0].bucket.keys[1].value>>" \
+						}\
+					],\
+					"items" : [\
+						{\
+							"field" : "PRODUCT_ID", \
+							"values" : [ \
+								{\
+									"value" : "<<$.buckets[0].bucket.items[0].values[0].value>>",\
+									"tags" : [\
+										{\
+											"tag" : "verb",\
+											"value" : "BUY"\
+										}\
+									]\
+								}\
+							] \
+						},\
+						{\
+							"field" : "PRODUCT_ID", \
+							"values" : [ \
+								{\
+									"value" : "<<$.buckets[1].bucket.items[0].values[0].value>>",\
+									"tags" : [\
+										{\
+											"tag" : "verb",\
+											"value" : "BUY"\
+										}\
+									]\
+								}\
+							] \
+						}\
+					],\
+					"aggregations": [\
+						{\
+							"type" : "count",\
+							"value" : 1\
+						}\
+					]\
+				}\
+			}\
+		}');					
+		
+		var associationconfigarray = [];
+		associationconfigarray.push(associationconfig1);		
+		associationconfigarray.push(associationconfig2);	
+		associationconfigarray.push(associationconfig3);
+
+		var output = processor.getHighestTupleSize(associationconfigarray);
+		assert.deepEqual(output,5);			
+							
+	});
 
 	it('createSubsetsOfSize', function() {
 		var bucketoutput1 = JSON.parse('{\
@@ -1450,33 +1703,108 @@ describe('Basket Processor Test', function(){
 	});
 
 	it('Buckets - createBucketTuples', function() {
-		var bucketarray = [];
 		
-		var tuple = JSON.parse('{\
-			"tuple": {\
-					"size": "2",\
-					"buckets" : []\
+		var associationconfig = JSON.parse('{\
+			"tuplesize": 2,\
+			"associationconditions" : [\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].field>>",\
+					"with" : "CUSTOMER_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].value>>",\
+					"with" : "<<$.buckets[1].bucket.keys[0].value>>"\
+				},\
+				{\
+					"match" : "<<$.buckets[1].bucket.keys[0].field>>",\
+					"with" : "CUSTOMER_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.keys[0].value>>",\
+					"with" : "<<$.buckets[1].bucket.keys[0].value>>"\
+				},\
+				{\
+					"match" : "<<$.buckets[0].bucket.items[0].field>>",\
+					"with" : "PRODUCT_ID"\
+				},\
+				{\
+					"match" : "<<$.buckets[1].bucket.items[0].field>>",\
+					"with" : "PRODUCT_ID"\
+				}\
+			],\
+			"then" : {\
+				"bucket" : {\
+					"keys" : [	\
+						{\
+							"field" : "CUSTOMER_ID", \
+							"value": "<<$.buckets[0].bucket.keys[0].value>>" \
+						},\
+						{\
+							"field" : "DATE_OF_SALE", \
+							"value" : "<<$.buckets[0].bucket.keys[1].value>>" \
+						}\
+					],\
+					"items" : [\
+						{\
+							"field" : "PRODUCT_ID", \
+							"values" : [ \
+								{\
+									"value" : "<<$.buckets[0].bucket.items[0].values[0].value>>",\
+									"tags" : [\
+										{\
+											"tag" : "verb",\
+											"value" : "BUY"\
+										}\
+									]\
+								}\
+							] \
+						},\
+						{\
+							"field" : "PRODUCT_ID", \
+							"values" : [ \
+								{\
+									"value" : "<<$.buckets[1].bucket.items[0].values[0].value>>",\
+									"tags" : [\
+										{\
+											"tag" : "verb",\
+											"value" : "BUY"\
+										}\
+									]\
+								}\
+							] \
+						}\
+					],\
+					"aggregations": [\
+						{\
+							"type" : "count",\
+							"value" : 1\
+						}\
+					]\
+				}\
 			}\
-		}');
+		}');	
 		
-		var bucket1 = JSON.parse('{\
+		var associationconfigarray = [];
+		associationconfigarray.push(associationconfig);
+		
+		var bucketoutput1 = JSON.parse('{\
 			"bucket" : {\
 				"keys" : [	\
 					{\
 						"field" : "CUSTOMER_ID", \
-						"value": "6099" \
+						"value": "59005"\
 					},\
 					{\
-						"field" : "DATE_OF_SALE", \
+						"field" : "DATE_OF_SALE",\
 						"value" : "2015/02" \
 					}\
 				],\
 				"items" : [\
 					{\
-						"field" : "PRODUCT_ID", \
-						"values" : [ \
+						"field" : "PRODUCT_ID",\
+						"values" : [\
 							{\
-								"value" : "PROD_A",\
+								"value" : "2381",\
 								"tags" : [\
 									{\
 										"tag" : "verb",\
@@ -1492,28 +1820,77 @@ describe('Basket Processor Test', function(){
 						"type" : "count",\
 						"value" : 1\
 					}\
-				]\
+				],\
+				"tags" : [\
+					{\
+						"tag" : "transactiondate", \
+						"value" : "20150206T115527Z" \
+					}\
+				]	\
 			}\
-		}');
+		}');	
 		
-		var bucket2 = JSON.parse('{\
+		var bucketoutput2 = JSON.parse('{\
 			"bucket" : {\
 				"keys" : [	\
 					{\
 						"field" : "CUSTOMER_ID", \
-						"value": "6099" \
+						"value": "59005"\
 					},\
 					{\
-						"field" : "DATE_OF_SALE", \
+						"field" : "DATE_OF_SALE",\
 						"value" : "2015/02" \
 					}\
 				],\
 				"items" : [\
 					{\
-						"field" : "PRODUCT_ID", \
-						"values" : [ \
+						"field" : "PARTNER_ID",\
+						"values" : [\
 							{\
-								"value" : "PROD_B",\
+								"value" : "null",\
+								"tags" : [\
+									{\
+										"tag" : "verb",\
+										"value" : "IS"\
+									}\
+								]\
+							}\
+						] \
+					}\
+				],\
+				"aggregations": [\
+					{\
+						"type" : "count",\
+						"value" : 1\
+					}\
+				],\
+				"tags" : [\
+					{\
+						"tag" : "transactiondate", \
+						"value" : "20150206T115527Z" \
+					}\
+				]	\
+			}\
+		}');	
+		
+		var bucketoutput3 = JSON.parse('{\
+			"bucket" : {\
+				"keys" : [	\
+					{\
+						"field" : "CUSTOMER_ID", \
+						"value": "59005"\
+					},\
+					{\
+						"field" : "DATE_OF_SALE",\
+						"value" : "2015/02" \
+					}\
+				],\
+				"items" : [\
+					{\
+						"field" : "PRODUCT_ID",\
+						"values" : [\
+							{\
+								"value" : "2380",\
 								"tags" : [\
 									{\
 										"tag" : "verb",\
@@ -1529,18 +1906,592 @@ describe('Basket Processor Test', function(){
 						"type" : "count",\
 						"value" : 1\
 					}\
-				]\
+				],\
+				"tags" : [\
+					{\
+						"tag" : "transactiondate", \
+						"value" : "20150206T115527Z" \
+					}\
+				]	\
 			}\
-		}');		
+		}');
 		
-		var expectedbucketlist = {};
-		tuple.tuple.buckets.push(bucket1);
-		tuple.tuple.buckets.push(bucket2);
-		expectedbucketlist.tuples = [];
-		expectedbucketlist.tuples.push(tuple);	
+		var bucketoutput4 = JSON.parse('{\
+			"bucket" : {\
+				"keys" : [	\
+					{\
+						"field" : "CUSTOMER_ID", \
+						"value": "59005"\
+					},\
+					{\
+						"field" : "DATE_OF_SALE",\
+						"value" : "2015/02" \
+					}\
+				],\
+				"items" : [\
+					{\
+						"field" : "PRODUCT_ID",\
+						"values" : [\
+							{\
+								"value" : "2383",\
+								"tags" : [\
+									{\
+										"tag" : "verb",\
+										"value" : "BUY"\
+									}\
+								]\
+							}\
+						] \
+					}\
+				],\
+				"aggregations": [\
+					{\
+						"type" : "count",\
+						"value" : 1\
+					}\
+				],\
+				"tags" : [\
+					{\
+						"tag" : "transactiondate", \
+						"value" : "20150206T115527Z" \
+					}\
+				]	\
+			}\
+		}');						
 		
-		var output = processor.createBucketTuples(bucketarray);
-		assert.deepEqual(output,expectedbucketlist);	
+		var bucketoutputarray = [];
+		bucketoutputarray.push(bucketoutput1);		
+		bucketoutputarray.push(bucketoutput2);		
+		bucketoutputarray.push(bucketoutput3);		
+		bucketoutputarray.push(bucketoutput4);		
+		
+		var expectedresult = JSON.parse('\
+[\
+    {\
+        "tuple": [\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2381",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            },\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PARTNER_ID",\
+                            "values": [\
+                                {\
+                                    "value": "null",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "IS"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            },\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2380",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            }\
+        ]\
+    },\
+    {\
+        "tuple": [\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2381",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            },\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PARTNER_ID",\
+                            "values": [\
+                                {\
+                                    "value": "null",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "IS"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            },\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2383",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            }\
+        ]\
+    },\
+    {\
+        "tuple": [\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2381",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            },\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2380",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            },\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2383",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            }\
+        ]\
+    },\
+    {\
+        "tuple": [\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PARTNER_ID",\
+                            "values": [\
+                                {\
+                                    "value": "null",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "IS"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            },\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2380",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            },\
+            {\
+                "bucket": {\
+                    "keys": [\
+                        {\
+                            "field": "CUSTOMER_ID",\
+                            "value": "59005"\
+                        },\
+                        {\
+                            "field": "DATE_OF_SALE",\
+                            "value": "2015/02"\
+                        }\
+                    ],\
+                    "items": [\
+                        {\
+                            "field": "PRODUCT_ID",\
+                            "values": [\
+                                {\
+                                    "value": "2383",\
+                                    "tags": [\
+                                        {\
+                                            "tag": "verb",\
+                                            "value": "BUY"\
+                                        }\
+                                    ]\
+                                }\
+                            ]\
+                        }\
+                    ],\
+                    "aggregations": [\
+                        {\
+                            "type": "count",\
+                            "value": 1\
+                        }\
+                    ],\
+                    "tags": [\
+                        {\
+                            "tag": "transactiondate",\
+                            "value": "20150206T115527Z"\
+                        }\
+                    ]\
+                }\
+            }\
+        ]\
+    }\
+]');
+		
+
+		var output = processor.createBucketTuples(bucketoutputarray,associationconfigarray);
+		assert.deepEqual(output,expectedresult);	
 				
 	});
 

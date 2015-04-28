@@ -7,6 +7,24 @@ module.exports = {
 	},
 
 	/*
+	 * DESCRIPTION:
+	 * This function takes an array of an array and flattens it into a single one dimensional array
+	 * INPUT:
+	 * - array to flatten (double array)
+	 * OUTPUT:
+	 * - single array flattened
+	*/
+	flattenArray: function(arraytoflatten) {
+		var result = [];
+		for(x = 0; x < arraytoflatten.length; x++) {
+			for(y = 0; y < arraytoflatten[x].length; y++) {
+				result.push(arraytoflatten[x][y]);
+			}
+		}
+		return result;
+	},
+	
+	/*
 	 * DESCRIPTION: 
 	 * Takes any payload and an array of templates. By using the array of templates, the function will transform
 	 * the payload to the various bucket templates
@@ -28,7 +46,15 @@ module.exports = {
 		console.log("createBuckets ==> " + result2);	
 		return JSON.parse(result2);
 	},
-	
+
+	/*
+	 * DESCRIPTION: 
+	 * Based on a size, creates all combinations of the tuples based on tuple size
+	 * INPUT: 
+	 * - array of buckets and the size of the tuples to be used in the combination
+	 * RETURN;
+	 * - array of tuples of typlesize
+	*/		
 	createSubsetsOfSize: function(bucketarray, tuplesize) {
 			var set = bucketarray; 
 			var setLength = set.length;
@@ -71,37 +97,39 @@ module.exports = {
 			} while (r == 0);		
 			return result;
 	},
-	
+
 	/*
-	 * DESCRIPTION:
-	 * This function takes an array of an array and flattens it into a single one dimensional array
-	 * INPUT:
-	 * - array to flatten (double array)
-	 * OUTPUT:
-	 * - single array flattened
-	*/
-	flattenArray: function(arraytoflatten) {
-		var result = [];
-		for(x = 0; x < arraytoflatten.length; x++) {
-			for(y = 0; y < arraytoflatten[x].length; y++) {
-				result.push(arraytoflatten[x][y]);
+	 * DESCRIPTION: 
+	 * This analyses the associationconfigarray and returns the highest tuple size found
+	 * INPUT: 
+	 * - array of configurations
+	 * RETURN;
+	 * - highest tuple size
+	*/		
+	getHighestTupleSize: function(associationconfigarray) {
+		var highest = 0;
+		for(x = 0; x < associationconfigarray.length; x++) {
+			if(associationconfigarray[x].tuplesize > highest) {
+				highest = associationconfigarray[x].tuplesize;
 			}
 		}
-		return result;
+		return highest;
 	},
 
 	/*
 	 * DESCRIPTION: 
-	 * This function will take an array of buckets and will create a combination
+	 * This function will take an array of buckets and will create a combination of tuples based on the array of
+	 * configurations given to it.
 	 * INPUT: 
-	 * - 
+	 * - array of buckets and
 	 * RETURN;
 	 * - 
 	*/		
-	createBucketTuples: function(bucketarray) {
+	createBucketTuples: function(bucketarray,associationconfigarray) {
+		
 			var results = [];
-		   	var set = 'abcdefg'.split('');
-		   	var maxsize = 5;
+		   	var set = bucketarray;
+		   	var maxsize = this.getHighestTupleSize(associationconfigarray);
 		   	for(i = 2; i <= maxsize; i++) {
 				results.push(this.createSubsetsOfSize(set, i));
 			}						
