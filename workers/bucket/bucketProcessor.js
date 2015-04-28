@@ -194,7 +194,7 @@ module.exports = {
 				}						
 			}							
 		}		
-		console.log("createAssociatedBucketTuples ==> " + JSON.stringify(associatedtuples));	
+		//console.log("createAssociatedBucketTuples ==> " + JSON.stringify(associatedtuples));	
 		
 		return associatedtuples;
 	},
@@ -202,6 +202,17 @@ module.exports = {
 	aggregateBuckets: function(bucket1, bucket2) {
 	
 	},
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	// TBD This function will receive a template data and a user config variables and will
