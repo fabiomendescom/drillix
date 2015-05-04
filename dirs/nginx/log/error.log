@@ -213,3 +213,7 @@
 2015/05/03 04:17:05 [error] 6#0: *1 open() "/usr/share/nginx/html/analysis/associations" failed (2: No such file or directory), client: 172.17.42.1, server: localhost, request: "GET /analysis/associations HTTP/1.1", host: "localhost"
 2015/05/03 04:19:40 [error] 6#0: *5 open() "/usr/share/nginx/html/fabio.html" failed (2: No such file or directory), client: 172.17.42.1, server: localhost, request: "GET /fabio.html HTTP/1.1", host: "localhost"
 2015/05/03 04:19:51 [error] 6#0: *5 "/usr/share/nginx/html/analysis/index.html" is not found (2: No such file or directory), client: 172.17.42.1, server: localhost, request: "GET /analysis/ HTTP/1.1", host: "localhost"
+2015/05/03 17:00:51 [error] 6#0: *7 open() "/usr/share/nginx/html/wines" failed (2: No such file or directory), client: 172.17.42.1, server: localhost, request: "GET /wines HTTP/1.1", host: "localhost"
+2015/05/03 18:16:44 [error] 5#0: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 172.17.42.1, server: api.drillix.com, request: "GET /favicon.ico HTTP/1.1", host: "api.drillix.com"
+2015/05/03 18:16:44 [error] 5#0: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 172.17.42.1, server: api.drillix.com, request: "GET /favicon.ico HTTP/1.1", host: "api.drillix.com"
+2015/05/03 18:18:10 [emerg] 1#0: host not found in upstream "api.drillix.com:3000" in /etc/nginx/conf.d/nginx.conf:2
