@@ -26,7 +26,8 @@ var users = [
 		secretkey: 'UyxMeInnRSqXIZpz5FvQs/ieKicwRTUzuZaHCX6i',
 		region: 'us-east-1',
 		account: '139086185180',
-		queuename: 'darby-events'
+		queuename: 'darby-events',
+		mongocollection: 'darby-events-sales'
 	}
 ];
 
@@ -59,26 +60,29 @@ var app = express();
 // request carries authentication credentials, as is the case with HTTP Basic.
 app.use(passport.initialize());
  
-app.get('/eventprofile/:id', passport.authenticate('basic', { session: false }), function(req, res) {	
+app.get('/v0.1/eventprofiles/:id', passport.authenticate('basic', { session: false }), function(req, res) {	
 	res.send([{name:'wine1'}, {name:'wine2'}]);
 });
 
-app.get('/event/:id',  passport.authenticate('basic', { session: false }), function(req, res) {
+app.get('/v0.1/events/:id',  passport.authenticate('basic', { session: false }), function(req, res) {
 	var msg = "FAAAAA";
 	
 	sqsmessageadd(msg, req, res, function(err, data) {
 		if (err) {
 			console.log(err, err.stack); // an error occurred
-			res.send({id:req.params.id, name: err, description: err.stack});
+			//res.send({id:req.params.id, name: err, description: err.stack});
+			res.status(500);
+			res.send({"status" : "error","statuscode" : 1,"message" : "Problem inserting event","description" : "Problem inserting event"});						
 		}
 		else {    
 			console.log(data);           // successful response
-			res.send({eventid:data.MessageId});
+			res.send({"status" : "success"});			
+			
 		}
 	});
 });
 
-app.post('/event',  passport.authenticate('basic', { session: false }), function(req, res) {
+app.post('/v0.1/events',  passport.authenticate('basic', { session: false }), function(req, res) {
 	res.send({id:req.params.id, name: "The Name", description: "description"});
 });
  

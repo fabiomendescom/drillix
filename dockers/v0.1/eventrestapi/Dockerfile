@@ -28,6 +28,12 @@ RUN \
 	npm install passport-http --save  
 	
 RUN \	
+	npm install mongodb --save
+	
+RUN \
+	npm install sqs-queue-parallel --save
+		
+RUN \	
 	npm install aws-sdk --save
 
 WORKDIR /var/www/
