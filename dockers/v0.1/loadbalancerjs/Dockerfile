@@ -37,10 +37,11 @@ RUN \
 	npm install aws-sdk --save
 	
 RUN \
-	npm install bouncy --save
+	npm install http-proxy --save
 	
 RUN \
 	npm install seaport --save
+	
 
 WORKDIR /var/www/
 
@@ -50,11 +51,11 @@ ENV NODE_DIR /var/www/
 RUN \
 	mkdir /var/log/drillix
 
-COPY deploy/events.js /var/www/events.js
+COPY deploy/loadbalancer.js /var/www/loadbalancer.js
 
-EXPOSE 3000
+EXPOSE 80
 
 USER node
 
-CMD node events.js 2>> /var/log/drillix/error.log | tee /var/log/drillix/info.log
+CMD authbind node loadbalancer.js 2>> /var/log/drillix/error.log | tee /var/log/drillix/info.log
 

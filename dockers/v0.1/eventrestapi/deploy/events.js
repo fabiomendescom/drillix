@@ -60,17 +60,17 @@ var app = express();
 // request carries authentication credentials, as is the case with HTTP Basic.
 app.use(passport.initialize());
  
-app.get('/v0.1/eventprofiles/:id', passport.authenticate('basic', { session: false }), function(req, res) {	
+ 
+app.get('/', function(req, res) {	
 	res.send([{name:'wine1'}, {name:'wine2'}]);
 });
 
-app.get('/v0.1/events/:id',  passport.authenticate('basic', { session: false }), function(req, res) {
+app.get('/:account/:subaccount/canonical/transactions/:transaction',  passport.authenticate('basic', { session: false }), function(req, res) {
 	var msg = "FAAAAA";
 	
 	sqsmessageadd(msg, req, res, function(err, data) {
 		if (err) {
 			console.log(err, err.stack); // an error occurred
-			//res.send({id:req.params.id, name: err, description: err.stack});
 			res.status(500);
 			res.send({"status" : "error","statuscode" : 1,"message" : "Problem inserting event","description" : "Problem inserting event"});						
 		}
@@ -82,9 +82,9 @@ app.get('/v0.1/events/:id',  passport.authenticate('basic', { session: false }),
 	});
 });
 
-app.post('/v0.1/events',  passport.authenticate('basic', { session: false }), function(req, res) {
-	res.send({id:req.params.id, name: "The Name", description: "description"});
-});
+//app.post('/v0.1/events',  passport.authenticate('basic', { session: false }), function(req, res) {
+//	res.send({id:req.params.id, name: "The Name", description: "description"});
+//});
  
-app.listen(process.env.PORT || 3000);
+app.listen(3000);
 console.log('Listening on port 3000...'); 

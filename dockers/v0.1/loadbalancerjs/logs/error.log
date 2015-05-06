@@ -1,0 +1,29 @@
+/node_modules/http-proxy/lib/http-proxy/index.js:119
+    throw err;
+          ^
+Error: getaddrinfo ENOTFOUND api.drillix.com
+    at errnoException (dns.js:44:10)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:94:26)
+/node_modules/http-proxy/lib/http-proxy/index.js:119
+    throw err;
+          ^
+Error: connect EINVAL
+    at exports._errnoException (util.js:746:11)
+    at connect (net.js:842:19)
+    at net.js:945:9
+    at GetAddrInfoReqWrap.asyncCallback [as callback] (dns.js:81:16)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:99:10)
+/node_modules/http-proxy/lib/http-proxy/index.js:119
+    throw err;
+          ^
+Error: Must provide a proper URL as target
+    at ProxyServer.<anonymous> (/node_modules/http-proxy/lib/http-proxy/index.js:68:35)
+    at Server.closure (/node_modules/http-proxy/lib/http-proxy/index.js:125:43)
+    at Server.emit (events.js:110:17)
+    at HTTPParser.parserOnIncoming [as onIncoming] (_http_server.js:491:12)
+    at HTTPParser.parserOnHeadersComplete (_http_common.js:111:23)
+    at Socket.socketOnData (_http_server.js:343:22)
+    at Socket.emit (events.js:107:17)
+    at readableAddChunk (_stream_readable.js:163:16)
+    at Socket.Readable.push (_stream_readable.js:126:10)
+    at TCP.onread (net.js:538:20)
