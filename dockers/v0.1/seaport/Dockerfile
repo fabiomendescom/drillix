@@ -41,6 +41,9 @@ RUN \
 	
 RUN \
 	npm install seaport --save
+
+RUN \	
+	npm install -g seaport
 	
 
 WORKDIR /var/www/
@@ -51,11 +54,7 @@ ENV NODE_DIR /var/www/
 RUN \
 	mkdir /var/log/drillix
 
-COPY deploy/loadbalancer.js /var/www/loadbalancer.js
+EXPOSE 9090
 
-EXPOSE 80
-
-USER node
-
-CMD authbind node loadbalancer.js 
+CMD seaport listen 9090
 

@@ -37,7 +37,7 @@ RUN \
 	npm install aws-sdk --save
 	
 RUN \
-	npm install bouncy --save
+	npm install http-proxy --save
 	
 RUN \
 	npm install seaport --save
@@ -56,5 +56,4 @@ EXPOSE 3000
 
 USER node
 
-CMD node events.js 2>> /var/log/drillix/error.log | tee /var/log/drillix/info.log
-
+CMD node events.js 

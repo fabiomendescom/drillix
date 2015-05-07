@@ -4,6 +4,9 @@ var express = require('express')
 , BasicStrategy = require('passport-http').BasicStrategy;
 
 var AWS = require('aws-sdk');
+var http = require('http');
+var seaport = require('seaport');
+var ports = seaport.connect('172.17.42.1', 9090);
 
 function sqsmessageadd(msg, req, res, callback) {
 	var sqs = new AWS.SQS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
@@ -85,6 +88,11 @@ app.get('/:account/:subaccount/canonical/transactions/:transaction',  passport.a
 //app.post('/v0.1/events',  passport.authenticate('basic', { session: false }), function(req, res) {
 //	res.send({id:req.params.id, name: "The Name", description: "description"});
 //});
- 
-app.listen(3000);
-console.log('Listening on port 3000...'); 
+
+
+var porttolisten = ports.register('web@1.2.3',{port:3000});
+console.log("preparing to listen on port " + porttolisten);
+app.listen(porttolisten);
+
+console.log("listening on port " + porttolisten);
+
