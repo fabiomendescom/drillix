@@ -22,10 +22,16 @@ RUN \
     npm install express --save  
     
 RUN \
+	npm install body-parser --save
+    
+RUN \
 	npm install passport --save
 	
+#RUN \
+#	npm install passport-http --save  
+
 RUN \
-	npm install passport-http --save  
+	npm install passport-http-bearer --save
 	
 RUN \	
 	npm install mongodb --save
@@ -36,11 +42,11 @@ RUN \
 RUN \	
 	npm install aws-sdk --save
 	
-RUN \
-	npm install http-proxy --save
+#RUN \
+#	npm install http-proxy --save
 	
-RUN \
-	npm install seaport --save
+#RUN \
+#	npm install seaport --save
 
 WORKDIR /var/www/
 

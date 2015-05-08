@@ -18,29 +18,29 @@ RUN \
   chown -R node:node /etc/authbind/byport/ && \
   chmod -R 755 /etc/authbind/byport/
   
-RUN \
-    npm install express --save  
+#RUN \
+#    npm install express --save  
     
-RUN \
-	npm install passport --save
+#RUN \
+#	npm install passport --save
 	
-RUN \
-	npm install passport-http --save  
+#RUN \
+#	npm install passport-http --save  
 	
-RUN \	
-	npm install mongodb --save
+#RUN \	
+#	npm install mongodb --save
 	
-RUN \
-	npm install sqs-queue-parallel --save
+#RUN \
+#	npm install sqs-queue-parallel --save
 		
-RUN \	
-	npm install aws-sdk --save
+#RUN \	
+#	npm install aws-sdk --save
 	
 RUN \
 	npm install http-proxy --save
 	
-RUN \
-	npm install seaport --save
+#RUN \
+#	npm install seaport --save
 	
 
 WORKDIR /var/www/
