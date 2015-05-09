@@ -4,7 +4,10 @@ var express = require('express')
 , BearerStrategy = require('passport-http-bearer').Strategy;
 var bodyParser = require("body-parser");
 
+var mongouri			= "mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699";                                        
 
+var MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
 
 var AWS = require('aws-sdk');
 var http = require('http');
@@ -63,6 +66,50 @@ app.use(function (req, res, next) {
   console.log(req.body) // populated!
   next()
 })
+
+app.get('/:account/:subaccount/canonical/counters/:counter',  passport.authenticate('bearer', { session: false }), function(req, res) {
+	MongoClient.connect(mongouri, function(err, db) {
+		if(!err) {
+			countercollection = db.collection('darby-lastid');
+			countercollection.findOne({_id: req.params.counter}, function(err, document) {
+				console.log(document.name);
+				res.status(200);
+				var response = {};
+				response["counter"] = document["_id"];
+				response["value"] = document["value"];
+				res.send(response);							
+			});
+		} else {
+			res.status(500);
+			res.send({"status" : "error","statuscode" : 2,"message" : "Problem connecting to storage","description" : "Problem inserting event"});											
+		}
+	});
+});
+
+app.post('/:account/:subaccount/canonical/counters/:counter',  passport.authenticate('bearer', { session: false }), function(req, res) {
+	MongoClient.connect(mongouri, function(err, db) {
+		if(!err) {
+			var stuff = req.body;
+			stuff["_id"] = req.params.counter;
+			countercollection = db.collection('darby-lastid');
+			countercollection.save(
+				stuff
+			, function(err, result) {
+				if (err) {
+					console.log(err);
+					res.status(500);
+					res.send({"status" : "error","statuscode" : 1,"message" : "Problem inserting in storage","description" : "Problem inserting event"});								
+				} else {
+					res.status(200);
+					res.send({"status" : "success"});							
+				}
+			});
+		} else {
+			res.status(500);
+			res.send({"status" : "error","statuscode" : 2,"message" : "Problem connecting to storage","description" : "Problem inserting event"});											
+		}
+	});
+});
 
 app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
 	var msg = req.body;
