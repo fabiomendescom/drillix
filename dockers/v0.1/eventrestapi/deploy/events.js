@@ -65,7 +65,7 @@ app.use(function (req, res, next) {
 })
 
 app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
-	var msg = {productid:111};
+	var msg = req.body;
 	
 	var meta = {};	
 	meta["account"] = req.params.account;
@@ -85,7 +85,8 @@ app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.
 		}
 		else {    
 			console.log(data);           // successful response
-			res.send({"status" : "success", "id" : data.MessageId, "data" : JSON.stringify(req.body)});			
+			res.status(200);
+			res.send({"status" : "success", "id" : data.MessageId});			
 			
 		}
 	});
