@@ -1,23 +1,41 @@
+//INSTANCE SPECIFIC
+var porttolisten 		= process.env.PORT;
+var queue               = process.env.EVENTQUEUE;
+var redisurl			= process.env.REDIS_URL;
+var redisport			= process.env.REDIS_PORT;
+
 var express = require('express')
 , passport = require('passport')
 , util = require('util')
 , BearerStrategy = require('passport-http-bearer').Strategy;
 var bodyParser = require("body-parser");
-
-var mongouri			= "mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699";                                        
-
+var cluster = require('cluster');
+var numCPUs = require('os').cpus().length;
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
-
 var AWS = require('aws-sdk');
 var http = require('http');
+var redis = require("redis");
 
+if (cluster.isMaster) {
+  // Fork workers.
+  for (var i = 0; i < numCPUs; i++) {
+	console.log("fork node " + i);
+    cluster.fork();
+  }
+
+  cluster.on('exit', function(worker, code, signal) {
+    console.log('worker ' + worker.process.pid + ' died');
+  });
+} else {
+
+//BEGIN OF CLUSTER CODE
 function sqsmessageadd(msg, req, res, callback) {
 	var sqs = new AWS.SQS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
 
 	var params = {
 		MessageBody: msg,
-		QueueUrl: 'https://sqs.' + req.user.region + '.amazonaws.com/' + req.user.account + '/' + req.user.queuename
+		QueueUrl: 'https://sqs.' + req.user.region + '.amazonaws.com/' + req.user.account + '/' + queue
 	};
 	
 	sqs.sendMessage(params, function(err, data) {
@@ -25,27 +43,18 @@ function sqsmessageadd(msg, req, res, callback) {
 	});	
 }
 
-var users = [
-	{ 
-		id: 1, 
-		token: 'E95C52F99868D96F6791264A1AE4A', 
-		accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
-		secretkey: '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',
-		region: 'us-east-1',
-		account: '139086185180',
-		queuename: 'darby-events',
-		mongocollection: 'darby-events-sales'
-	}
-];
-
 function findByToken(token, fn) {
-	for (var i = 0, len = users.length; i < len; i++) {
-		var user = users[i];
-		if (user.token === token) {
-			return fn(null, user);
-		}
-	}
-	return fn(null, null);
+	var redisclient = redis.createClient(redisport,redisurl);
+
+	redisclient.on("error", function (err) {
+		console.log("Error REDIS url " + redisurl + ":" + redisport + " - " + err);
+	});	
+		
+	redisclient.get(token, function(err, reply) {
+		console.log("THE VALUE IS: " + reply);
+		user = JSON.parse(reply);
+		return fn(null, user);
+	});			
 }
 
 passport.use(new BearerStrategy(
@@ -65,12 +74,13 @@ app.use(bodyParser.json());
 app.use(function (req, res, next) {
   console.log(req.body) // populated!
   next()
-})
+})	
 
 app.get('/:account/:subaccount/canonical/counters/:counter',  passport.authenticate('bearer', { session: false }), function(req, res) {
-	MongoClient.connect(mongouri, function(err, db) {
+	var countercollection	= req.user.tenantprefix + "lastid";
+	MongoClient.connect(req.user.mongouri, function(err, db) {
 		if(!err) {
-			countercollection = db.collection('darby-lastid');
+			countercollection = db.collection(countercollection);
 			countercollection.findOne({_id: req.params.counter}, function(err, document) {
 				console.log(document.name);
 				res.status(200);
@@ -84,14 +94,16 @@ app.get('/:account/:subaccount/canonical/counters/:counter',  passport.authentic
 			res.send({"status" : "error","statuscode" : 2,"message" : "Problem connecting to storage","description" : "Problem inserting event"});											
 		}
 	});
+
 });
 
 app.post('/:account/:subaccount/canonical/counters/:counter',  passport.authenticate('bearer', { session: false }), function(req, res) {
+	var countercollection	= req.user.tenantprefix + "lastid";
 	MongoClient.connect(mongouri, function(err, db) {
 		if(!err) {
 			var stuff = req.body;
 			stuff["_id"] = req.params.counter;
-			countercollection = db.collection('darby-lastid');
+			countercollection = db.collection(countercollection);
 			countercollection.save(
 				stuff
 			, function(err, result) {
@@ -109,9 +121,11 @@ app.post('/:account/:subaccount/canonical/counters/:counter',  passport.authenti
 			res.send({"status" : "error","statuscode" : 2,"message" : "Problem connecting to storage","description" : "Problem inserting event"});											
 		}
 	});
+	
 });
 
 app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
+
 	var msg = req.body;
 	
 	var meta = {};	
@@ -137,10 +151,15 @@ app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.
 			
 		}
 	});
+
 });
 
-var porttolisten = 3000;
+
 console.log("preparing to listen on port " + porttolisten);
+
 app.listen(porttolisten);
+
 console.log("listening on port " + porttolisten);
 
+//END OF CLUSTER CODE
+}

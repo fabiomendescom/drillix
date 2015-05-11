@@ -18,29 +18,41 @@ RUN \
   chown -R node:node /etc/authbind/byport/ && \
   chmod -R 755 /etc/authbind/byport/
   
-#RUN \
-#    npm install express --save  
+RUN \
+    npm install express --save  
     
-#RUN \
-#	npm install passport --save
+RUN \
+	npm install body-parser --save
+    
+RUN \
+	npm install passport --save
 	
 #RUN \
 #	npm install passport-http --save  
+
+RUN \
+	npm install passport-http-bearer --save
 	
-#RUN \	
-#	npm install mongodb --save
-	
-#RUN \
-#	npm install sqs-queue-parallel --save
-		
-#RUN \	
-#	npm install aws-sdk --save
+RUN \	
+	npm install mongodb --save
 	
 RUN \
-	npm install http-proxy --save
+	npm install sqs-queue-parallel --save
+		
+RUN \	
+	npm install aws-sdk --save
+	
+#RUN \
+#	npm install http-proxy --save
 	
 #RUN \
 #	npm install seaport --save
+
+RUN \
+	npm install sqs-queue-parallel --save
+	
+RUN \
+	npm install sqs --save	
 	
 RUN \
 	npm install redis --save	
@@ -53,11 +65,9 @@ ENV NODE_DIR /var/www/
 RUN \
 	mkdir /var/log/drillix
 
-COPY deploy/loadbalancer.js /var/www/loadbalancer.js
+COPY deploy/event-worker.js /var/www/event-worker.js
 
-EXPOSE 80
 
 USER node
 
-CMD authbind node loadbalancer.js 
-
+CMD node event-worker.js 
