@@ -39,8 +39,8 @@ RUN \
 RUN \
 	npm install http-proxy --save
 	
-#RUN \
-#	npm install seaport --save
+RUN \
+	npm install seaport --save
 	
 RUN \
 	npm install redis --save	
@@ -55,7 +55,7 @@ RUN \
 
 COPY deploy/loadbalancer.js /var/www/loadbalancer.js
 
-EXPOSE 80
+EXPOSE 80 5001
 
 USER node
 

@@ -1,8 +1,8 @@
 //INSTANCE SPECIFIC
-var porttolisten 		= process.env.PORT;
-var queue               = process.env.EVENTQUEUE;
 var redisurl			= process.env.REDIS_URL;
 var redisport			= process.env.REDIS_PORT;
+var porttolisten 		= process.env.PORT;
+var queue               = process.env.EVENTQUEUE;
 
 var express = require('express')
 , passport = require('passport')
@@ -16,20 +16,9 @@ var MongoClient = require('mongodb').MongoClient
 var AWS = require('aws-sdk');
 var http = require('http');
 var redis = require("redis");
+var seaport = require("seaport");
 
-if (cluster.isMaster) {
-  // Fork workers.
-  for (var i = 0; i < numCPUs; i++) {
-	console.log("fork node " + i);
-    cluster.fork();
-  }
 
-  cluster.on('exit', function(worker, code, signal) {
-    console.log('worker ' + worker.process.pid + ' died');
-  });
-} else {
-
-//BEGIN OF CLUSTER CODE
 function sqsmessageadd(msg, req, res, callback) {
 	var sqs = new AWS.SQS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
 
@@ -154,12 +143,12 @@ app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.
 
 });
 
-
+var ports = seaport.connect('172.17.42.1', 5001);
+porttolisten = ports.register('drillixevents@0.0.0',3000);
 console.log("preparing to listen on port " + porttolisten);
 
 app.listen(porttolisten);
 
 console.log("listening on port " + porttolisten);
 
-//END OF CLUSTER CODE
-}
+

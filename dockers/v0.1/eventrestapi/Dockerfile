@@ -45,8 +45,8 @@ RUN \
 #RUN \
 #	npm install http-proxy --save
 	
-#RUN \
-#	npm install seaport --save
+RUN \
+	npm install seaport --save
 
 RUN \
 	npm install redis --save

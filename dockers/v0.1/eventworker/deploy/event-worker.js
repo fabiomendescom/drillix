@@ -1,18 +1,19 @@
 // INSTANCE SPECIFIC
-var queue               = process.env.EVENTQUEUE;
 var numberqueuemsgs     = process.env.QUEUENUMBERMESSAGES;
 var concurrency			= process.env.QUEUECONCURRENCY;
+var processgroup		= process.env.PROCESSGROUP;
 
-var usercontext =	{ 
-		id: 1, 
-		token: 'E95C52F99868D96F6791264A1AE4A', 
-		accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
-		secretkey: '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',
-		region: 'us-east-1',
-		account: '139086185180',
-		mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'
+var processgroup = {
+	id : "GROUP1",
+	queue: "events",
+	accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
+	secretkey: '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',
+	region: 'us-east-1',
+	account: '139086185180',
+	mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'	
 }
 
+var queuename               = processgroup.queue;
 var mongocollection		= "darby-sale";
 
 var SqsQueueParallel = require('sqs-queue-parallel');
@@ -25,16 +26,16 @@ var MongoClient = require('mongodb').MongoClient
 //  - each listener can receive up to 4 messages
 // With this configuration you could receive and parse 8 `message` events in parallel
 var queue = new SqsQueueParallel({
-    name: queue,
+    name: queuename,
     maxNumberOfMessages: numberqueuemsgs,
     concurrency: concurrency,
-    region: usercontext.region,
-    accessKeyId: usercontext.accesskey,
-    secretAccessKey: usercontext.secretkey
+    region: processgroup.region,
+    accessKeyId: processgroup.accesskey,
+    secretAccessKey: processgroup.secretkey
 });
 
 // Use connect method to connect to the Server
-MongoClient.connect(usercontext.mongouri, function(err, db) {
+MongoClient.connect(processgroup.mongouri, function(err, db) {
 		//assert.equal(null, err);
 		console.log("Connected correctly to mongodb server");
 

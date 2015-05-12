@@ -1,7 +1,4 @@
 //INSTANCE SPECIFIC
-var targetprotocol 		= process.env.TARGET_PROTOCOL;
-var targetaddress 		= process.env.TARGET_ADDR;
-var targetport 			= process.env.TARGET_PORT;
 var redisurl			= process.env.REDIS_URL;
 var redisport			= process.env.REDIS_PORT;
 
@@ -11,26 +8,20 @@ var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
 var redis = require("redis");
 
-if (cluster.isMaster) {
-  // Fork workers.
-  for (var i = 0; i < numCPUs; i++) {
-	console.log("fork node " + i);
-    cluster.fork();
-  }
+var seaport = require('seaport');
+var seaportserver = seaport.createServer();
+seaportserver.listen(5001);
+console.log("Seaport listening on 5001");
 
-  cluster.on('exit', function(worker, code, signal) {
-    console.log('worker ' + worker.process.pid + ' died');
-  });
-} else {
 	var redisclient = redis.createClient(redisport,redisurl);
 
 	redisclient.on("error", function (err) {
 		console.log("Error REDIS url " + redisurl + ":" + redisport + " - " + err);
 	});	
 	var proxy = httpProxy.createProxyServer({});
+		
+	var ports = seaport.connect(5001);		
 
-	var targeturl = targetprotocol + '://' + targetaddress + ':' + targetport;
-	console.log("proxy on " + targeturl);
 	var server = http.createServer(function(req, res) {		
 		var usercontext =	{ 
 				id: 1, 
@@ -42,11 +33,16 @@ if (cluster.isMaster) {
 				account: '139086185180',
 				mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'
 		}				
-		redisclient.set(usercontext.token, JSON.stringify(usercontext), redis.print);
-		proxy.web(req, res, { target: targeturl });
+		redisclient.set(usercontext.token, JSON.stringify(usercontext), redis.print);	
+		ports.get('drillixevents@0.0.0', function (ps) {
+			console.log(JSON.stringify(ps));
+			var targeturl = 'http://' + ps[0].host.replace("::ffff:","") + ':' + ps[0].port;
+			console.log("Proxing to " + targeturl);
+			proxy.web(req, res, { target: targeturl });
+		});	
+		
 	});
 	console.log("listening on port 80")
 	server.listen(80);
-}	
 
 
