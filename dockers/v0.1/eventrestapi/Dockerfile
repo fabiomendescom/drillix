@@ -50,6 +50,10 @@ RUN \
 
 RUN \
 	npm install redis --save
+	
+RUN \	
+	npm install winston --save
+	
 
 WORKDIR /var/www/
 

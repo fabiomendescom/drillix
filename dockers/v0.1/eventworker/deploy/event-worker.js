@@ -3,6 +3,28 @@ var numberqueuemsgs     = process.env.QUEUENUMBERMESSAGES;
 var concurrency			= process.env.QUEUECONCURRENCY;
 var processgroup		= process.env.PROCESSGROUP;
 
+var logger = require('winston');
+var SqsQueueParallel = require('sqs-queue-parallel');
+var sqs = require('sqs');
+var MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
+
+function getSystemInfo() {
+	os = require('os');
+	cpu = os.cpus();
+	var info = {	
+			cpus: cpu.length,
+			model: cpu[0].model,
+			speed: cpu[0].speed,
+			hostname: os.hostname(),
+			ramused: Math.round(os.freemem()/(1024*1000))+"MB",
+			ramtotal: Math.round(os.totalmem()/(1024*1000*1000)) + "GB"
+	};
+	return info;
+}
+
+logger.info("Starting docker process",getSystemInfo());
+  
 var processgroup = {
 	id : "GROUP1",
 	queue: "events",
@@ -15,11 +37,6 @@ var processgroup = {
 
 var queuename               = processgroup.queue;
 var mongocollection		= "darby-sale";
-
-var SqsQueueParallel = require('sqs-queue-parallel');
-var sqs = require('sqs');
-var MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
 
 // Simple configuration:
 //  - 2 concurrency listeners
@@ -37,12 +54,12 @@ var queue = new SqsQueueParallel({
 // Use connect method to connect to the Server
 MongoClient.connect(processgroup.mongouri, function(err, db) {
 		//assert.equal(null, err);
-		console.log("Connected correctly to mongodb server");
+		logger.info("Connected correctly to mongodb server");
 
 		// Get event messages to process
 		queue.on('message', function (e)
 		{
-			console.log('New message: ', e.data)
+			logger.info('New message: ', e.data)
     
 			///////////////////////
 			// PROCESS THE EVENT //
@@ -69,6 +86,6 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
 
 		queue.on('error', function (err)
 		{
-			console.log('There was an error: ', err);
+			logger.info('There was an error: ', err);
 		});
 });

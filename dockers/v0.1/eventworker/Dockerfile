@@ -57,6 +57,10 @@ RUN \
 RUN \
 	npm install redis --save	
 
+RUN \	
+	npm install winston --save
+
+
 WORKDIR /var/www/
 
 #set to effective working dir for default command (working_dir directive doesn't work in tutum)

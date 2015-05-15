@@ -18,6 +18,9 @@ RUN \
   chown -R node:node /etc/authbind/byport/ && \
   chmod -R 755 /etc/authbind/byport/
   
+RUN \
+	 npm install node-zookeeper-client --save
+		
 #RUN \
 #    npm install express --save  
     
@@ -44,6 +47,11 @@ RUN \
 	
 RUN \
 	npm install redis --save	
+	
+RUN \	
+	npm install winston --save
+
+
 
 WORKDIR /var/www/
 
