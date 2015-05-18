@@ -19,6 +19,9 @@ RUN \
   chmod -R 755 /etc/authbind/byport/
   
 RUN \
+	npm install local-ip
+	
+RUN \
     npm install express --save  
     
 RUN \
@@ -26,9 +29,6 @@ RUN \
     
 RUN \
 	npm install passport --save
-	
-#RUN \
-#	npm install passport-http --save  
 
 RUN \
 	npm install passport-http-bearer --save
@@ -41,12 +41,6 @@ RUN \
 		
 RUN \	
 	npm install aws-sdk --save
-	
-#RUN \
-#	npm install http-proxy --save
-	
-RUN \
-	npm install seaport --save
 
 RUN \
 	npm install redis --save
@@ -54,6 +48,8 @@ RUN \
 RUN \	
 	npm install winston --save
 	
+RUN \
+	npm install node-zookeeper-client --save
 
 WORKDIR /var/www/
 

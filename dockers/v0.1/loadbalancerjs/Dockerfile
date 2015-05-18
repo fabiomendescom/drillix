@@ -20,30 +20,9 @@ RUN \
   
 RUN \
 	 npm install node-zookeeper-client --save
-		
-#RUN \
-#    npm install express --save  
-    
-#RUN \
-#	npm install passport --save
-	
-#RUN \
-#	npm install passport-http --save  
-	
-#RUN \	
-#	npm install mongodb --save
-	
-#RUN \
-#	npm install sqs-queue-parallel --save
-		
-#RUN \	
-#	npm install aws-sdk --save
 	
 RUN \
 	npm install http-proxy --save
-	
-RUN \
-	npm install seaport --save
 	
 RUN \
 	npm install redis --save	
