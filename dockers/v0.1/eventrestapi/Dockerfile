@@ -18,8 +18,8 @@ RUN \
   chown -R node:node /etc/authbind/byport/ && \
   chmod -R 755 /etc/authbind/byport/
   
-RUN \
-	npm install local-ip
+#RUN \
+#	npm install local-ip
 	
 RUN \
     npm install express --save  
@@ -36,8 +36,8 @@ RUN \
 RUN \	
 	npm install mongodb --save
 	
-RUN \
-	npm install sqs-queue-parallel --save
+#RUN \
+#	npm install sqs-queue-parallel --save
 		
 RUN \	
 	npm install aws-sdk --save
@@ -48,8 +48,11 @@ RUN \
 RUN \	
 	npm install winston --save
 	
+#RUN \
+#	npm install node-zookeeper-client --save
+	
 RUN \
-	npm install node-zookeeper-client --save
+	npm install kafka --save
 
 WORKDIR /var/www/
 
@@ -61,8 +64,8 @@ RUN \
 
 COPY deploy/events.js /var/www/events.js
 
-EXPOSE 3000
+EXPOSE 80
 
 USER node
 
-CMD node events.js 
+CMD authbind node events.js 

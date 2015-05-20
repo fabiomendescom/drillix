@@ -13,9 +13,9 @@ for x in $arr
 do
     let "I++";
     y=$(echo $x | sed 's/:2181$//')
-    if [[ $HOSTNAME = $y ]]; then
+#    if [[ $HOSTNAME = $y ]]; then
       ZK_ID=$I
-    fi
+#    fi
     ZKS+=$'\nserver.'$I'='$y':2888:3888'
 done
 

@@ -18,6 +18,7 @@ logger.info("Starting registration to zookeeper");
 var zookeeper = require('node-zookeeper-client');
  
 var myurl = myipaddress + ":6379";
+
 var client = zookeeper.createClient(zookeeperurl);
 var path = "/DRILLIXSERVICES/REDIS" + "/" + nodename;
  
