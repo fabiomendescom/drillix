@@ -99,19 +99,24 @@
   </connection>
   <order>
   <hop> <from>Product Sales</from><to>Change date to UTC</to><enabled>Y</enabled> </hop>
-  <hop> <from>Change date to UTC</from><to>Create JSON</to><enabled>Y</enabled> </hop>
   <hop> <from>Check Success</from><to>Abort</to><enabled>Y</enabled> </hop>
   <hop> <from>REST Client</from><to>Check Success</to><enabled>Y</enabled> </hop>
   <hop> <from>Create JSON 2</from><to>REST Client 2</to><enabled>Y</enabled> </hop>
-  <hop> <from>REST Client 3</from><to>Json Input</to><enabled>Y</enabled> </hop>
-  <hop> <from>Json Input</from><to>Select values</to><enabled>Y</enabled> </hop>
-  <hop> <from>Select values</from><to>Blocking Step</to><enabled>Y</enabled> </hop>
-  <hop> <from>Blocking Step</from><to>Product Sales</to><enabled>Y</enabled> </hop>
   <hop> <from>Data Grid</from><to>REST Client 3</to><enabled>Y</enabled> </hop>
-  <hop> <from>Create JSON</from><to>Add constants</to><enabled>Y</enabled> </hop>
-  <hop> <from>Add constants</from><to>REST Client</to><enabled>Y</enabled> </hop>
   <hop> <from>Check Success</from><to>Blocking Step 2</to><enabled>Y</enabled> </hop>
-  <hop> <from>Blocking Step 2</from><to>Create JSON 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>REST Client 3</from><to>Json Input</to><enabled>Y</enabled> </hop>
+  <hop> <from>Blocking Step</from><to>Product Sales</to><enabled>Y</enabled> </hop>
+  <hop> <from>Select values</from><to>Blocking Step</to><enabled>Y</enabled> </hop>
+  <hop> <from>Change date to UTC</from><to>Add sequence</to><enabled>Y</enabled> </hop>
+  <hop> <from>Json Input</from><to>Select values</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add sequence</from><to>Modified Java Script Value</to><enabled>Y</enabled> </hop>
+  <hop> <from>Modified Java Script Value</from><to>Create JSON</to><enabled>Y</enabled> </hop>
+  <hop> <from>Create JSON</from><to>Group by</to><enabled>Y</enabled> </hop>
+  <hop> <from>Group by</from><to>Add constants</to><enabled>Y</enabled> </hop>
+  <hop> <from>Add constants</from><to>Modified Java Script Value 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Modified Java Script Value 2</from><to>REST Client</to><enabled>Y</enabled> </hop>
+  <hop> <from>Blocking Step 2</from><to>Select values 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Select values 2</from><to>Create JSON 2</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Abort</name>
@@ -129,8 +134,8 @@
       <always_log_rows>Y</always_log_rows>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>587</xloc>
-      <yloc>269</yloc>
+      <xloc>874</xloc>
+      <yloc>253</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -162,8 +167,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>343</xloc>
-      <yloc>203</yloc>
+      <xloc>340</xloc>
+      <yloc>172</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -186,8 +191,8 @@
       <compress>Y</compress>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>208</xloc>
-      <yloc>201</yloc>
+      <xloc>209</xloc>
+      <yloc>187</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -210,8 +215,8 @@
       <compress>Y</compress>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>568</xloc>
-      <yloc>53</yloc>
+      <xloc>691</xloc>
+      <yloc>137</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -240,8 +245,8 @@
         <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>331</xloc>
-      <yloc>17</yloc>
+      <xloc>253</xloc>
+      <yloc>11</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -269,8 +274,8 @@
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>511</xloc>
-      <yloc>175</yloc>
+      <xloc>677</xloc>
+      <yloc>253</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -290,7 +295,7 @@
     <optimizationLevel>9</optimizationLevel>
     <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#x2f;&#x2f;Script here&#xa;&#xa;var finaljson &#x3d; &#x27;&#x7b;&#x22;Process&#x22;&#x3a;&#x7b;&#x22;Type&#x22;&#x3a;&#x22;AddEvent&#x22;,&#x22;Data&#x22; &#x3a; &#x7b;&#x22;account&#x22;&#x3a;&#x22;darby&#x22;, &#x22;object&#x22;&#x3a;&#x22;sale&#x22;, &#x22;fields&#x22;&#x3a;&#x5b;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;partner_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; designer_id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;net_amount&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_sale_net &#x2b; &#x27;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;gross_amount&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_sale_gross &#x2b; &#x27;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;unique_sale_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;product_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; product_id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;variant_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; product_variant_id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;line_number&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; line_item_id &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;quantity&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x27; &#x2b; product_quantity &#x2b; &#x27;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;sale_date&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; sale_date_utc &#x2b; &#x27;&#x22;&#x7d;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7b;&#x22;name&#x22;&#x3a;&#x22;&#x27; &#x2b; &#x27;customer_id&#x27; &#x2b; &#x27;&#x22;, &#x22;value&#x22;&#x3a;&#x22;&#x27; &#x2b; user_id &#x2b; &#x27;&#x22;&#x7d;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x5d;&#x7d;&#x7d;&#x7d;&#x27;&#x3b;&#xa;&#xa;finaljson &#x3d; &#x27;&#x7b;&#x22;product&#x22;&#x3a; 133&#x7d;&#x27;&#x3b;&#xa;&#xa;</jsScript_script>
+        <jsScript_script>var finaljson &#x3d; &#x27;&#x7b;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;_sequence_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;partner_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; designer_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;net_amount&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_sale_net &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;gross_amount&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_sale_gross &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;product_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;variant_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_variant_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;line_number&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  line_item_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;quantity&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_quantity &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;sale_date&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  sale_date_utc &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;customer_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  user_id &#x2b; &#x27;&#x22;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7d;&#x27;&#x3b;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;</jsScript_script>
       </jsScript>    </jsScripts>    <fields>      <field>        <name>finaljson</name>
         <rename>finaljson</rename>
         <type>String</type>
@@ -299,8 +304,8 @@
         <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>330</xloc>
-      <yloc>121</yloc>
+      <xloc>568</xloc>
+      <yloc>131</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -320,7 +325,7 @@
     <optimizationLevel>9</optimizationLevel>
     <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#xa;var newid &#x3d; &#x27;&#x7b;&#x22;value&#x22;&#x3a; &#x27; &#x2b; id &#x2b; &#x27;&#x7d;&#x27;&#x3b;&#xa;</jsScript_script>
+        <jsScript_script>&#xa;var newid &#x3d; &#x27;&#x7b;&#x22;value&#x22;&#x3a; &#x27; &#x2b; maxid &#x2b; &#x27;&#x7d;&#x27;&#x3b;&#xa;</jsScript_script>
       </jsScript>    </jsScripts>    <fields>      <field>        <name>finaljson</name>
         <rename>finaljson</rename>
         <type>String</type>
@@ -335,8 +340,8 @@
         <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>705</xloc>
-      <yloc>52</yloc>
+      <xloc>743</xloc>
+      <yloc>25</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -370,8 +375,8 @@
     </data>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>53</xloc>
-      <yloc>19</yloc>
+      <xloc>43</xloc>
+      <yloc>4</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -432,8 +437,8 @@
     <sizeFieldName/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>56</xloc>
-      <yloc>216</yloc>
+      <xloc>47</xloc>
+      <yloc>196</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -450,7 +455,7 @@
            <schema_name/>
            </partitioning>
     <connection>darbydb</connection>
-    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc&#xa;limit 1000&#xa;&#xa;</sql>
+    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc&#xa;</sql>
     <limit>0</limit>
     <lookup>Blocking Step</lookup>
     <execute_each_row>N</execute_each_row>
@@ -458,8 +463,8 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>210</xloc>
-      <yloc>97</yloc>
+      <xloc>162</xloc>
+      <yloc>92</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -482,7 +487,7 @@
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
     <urlField/>
-    <bodyField>finaljson</bodyField>
+    <bodyField>requestjson</bodyField>
     <httpLogin/>
     <httpPassword>Encrypted </httpPassword>
     <proxyHost/>
@@ -505,8 +510,8 @@
       </result>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>401</xloc>
-      <yloc>271</yloc>
+      <xloc>533</xloc>
+      <yloc>249</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -552,8 +557,8 @@
       </result>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>851</xloc>
-      <yloc>46</yloc>
+      <xloc>886</xloc>
+      <yloc>29</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -599,8 +604,8 @@
       </result>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>55</xloc>
-      <yloc>116</yloc>
+      <xloc>43</xloc>
+      <yloc>107</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -623,8 +628,171 @@
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>147</xloc>
-      <yloc>273</yloc>
+      <xloc>120</xloc>
+      <yloc>262</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Add sequence</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>recordcounter</valuename>
+      <use_database>N</use_database>
+      <connection>darbydb</connection>
+      <schema/>
+      <seqname>SEQ_</seqname>
+      <use_counter>Y</use_counter>
+      <counter_name>recordcounter</counter_name>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>9999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>388</xloc>
+      <yloc>15</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Modified Java Script Value</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var recordgroup &#x3d; Math.ceil&#x28;recordcounter&#x2f;200&#x29; </jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>recordgroup</name>
+        <rename>recordgroup</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>584</xloc>
+      <yloc>7</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Group by</name>
+    <type>GroupBy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <all_rows>N</all_rows>
+      <ignore_aggregate>N</ignore_aggregate>
+      <field_ignore/>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>grp</prefix>
+      <add_linenr>N</add_linenr>
+      <linenr_fieldname/>
+      <give_back_row>N</give_back_row>
+      <group>
+        <field>
+          <name>recordgroup</name>
+        </field>
+      </group>
+      <fields>
+        <field>
+          <aggregate>finaljson</aggregate>
+          <subject>finaljson</subject>
+          <type>CONCAT_STRING</type>
+          <valuefield>,</valuefield>
+        </field>
+        <field>
+          <aggregate>maxid</aggregate>
+          <subject>id</subject>
+          <type>MAX</type>
+          <valuefield/>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>453</xloc>
+      <yloc>126</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Modified Java Script Value 2</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var requestjson &#x3d; &#x27;&#x7b;&#x22;events&#x22;&#x3a;&#x5b;&#x27; &#x2b; finaljson &#x2b; &#x27;&#x5d;&#x7d;&#x27;&#xa;&#xa;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>requestjson</name>
+        <rename>requestjson</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>352</xloc>
+      <yloc>267</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values 2</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>maxid</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>authorization</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>804</xloc>
+      <yloc>136</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

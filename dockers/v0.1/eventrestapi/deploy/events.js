@@ -93,7 +93,6 @@ var app = express();
 app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
-//	logger.info(req.body) 
 	next()
 })	
 
@@ -120,7 +119,7 @@ app.get('/:account/:subaccount/canonical/counters/:counter',  passport.authentic
 
 app.post('/:account/:subaccount/canonical/counters/:counter',  passport.authenticate('bearer', { session: false }), function(req, res) {
 	var countercollection	= req.user.tenantprefix + "lastid";
-	MongoClient.connect(mongouri, function(err, db) {
+	MongoClient.connect(req.user.mongouri, function(err, db) {
 		if(!err) {
 			var stuff = req.body;
 			stuff["_id"] = req.params.counter;
@@ -168,9 +167,9 @@ app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.
     })
     producer.connect(function() {
 		logger.info("sending to topic ");
-        producer.send('message bytes')
+        producer.send(msgtext)
         res.status(200);
-        res.send({"status" : "success", "id" : 1});	
+        res.send({"status" : "success"});	
     })
 	
 	//sqsmessageadd(msgtext, req, res, function(err, data) {
