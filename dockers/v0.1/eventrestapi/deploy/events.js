@@ -2,7 +2,7 @@
 var nodename			= process.env.NODE_NAME;
 var porttolisten 		= 80; //= process.env.PORT;
 //var zookeeperurl		= process.env.ZOOKEEPER_URL;
-//var queue               = process.env.EVENTQUEUE;
+var queue               = process.env.EVENTQUEUE;
 
 //var redisurl			= process.env.REDIS_URL;
 //var redisport			= process.env.REDIS_PORT;
@@ -20,7 +20,7 @@ var MongoClient = require('mongodb').MongoClient
 var AWS = require('aws-sdk');
 var http = require('http');
 //var redis = require("redis");
-var kafka = require('kafka');
+//var kafka = require('kafka');
  
 
 function getSystemInfo() {
@@ -39,18 +39,18 @@ function getSystemInfo() {
 
 logger.info("Starting docker process",getSystemInfo());
 
-//function sqsmessageadd(msg, req, res, callback) {
-//	var sqs = new AWS.SQS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
+function sqsmessageadd(msg, req, res, callback) {
+	var sqs = new AWS.SQS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
 
-//	var params = {
-//		MessageBody: msg,
-//		QueueUrl: 'https://sqs.' + req.user.region + '.amazonaws.com/' + req.user.account + '/' + queue
-//	};
+	var params = {
+		MessageBody: msg,
+		QueueUrl: 'https://sqs.' + req.user.region + '.amazonaws.com/' + req.user.account + '/' + queue
+	};
 	
-//	sqs.sendMessage(params, function(err, data) {
-//		callback(err, data);
-//	});	
-//}
+	sqs.sendMessage(params, function(err, data) {
+		callback(err, data);
+	});	
+}
 
 function findByToken(token, fn) {
 		var usercontext =	{ 
@@ -157,33 +157,20 @@ app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.
 	msg["_drillixmeta"] = meta;
 	
 	var msgtext = JSON.stringify(msg);
-    
-    var producer = new kafka.Producer({
-        // these are also the default values
-        host:         '172.17.42.1',
-        port:         9092,
-        topic:        'test',
-        partition:    0
-    })
-    producer.connect(function() {
-		logger.info("sending to topic ");
-        producer.send(msgtext)
-        res.status(200);
-        res.send({"status" : "success"});	
-    })
 	
-	//sqsmessageadd(msgtext, req, res, function(err, data) {
-	//	if (err) {
-	//		logger.error(err, err.stack); // an error occurred
-	//		res.status(500);
-	//		res.send({"status" : "error","statuscode" : 1,"message" : "Problem inserting event","description" : "Problem inserting event"});						
-	//	}
-	//	else {    
-	//		logger.info(data);           // successful response
-	//		res.status(200);
-	//		res.send({"status" : "success", "id" : data.MessageId});						
-	//	}
-	//});
+	
+	sqsmessageadd(msgtext, req, res, function(err, data) {
+		if (err) {
+			logger.error(err, err.stack); // an error occurred
+			res.status(500);
+			res.send({"status" : "error","statuscode" : 1,"message" : "Problem inserting event","description" : "Problem inserting event"});						
+		}
+		else {    
+			logger.info(data);           // successful response
+			res.status(200);
+			res.send({"status" : "success", "id" : data.MessageId});						
+		}
+	});
 
 });
 

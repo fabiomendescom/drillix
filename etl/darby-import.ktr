@@ -455,7 +455,7 @@
            <schema_name/>
            </partitioning>
     <connection>darbydb</connection>
-    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc&#xa;</sql>
+    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc</sql>
     <limit>0</limit>
     <lookup>Blocking Step</lookup>
     <execute_each_row>N</execute_each_row>
@@ -678,7 +678,7 @@
     <optimizationLevel>9</optimizationLevel>
     <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var recordgroup &#x3d; Math.ceil&#x28;recordcounter&#x2f;200&#x29; </jsScript_script>
+        <jsScript_script>var recordgroup &#x3d; Math.ceil&#x28;recordcounter&#x2f;300&#x29; </jsScript_script>
       </jsScript>    </jsScripts>    <fields>      <field>        <name>recordgroup</name>
         <rename>recordgroup</rename>
         <type>Integer</type>

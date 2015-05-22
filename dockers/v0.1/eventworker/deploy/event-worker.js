@@ -8,6 +8,7 @@ var SqsQueueParallel = require('sqs-queue-parallel');
 var sqs = require('sqs');
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
+//var kafka = require('kafka');
 
 function getSystemInfo() {
 	os = require('os');
@@ -56,6 +57,7 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
 		//assert.equal(null, err);
 		logger.info("Connected correctly to mongodb server");
 
+		
 		// Get event messages to process
 		queue.on('message', function (e)
 		{
@@ -68,10 +70,11 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
 			////////////////////////////
 			// STEP: Save the event //
 			////////////////////////////
+			
 			collection = db.collection(mongocollection);
-			collection.insert([
-				e.data
-			], function(err, result) {
+			collection.insert(
+				e.data.events
+			, function(err, result) {
 				
 			});   
     

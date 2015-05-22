@@ -51,8 +51,11 @@ RUN \
 #RUN \
 #	npm install node-zookeeper-client --save
 	
-RUN \
-	npm install kafka --save
+#RUN \
+#	npm install kafka --save
+
+RUN \	
+	npm install kafkaesque
 
 WORKDIR /var/www/
 
