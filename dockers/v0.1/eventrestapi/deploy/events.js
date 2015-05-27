@@ -39,6 +39,7 @@ function getSystemInfo() {
 
 logger.info("Starting docker process",getSystemInfo());
 
+/*
 function sqsmessageadd(msg, req, res, callback) {
 	var sqs = new AWS.SQS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
 
@@ -50,6 +51,20 @@ function sqsmessageadd(msg, req, res, callback) {
 	sqs.sendMessage(params, function(err, data) {
 		callback(err, data);
 	});	
+}
+*/
+
+function snsmessageadd(msg, req, res, callback) {
+	var sns = new AWS.SNS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
+
+	var params = {
+		Message: msg, 
+		TopicArn: 'arn:aws:sns:us-east-1:139086185180:eventtopic'
+	};
+	
+	sns.publish(params, function(err, data) {
+		callback(err, data);
+	});
 }
 
 function findByToken(token, fn) {
@@ -144,6 +159,24 @@ app.post('/:account/:subaccount/canonical/counters/:counter',  passport.authenti
 	
 });
 
+app.get('/:account/:subaccount/canonical/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
+	var countercollection = "darby-sale";
+	var maxsequence;
+	MongoClient.connect(req.user.mongouri, function(err, db) {
+		if(!err) {
+			countercollection = db.collection(countercollection);
+			maxsequence = countercollection.find().sort({"_sequence_id":-1}).limit(1);
+			//logger.info(JSON.stringify(maxsequence));
+			res.status(200);
+			res.send({"_maxsequence_id": maxsequence});
+		} else {
+			res.status(500);
+			res.send({"status" : "error","statuscode" : 2,"message" : "Problem connecting to storage","description" : "Problem inserting event"});											
+		}
+	});
+
+});
+
 app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
 
 	var msg = req.body;
@@ -153,13 +186,16 @@ app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.
 	meta["subaccount"] = req.params.subaccount;
 	meta["type"] = "T";
 	meta["name"] = req.params.transaction;
+	meta["timestamp"] = new Date().toISOString();
 	
-	msg["_drillixmeta"] = meta;
+	for(i=0;i<msg.events.length;i++) {
+		msg.events[i]["_drillixmeta"] = meta;
+	}
 	
 	var msgtext = JSON.stringify(msg);
 	
 	
-	sqsmessageadd(msgtext, req, res, function(err, data) {
+	snsmessageadd(msgtext, req, res, function(err, data) {
 		if (err) {
 			logger.error(err, err.stack); // an error occurred
 			res.status(500);
@@ -168,7 +204,7 @@ app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.
 		else {    
 			logger.info(data);           // successful response
 			res.status(200);
-			res.send({"status" : "success", "id" : data.MessageId});						
+			res.send({"status" : "success"});						
 		}
 	});
 

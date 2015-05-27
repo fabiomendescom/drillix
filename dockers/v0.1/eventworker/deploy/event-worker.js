@@ -9,6 +9,7 @@ var sqs = require('sqs');
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 //var kafka = require('kafka');
+var util = require('util');
 
 function getSystemInfo() {
 	os = require('os');
@@ -28,6 +29,7 @@ logger.info("Starting docker process",getSystemInfo());
   
 var processgroup = {
 	id : "GROUP1",
+	mongocollectionprefix: "darby-",
 	queue: "events",
 	accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
 	secretkey: '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',
@@ -37,7 +39,6 @@ var processgroup = {
 }
 
 var queuename               = processgroup.queue;
-var mongocollection		= "darby-sale";
 
 // Simple configuration:
 //  - 2 concurrency listeners
@@ -61,7 +62,7 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
 		// Get event messages to process
 		queue.on('message', function (e)
 		{
-			logger.info('New message: ', e.data)
+			//logger.info('New message: ', e.data)
     
 			///////////////////////
 			// PROCESS THE EVENT //
@@ -71,12 +72,15 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
 			// STEP: Save the event //
 			////////////////////////////
 			
+			msg = JSON.parse(e.data.Message);
+
+			mongocollection = processgroup.mongocollectionprefix + msg.events[0]["_drillixmeta"].name;
 			collection = db.collection(mongocollection);
 			collection.insert(
-				e.data.events
+				msg.events
 			, function(err, result) {
 				
-			});   
+			});
     
 			///////////////////////////////////////////////
 			// STEP: Delete the message from the queue //

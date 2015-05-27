@@ -174,6 +174,35 @@
     </step>
 
   <step>
+    <name>Add sequence</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>recordcounter</valuename>
+      <use_database>N</use_database>
+      <connection>darbydb</connection>
+      <schema/>
+      <seqname>SEQ_</seqname>
+      <use_counter>Y</use_counter>
+      <counter_name>recordcounter</counter_name>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>9999999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>388</xloc>
+      <yloc>15</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Blocking Step</name>
     <type>BlockingStep</type>
     <description/>
@@ -236,7 +265,7 @@
     <optimizationLevel>9</optimizationLevel>
     <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#x2f;&#x2f;Set the generic formatters&#xa;var utc_date &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;yyyyMMdd&#x22;&#x29; &#xa;var utc_time &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;HHmmss&#x22;&#x29;&#x3b;&#xa;utc_date.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;utc_time.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;Format the relevant fields&#xa;var sale_date_utc &#x3d; utc_date.format&#x28;product_purchased_at&#x29; &#x2b; &#x22;T&#x22; &#x2b; utc_time.format&#x28;product_purchased_at&#x29; &#x2b; &#x22;Z&#x22;&#x3b;&#xa;&#xa;&#xa;</jsScript_script>
+        <jsScript_script>&#x2f;&#x2f;Set the generic formatters&#xa;var utc_date &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;yyyy-MM-dd&#x22;&#x29; &#xa;var utc_time &#x3d; new java.text.SimpleDateFormat&#x28;&#x22;HH&#x3a;mm&#x3a;ss.SSS&#x22;&#x29;&#x3b;&#xa;utc_date.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;utc_time.setTimeZone&#x28;java.util.TimeZone.getTimeZone&#x28;&#x22;UTC&#x22;&#x29;&#x29;&#x3b;&#xa;&#xa;&#x2f;&#x2f;Format the relevant fields&#xa;var sale_date_utc &#x3d; utc_date.format&#x28;product_purchased_at&#x29; &#x2b; &#x22;T&#x22; &#x2b; utc_time.format&#x28;product_purchased_at&#x29; &#x2b; &#x22;Z&#x22;&#x3b;&#xa;&#xa;&#xa;</jsScript_script>
       </jsScript>    </jsScripts>    <fields>      <field>        <name>sale_date_utc</name>
         <rename>sale_date_utc</rename>
         <type>String</type>
@@ -245,8 +274,8 @@
         <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>253</xloc>
-      <yloc>11</yloc>
+      <xloc>254</xloc>
+      <yloc>10</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -382,6 +411,52 @@
     </step>
 
   <step>
+    <name>Group by</name>
+    <type>GroupBy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <all_rows>N</all_rows>
+      <ignore_aggregate>N</ignore_aggregate>
+      <field_ignore/>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>grp</prefix>
+      <add_linenr>N</add_linenr>
+      <linenr_fieldname/>
+      <give_back_row>N</give_back_row>
+      <group>
+        <field>
+          <name>recordgroup</name>
+        </field>
+      </group>
+      <fields>
+        <field>
+          <aggregate>finaljson</aggregate>
+          <subject>finaljson</subject>
+          <type>CONCAT_STRING</type>
+          <valuefield>,</valuefield>
+        </field>
+        <field>
+          <aggregate>maxid</aggregate>
+          <subject>id</subject>
+          <type>MAX</type>
+          <valuefield/>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>453</xloc>
+      <yloc>126</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Json Input</name>
     <type>JsonInput</type>
     <description/>
@@ -444,6 +519,66 @@
     </step>
 
   <step>
+    <name>Modified Java Script Value</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var recordgroup &#x3d; Math.ceil&#x28;recordcounter&#x2f;200&#x29; </jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>recordgroup</name>
+        <rename>recordgroup</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>584</xloc>
+      <yloc>7</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Modified Java Script Value 2</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var requestjson &#x3d; &#x27;&#x7b;&#x22;events&#x22;&#x3a;&#x5b;&#x27; &#x2b; finaljson &#x2b; &#x27;&#x5d;&#x7d;&#x27;&#xa;&#xa;</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>requestjson</name>
+        <rename>requestjson</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>352</xloc>
+      <yloc>267</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Product Sales</name>
     <type>TableInput</type>
     <description/>
@@ -455,7 +590,7 @@
            <schema_name/>
            </partitioning>
     <connection>darbydb</connection>
-    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc</sql>
+    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc&#xa;limit 1</sql>
     <limit>0</limit>
     <lookup>Blocking Step</lookup>
     <execute_each_row>N</execute_each_row>
@@ -511,7 +646,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>533</xloc>
-      <yloc>249</yloc>
+      <yloc>248</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -630,141 +765,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>120</xloc>
       <yloc>262</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Add sequence</name>
-    <type>Sequence</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <valuename>recordcounter</valuename>
-      <use_database>N</use_database>
-      <connection>darbydb</connection>
-      <schema/>
-      <seqname>SEQ_</seqname>
-      <use_counter>Y</use_counter>
-      <counter_name>recordcounter</counter_name>
-      <start_at>1</start_at>
-      <increment_by>1</increment_by>
-      <max_value>9999999999</max_value>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>388</xloc>
-      <yloc>15</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Modified Java Script Value</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var recordgroup &#x3d; Math.ceil&#x28;recordcounter&#x2f;300&#x29; </jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>recordgroup</name>
-        <rename>recordgroup</rename>
-        <type>Integer</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>    </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>584</xloc>
-      <yloc>7</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Group by</name>
-    <type>GroupBy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <all_rows>N</all_rows>
-      <ignore_aggregate>N</ignore_aggregate>
-      <field_ignore/>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>grp</prefix>
-      <add_linenr>N</add_linenr>
-      <linenr_fieldname/>
-      <give_back_row>N</give_back_row>
-      <group>
-        <field>
-          <name>recordgroup</name>
-        </field>
-      </group>
-      <fields>
-        <field>
-          <aggregate>finaljson</aggregate>
-          <subject>finaljson</subject>
-          <type>CONCAT_STRING</type>
-          <valuefield>,</valuefield>
-        </field>
-        <field>
-          <aggregate>maxid</aggregate>
-          <subject>id</subject>
-          <type>MAX</type>
-          <valuefield/>
-        </field>
-      </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>453</xloc>
-      <yloc>126</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Modified Java Script Value 2</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var requestjson &#x3d; &#x27;&#x7b;&#x22;events&#x22;&#x3a;&#x5b;&#x27; &#x2b; finaljson &#x2b; &#x27;&#x5d;&#x7d;&#x27;&#xa;&#xa;</jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>requestjson</name>
-        <rename>requestjson</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>    </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>352</xloc>
-      <yloc>267</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
