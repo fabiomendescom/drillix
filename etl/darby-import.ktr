@@ -196,8 +196,8 @@
       <max_value>9999999999</max_value>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>388</xloc>
-      <yloc>15</yloc>
+      <xloc>415</xloc>
+      <yloc>13</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -324,7 +324,7 @@
     <optimizationLevel>9</optimizationLevel>
     <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var finaljson &#x3d; &#x27;&#x7b;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;_sequence_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;partner_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; designer_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;net_amount&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_sale_net &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;gross_amount&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_sale_gross &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;product_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;variant_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_variant_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;line_number&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  line_item_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;quantity&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_quantity &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;sale_date&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  sale_date_utc &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;customer_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  user_id &#x2b; &#x27;&#x22;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7d;&#x27;&#x3b;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;</jsScript_script>
+        <jsScript_script>var finaljson &#x3d; &#x27;&#x7b;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;_sequence_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;partner_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b; designer_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;net_amount&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_sale_net &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;gross_amount&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_sale_gross &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;product_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;variant_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_variant_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;line_number&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  line_item_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;quantity&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  product_quantity &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;sale_date&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  sale_date_utc &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;customer_id&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  user_id &#x2b; &#x27;&#x22;,&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x22;customer_sex&#x22;&#x3a;&#x27; &#x2b; &#x27;&#x22;&#x27; &#x2b;  user_sex &#x2b; &#x27;&#x22;&#x27;&#x3b;&#xa;finaljson &#x3d; finaljson &#x2b; &#x27;&#x7d;&#x27;&#x3b;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;</jsScript_script>
       </jsScript>    </jsScripts>    <fields>      <field>        <name>finaljson</name>
         <rename>finaljson</rename>
         <type>String</type>
@@ -333,7 +333,7 @@
         <replace>N</replace>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>568</xloc>
+      <xloc>569</xloc>
       <yloc>131</yloc>
       <draw>Y</draw>
       </GUI>
@@ -590,7 +590,7 @@
            <schema_name/>
            </partitioning>
     <connection>darbydb</connection>
-    <sql>SELECT  &#x2a;&#xa;FROM mea_product_sales&#xa;where id &#x3e; &#x3f;&#xa;and product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by id asc&#xa;limit 1</sql>
+    <sql>SELECT  &#xa;mea_product_sales.id,&#xa;mea_product_sales.designer_id,&#xa;mea_product_sales.product_sale_net,&#xa;mea_product_sales.product_sale_gross,&#xa;mea_product_sales.product_id,&#xa;mea_product_sales.product_variant_id,&#xa;mea_product_sales.line_item_id,&#xa;mea_product_sales.product_quantity,&#xa;mea_product_sales.product_purchased_at,&#xa;mea_product_sales.user_id,&#xa;dim_users.user_sex&#xa;FROM mea_product_sales&#xa;left outer join dim_users on mea_product_sales.user_id &#x3d; dim_users.user_id&#xa;where mea_product_sales.id &#x3e; &#x3f;&#xa;and mea_product_sales.product_purchased_at &#x3e;&#x3d; &#x27;2014-01-01&#x27;&#xa;order by mea_product_sales.id asc&#xa;</sql>
     <limit>0</limit>
     <lookup>Blocking Step</lookup>
     <execute_each_row>N</execute_each_row>
@@ -617,7 +617,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>POST</method>
-    <url>http&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;transactions&#x2f;sales</url>
+    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;transactions&#x2f;sales</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
@@ -664,7 +664,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>POST</method>
-    <url>http&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;counters&#x2f;sales</url>
+    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;maxsequencetransactions&#x2f;sales</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
@@ -711,7 +711,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>GET</method>
-    <url>http&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;counters&#x2f;sales</url>
+    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;maxsequencetransactions&#x2f;sales</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>

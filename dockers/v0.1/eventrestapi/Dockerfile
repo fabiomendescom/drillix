@@ -67,7 +67,15 @@ RUN \
 
 COPY deploy/events.js /var/www/events.js
 
-EXPOSE 80
+COPY ssl/api.drillix.com.key /var/www/api.drillix.com.key
+#COPY ssl/api.drillix.com-SELF.crt /var/www/api.drillix.com-SELF.crt
+COPY ssl/api.drillix.com.crt /var/www/api.drillix.com.crt
+
+COPY ssl/AddTrustExternalCARoot.crt /var/www/AddTrustExternalCARoot.crt
+COPY ssl/COMODORSAAddTrustCA.crt /var/www/COMODORSAAddTrustCA.crt
+COPY ssl/COMODORSADomainValidationSecureServerCA.crt /var/www/COMODORSADomainValidationSecureServerCA.crt
+
+EXPOSE 80 443
 
 USER node
 

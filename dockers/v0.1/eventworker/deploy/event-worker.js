@@ -29,7 +29,7 @@ logger.info("Starting docker process",getSystemInfo());
   
 var processgroup = {
 	id : "GROUP1",
-	mongocollectionprefix: "darby-",
+	tenantprefix: "darby-",
 	queue: "events",
 	accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
 	secretkey: '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',
@@ -74,7 +74,7 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
 			
 			msg = JSON.parse(e.data.Message);
 
-			mongocollection = processgroup.mongocollectionprefix + msg.events[0]["_drillixmeta"].name;
+			mongocollection = processgroup.tenantprefix + msg.events[0]["_drillixmeta"].name;
 			collection = db.collection(mongocollection);
 			collection.insert(
 				msg.events

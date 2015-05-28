@@ -1,8 +1,10 @@
 //INSTANCE SPECIFIC
 var nodename			= process.env.NODE_NAME;
-var porttolisten 		= 80; //= process.env.PORT;
-//var zookeeperurl		= process.env.ZOOKEEPER_URL;
+var porttolisten 		= 443; 
 var queue               = process.env.EVENTQUEUE;
+
+var fs = require('fs'),
+    https = require('https');
 
 //var redisurl			= process.env.REDIS_URL;
 //var redisport			= process.env.REDIS_PORT;
@@ -13,14 +15,11 @@ var express = require('express')
 , util = require('util')
 , BearerStrategy = require('passport-http-bearer').Strategy;
 var bodyParser = require("body-parser");
-//var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 var AWS = require('aws-sdk');
 var http = require('http');
-//var redis = require("redis");
-//var kafka = require('kafka');
  
 
 function getSystemInfo() {
@@ -39,21 +38,6 @@ function getSystemInfo() {
 
 logger.info("Starting docker process",getSystemInfo());
 
-/*
-function sqsmessageadd(msg, req, res, callback) {
-	var sqs = new AWS.SQS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
-
-	var params = {
-		MessageBody: msg,
-		QueueUrl: 'https://sqs.' + req.user.region + '.amazonaws.com/' + req.user.account + '/' + queue
-	};
-	
-	sqs.sendMessage(params, function(err, data) {
-		callback(err, data);
-	});	
-}
-*/
-
 function snsmessageadd(msg, req, res, callback) {
 	var sns = new AWS.SNS({accessKeyId: req.user.accesskey, secretAccessKey: req.user.secretkey, region: req.user.region});
 
@@ -69,7 +53,7 @@ function snsmessageadd(msg, req, res, callback) {
 
 function findByToken(token, fn) {
 		var usercontext =	{ 
-				id: 1, 
+				id: 1, 			
 				tenantprefix: "darby-",
 				token: 'E95C52F99868D96F6791264A1AE4A', 
 				accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
@@ -102,8 +86,22 @@ passport.use(new BearerStrategy(
     });
   }
 ));
+
+var options = {
+    key: fs.readFileSync('/var/www/api.drillix.com.key'),
+    cert: fs.readFileSync('/var/www/api.drillix.com.crt'),
+    ca: [
+            fs.readFileSync('/var/www/AddTrustExternalCARoot.crt', 'utf8'),
+            fs.readFileSync('/var/www/COMODORSAAddTrustCA.crt', 'utf8'),
+            fs.readFileSync('/var/www/COMODORSADomainValidationSecureServerCA.crt', 'utf8')
+    ]    
+};
  
 var app = express();
+
+var server = https.createServer(options, app).listen(porttolisten, function(){
+  logger.info("Express server listening on port " + porttolisten);
+});
 
 app.use(passport.initialize());
 app.use(bodyParser.json());
@@ -111,12 +109,13 @@ app.use(function (req, res, next) {
 	next()
 })	
 
-app.get('/:account/:subaccount/canonical/counters/:counter',  passport.authenticate('bearer', { session: false }), function(req, res) {
-	var countercollection	= req.user.tenantprefix + "lastid";
+
+app.get('/:account/:subaccount/canonical/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
+	var countercollection	= req.user.tenantprefix + "maxsequence";
 	MongoClient.connect(req.user.mongouri, function(err, db) {
 		if(!err) {
 			countercollection = db.collection(countercollection);
-			countercollection.findOne({_id: req.params.counter}, function(err, document) {
+			countercollection.findOne({_id: req.params.transaction}, function(err, document) {
 				logger.info(document.name);
 				res.status(200);
 				var response = {};
@@ -132,12 +131,13 @@ app.get('/:account/:subaccount/canonical/counters/:counter',  passport.authentic
 
 });
 
-app.post('/:account/:subaccount/canonical/counters/:counter',  passport.authenticate('bearer', { session: false }), function(req, res) {
-	var countercollection	= req.user.tenantprefix + "lastid";
+
+app.post('/:account/:subaccount/canonical/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
+	var countercollection = req.user.tenantprefix + "maxsequence";
 	MongoClient.connect(req.user.mongouri, function(err, db) {
 		if(!err) {
 			var stuff = req.body;
-			stuff["_id"] = req.params.counter;
+			stuff["_id"] = req.params.transaction;
 			countercollection = db.collection(countercollection);
 			countercollection.save(
 				stuff
@@ -157,24 +157,6 @@ app.post('/:account/:subaccount/canonical/counters/:counter',  passport.authenti
 		}
 	});
 	
-});
-
-app.get('/:account/:subaccount/canonical/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
-	var countercollection = "darby-sale";
-	var maxsequence;
-	MongoClient.connect(req.user.mongouri, function(err, db) {
-		if(!err) {
-			countercollection = db.collection(countercollection);
-			maxsequence = countercollection.find().sort({"_sequence_id":-1}).limit(1);
-			//logger.info(JSON.stringify(maxsequence));
-			res.status(200);
-			res.send({"_maxsequence_id": maxsequence});
-		} else {
-			res.status(500);
-			res.send({"status" : "error","statuscode" : 2,"message" : "Problem connecting to storage","description" : "Problem inserting event"});											
-		}
-	});
-
 });
 
 app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
@@ -210,11 +192,6 @@ app.post('/:account/:subaccount/canonical/transactions/:transaction',  passport.
 
 });
 
-portchosen = porttolisten;
-logger.info("preparing to listen on port " + portchosen);
 
-app.listen(portchosen);
-
-logger.info("listening on port " + portchosen);
 
 	
