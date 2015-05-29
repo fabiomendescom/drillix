@@ -54,8 +54,8 @@ RUN \
 #RUN \
 #	npm install kafka --save
 
-RUN \	
-	npm install kafkaesque
+#RUN \	
+#	npm install kafkaesque
 
 WORKDIR /var/www/
 
@@ -68,7 +68,6 @@ RUN \
 COPY deploy/events.js /var/www/events.js
 
 COPY ssl/api.drillix.com.key /var/www/api.drillix.com.key
-#COPY ssl/api.drillix.com-SELF.crt /var/www/api.drillix.com-SELF.crt
 COPY ssl/api.drillix.com.crt /var/www/api.drillix.com.crt
 
 COPY ssl/AddTrustExternalCARoot.crt /var/www/AddTrustExternalCARoot.crt

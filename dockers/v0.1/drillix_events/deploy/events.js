@@ -1,7 +1,7 @@
 //INSTANCE SPECIFIC
-var nodename			= process.env.NODE_NAME;
 var porttolisten 		= 443; 
-var queue               = process.env.EVENTQUEUE;
+var topictopublish      = process.env.TOPICTOPUBLISH;
+var envprefix			= process.env.ENVPREFIX;
 
 var fs = require('fs'),
     https = require('https');
@@ -36,6 +36,8 @@ function getSystemInfo() {
 	return info;
 }
 
+logger.info("ENV: TOPICTOPUBLISH: " + topictopublish);
+logger.info("ENV: ENVPREFIX: " + envprefix);
 logger.info("Starting docker process",getSystemInfo());
 
 function snsmessageadd(msg, req, res, callback) {
@@ -43,7 +45,7 @@ function snsmessageadd(msg, req, res, callback) {
 
 	var params = {
 		Message: msg, 
-		TopicArn: 'arn:aws:sns:us-east-1:139086185180:eventtopic'
+		TopicArn: topictopublish
 	};
 	
 	sns.publish(params, function(err, data) {
@@ -111,7 +113,7 @@ app.use(function (req, res, next) {
 
 
 app.get('/:account/:subaccount/canonical/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
-	var countercollection	= req.user.tenantprefix + "maxsequence";
+	var countercollection	= envprefix + req.user.tenantprefix + "maxsequence";
 	MongoClient.connect(req.user.mongouri, function(err, db) {
 		if(!err) {
 			countercollection = db.collection(countercollection);
@@ -133,7 +135,7 @@ app.get('/:account/:subaccount/canonical/maxsequencetransactions/:transaction', 
 
 
 app.post('/:account/:subaccount/canonical/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
-	var countercollection = req.user.tenantprefix + "maxsequence";
+	var countercollection = envprefix + req.user.tenantprefix + "maxsequence";
 	MongoClient.connect(req.user.mongouri, function(err, db) {
 		if(!err) {
 			var stuff = req.body;

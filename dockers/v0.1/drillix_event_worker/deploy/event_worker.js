@@ -1,7 +1,9 @@
 // INSTANCE SPECIFIC
 var numberqueuemsgs     = process.env.QUEUENUMBERMESSAGES;
 var concurrency			= process.env.QUEUECONCURRENCY;
-var processgroup		= process.env.PROCESSGROUP;
+//var processgroup		= process.env.PROCESSGROUP;
+
+var envprefix			= process.env.ENVPREFIX;
 
 var logger = require('winston');
 var SqsQueueParallel = require('sqs-queue-parallel');
@@ -24,6 +26,10 @@ function getSystemInfo() {
 	};
 	return info;
 }
+
+logger.info("ENV: NUMBERQUEUEMESSAGES: " + numberqueuemsgs);
+logger.info("ENV: QUEUECONCURRENCY: " + concurrency);
+logger.info("ENV: ENVPREFIX: " + envprefix);
 
 logger.info("Starting docker process",getSystemInfo());
   
@@ -74,7 +80,7 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
 			
 			msg = JSON.parse(e.data.Message);
 
-			mongocollection = processgroup.tenantprefix + msg.events[0]["_drillixmeta"].name;
+			mongocollection = envprefix + processgroup.tenantprefix + msg.events[0]["_drillixmeta"].name;
 			collection = db.collection(mongocollection);
 			collection.insert(
 				msg.events
