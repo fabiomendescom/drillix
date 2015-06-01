@@ -617,7 +617,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>POST</method>
-    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;transactions&#x2f;sales</url>
+    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;darby&#x2f;transactions&#x2f;sales</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
@@ -664,7 +664,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>POST</method>
-    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;maxsequencetransactions&#x2f;sales</url>
+    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;darby&#x2f;maxsequencetransactions&#x2f;sales</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
@@ -711,7 +711,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>GET</method>
-    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;account&#x2f;subaccount&#x2f;canonical&#x2f;maxsequencetransactions&#x2f;sales</url>
+    <url>https&#x3a;&#x2f;&#x2f;api.drillix.com&#x2f;darby&#x2f;maxsequencetransactions&#x2f;sales</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>

@@ -1,0 +1,5 @@
+This docker will take each event from the SQS queue and break the fields
+into buckets to be aggregated later by other processes
+This process will not know if and event is created or modified. It will
+simply blindly take the fields and based on configs it will split into buckets.
+

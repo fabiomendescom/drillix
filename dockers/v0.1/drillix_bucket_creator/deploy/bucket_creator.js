@@ -29,6 +29,29 @@ function getSystemInfo() {
 	return info;
 }
 
+	/*
+	 * DESCRIPTION: 
+	 * Takes any payload and an array of templates. By using the array of templates, the function will transform
+	 * the payload to the various bucket templates
+	 * INPUT: 
+	 * - Any json payload
+	 * RETURN;
+	 * - Array of buckets created by the templates
+	*/	
+	var createBuckets: function(payload, buckettemplatearray) {
+		var buckettemplatearraystring = JSON.stringify(buckettemplatearray);
+
+		var result = buckettemplatearraystring;
+		var re = /"<<(.*?)>>"/g
+		while( res = re.exec(result) ) {
+			var temp = '"' + jsonPath.eval(payload, res[1]) + '"';
+			result2 =  result2.replace(res[0], temp);
+		}
+			
+		logger.info("createBuckets ==> " + result2);	
+		return JSON.parse(result2);
+	};
+
 logger.info("ENV: NUMBERQUEUEMESSAGES: " + numberqueuemsgs);
 logger.info("ENV: QUEUECONCURRENCY: " + concurrency);
 logger.info("ENV: ENVPREFIX: " + envprefix);
@@ -94,14 +117,12 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
 			
 			msg = JSON.parse(e.data.Message);
 
-			//By definition, they can only use REST with account on the url to enter this. For thsi reason, it is safe to
-			//trust the account to be consistent by looking at only index 0 since we know the entire message is from the 
-			//same account
-			mongocollection = envprefix + msg.events[0]["_drillixmeta"].account + "-" + msg.events[0]["_drillixmeta"].name;
+			//This will create the buckets based on the transaction
+			//FINISH THIS HERE. ADD THE CREATE BUCKET FUNCTION
 		
 			collection = db.collection(mongocollection);
 			collection.insert(
-				msg.events
+				//ADD HERE THE JSON TO BE INSERTED. DO THIS WITH ARRAYS
 			, function(err, result) {
 				
 			});
@@ -112,11 +133,11 @@ MongoClient.connect(processgroup.mongouri, function(err, db) {
      
 			e.deleteMessage(function(err, data) {
 				e.next();
-			});
+			});			
 		});
 
 		queue.on('error', function (err)
 		{
 			logger.info('There was an error: ', err);
 		});
-});
+});			

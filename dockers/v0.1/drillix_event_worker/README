@@ -1,0 +1,5 @@
+This docker is meant to be a batch process. It will sit there reading
+SQS queues and pulling messages from it. Once message is pulled, no
+validation occurs. It will open a mongodb connection and add the 
+events found in the queue in mongodb.
+
