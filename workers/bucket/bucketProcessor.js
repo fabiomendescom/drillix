@@ -203,16 +203,7 @@ module.exports = {
 	
 	},
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	
 	
 	// TBD This function will receive a template data and a user config variables and will

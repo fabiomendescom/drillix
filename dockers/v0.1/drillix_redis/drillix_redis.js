@@ -1,6 +1,6 @@
 //INSTANCE SPECIFIC
 var nodename			= process.env.NODE_NAME;
-var zookeeperurl		= process.env.ZOOKEEPER_URL;
+var zookeeperurls		= process.env.ZOOKEEPER_URLS; //separated by semi colons
 
 var logger = require('winston');
 var myipaddress;
@@ -19,11 +19,11 @@ var zookeeper = require('node-zookeeper-client');
  
 var myurl = myipaddress + ":6379";
 
-var client = zookeeper.createClient(zookeeperurl);
+var client = zookeeper.createClient(zookeeperurls);
 var path = "/DRILLIXSERVICES/REDIS" + "/" + nodename;
  
 client.once('connected', function () {
-    logger.info('Connected to zookeeper service at ' + zookeeperurl);							
+    logger.info('Connected to zookeeper service at ' + zookeeperurls);							
 	client.exists(path,function(error, stat) {
 		if(error) {
 			logger.error(error.stack);

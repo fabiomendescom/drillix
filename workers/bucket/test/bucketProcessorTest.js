@@ -1655,7 +1655,7 @@ describe('Basket Processor Test', function(){
 				"keys" : [	\
 					{\
 						"field" : "CUSTOMER_ID", \
-						"value": "59005"\
+						"value": "59005"\	
 					},\
 					{\
 						"field" : "DATE_OF_SALE",\

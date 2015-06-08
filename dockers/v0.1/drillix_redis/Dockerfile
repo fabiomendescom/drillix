@@ -9,17 +9,10 @@ RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x
 && grep " node-v$NODE_VERSION-linux-x64.tar.gz\$" SHASUMS256.txt.asc | sha256sum -c - \
 && tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
 && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc \
-&& npm install -g npm@1.4.28 \
+&& npm install -g npm@1.4.28 \	
 && npm install -g npm@"$NPM_VERSION" \
 && npm cache clear
 
-RUN \
-  npm install -g bower && \
-  npm install -g forever && \
-  npm install -g nodemon && \
-  mkdir -p /var/www && \
-  useradd -ms /sbin/nologin node && \
-  chown -R node:node /var/www
 
 #allow node user to run services on port 80 and 443 (when prefixed with 'authbind')
 RUN \
@@ -30,24 +23,16 @@ RUN \
   touch /etc/authbind/byport/80 && \
   chown -R node:node /etc/authbind/byport/ && \
   chmod -R 755 /etc/authbind/byport/ 
-	 
-RUN mkdir -p /usr/local/rediszookeeper
+  
+ 
+RUN mkdir -p /usr/local/redis
 
-ADD redis-zookeeper.js /usr/local/rediszookeeper/redis-zookeeper.js
+ADD drillix_redis.js /usr/local/rediszookeeper/drillix_redis.js
 
-WORKDIR /usr/local/rediszookeeper/
+WORKDIR /usr/local/redis/
 
-ENV NODE_DIR /usr/local/rediszookeeper/
+ENV NODE_DIR /usr/local/redis/
 	 
-RUN \
-	npm install node-zookeeper-client --save
-	 
-RUN \	
-	npm install winston --save	 
-	
-RUN \
-	npm install local-ip		
-		 
-CMD ["node", "redis-zookeeper.js"] 
+CMD ["node", "drillix_redis.js"] 
 	 
 #ENTRYPOINT ["/entrypoint.sh"]
