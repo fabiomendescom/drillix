@@ -1,5 +1,5 @@
 //INSTANCE SPECIFIC
-var porttolisten 		= 443; 
+var porttolisten 		= 9000; 
 var topictopublish      = process.env.TOPICTOPUBLISH;
 var envprefix			= process.env.ENVPREFIX;
 
@@ -56,7 +56,7 @@ function snsmessageadd(msg, req, res, callback) {
 }
 
 function findByToken(token, fn) {
-	/*
+	
 		var usercontext =	{ 
 				id: 1, 			
 				tenantprefix: "darby-",
@@ -67,7 +67,8 @@ function findByToken(token, fn) {
 				account: '139086185180',
 				mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'
 		}
-	*/
+	
+/*	
 		var usercontext =	{ 
 				id: 1, 			
 				token: 'E95C52F99868D96F6791264A1AE4A', 
@@ -77,7 +78,12 @@ function findByToken(token, fn) {
 				account: '195410579593',
 				mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'
 		}	 
-		return fn(null,usercontext);
+*/ 
+		if(token==usercontext.token) {
+			return fn(null,usercontext);
+		} else {
+			return fn(null,null);
+		}	
 	
 	//var redisclient = redis.createClient(redisport,redisurl);
 
@@ -102,6 +108,7 @@ passport.use(new BearerStrategy(
   }
 ));
 
+/*
 var options = {
     key: fs.readFileSync('/var/www/api.drillix.com.key'),
     cert: fs.readFileSync('/var/www/api.drillix.com.crt'),
@@ -111,12 +118,9 @@ var options = {
             fs.readFileSync('/var/www/COMODORSADomainValidationSecureServerCA.crt', 'utf8')
     ]    
 };
+*/
  
 var app = express();
-
-var server = https.createServer(options, app).listen(porttolisten, function(){
-  logger.info("Express server listening on port " + porttolisten);
-});
 
 app.use(passport.initialize());
 app.use(bodyParser.json());
@@ -124,6 +128,10 @@ app.use(function (req, res, next) {
 	next()
 })	
 
+//var server = https.createServer(options, app).listen(porttolisten, function(){
+var server = http.createServer(app).listen(porttolisten, function(){
+  logger.info("Express server listening on port " + porttolisten);
+});
 
 app.get('/:account/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
 	var countercollection	= envprefix + req.params.account + "-" + "maxsequence";

@@ -65,16 +65,17 @@ ENV NODE_DIR /var/www/
 RUN \
 	mkdir /var/log/drillix
 
-COPY deploy/events.js /var/www/events.js
+COPY events.js /var/www/events.js
 
-COPY ssl/api.drillix.com.key /var/www/api.drillix.com.key
-COPY ssl/api.drillix.com.crt /var/www/api.drillix.com.crt
+#COPY ssl/api.drillix.com.key /var/www/api.drillix.com.key
+#COPY ssl/api.drillix.com.crt /var/www/api.drillix.com.crt
 
-COPY ssl/AddTrustExternalCARoot.crt /var/www/AddTrustExternalCARoot.crt
-COPY ssl/COMODORSAAddTrustCA.crt /var/www/COMODORSAAddTrustCA.crt
-COPY ssl/COMODORSADomainValidationSecureServerCA.crt /var/www/COMODORSADomainValidationSecureServerCA.crt
+#COPY ssl/AddTrustExternalCARoot.crt /var/www/AddTrustExternalCARoot.crt
+#COPY ssl/COMODORSAAddTrustCA.crt /var/www/COMODORSAAddTrustCA.crt
+#COPY ssl/COMODORSADomainValidationSecureServerCA.crt /var/www/COMODORSADomainValidationSecureServerCA.crt
 
-EXPOSE 80 443
+#EXPOSE 80 443
+EXPOSE 9000 
 
 USER node
 
