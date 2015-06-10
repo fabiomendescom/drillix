@@ -60,9 +60,9 @@ ENV NODE_DIR /var/www/
 RUN \
 	mkdir /var/log/drillix
 
-COPY deploy/event_worker.js /var/www/event_worker.js
+COPY drillix_worker_loadevents.js /var/www/drillix_worker_loadevents.js
 
 
 USER node
 
-CMD node event_worker.js 
+CMD node drillix_worker_loadevents.js 

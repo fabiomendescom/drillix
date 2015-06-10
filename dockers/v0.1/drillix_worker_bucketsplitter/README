@@ -1,0 +1,3 @@
+this docker will take the messages from the sqs queue and split them by
+the sequential groups (order number for example). A non-sequential group is
+time for example

@@ -18,9 +18,6 @@ RUN \
   chown -R node:node /etc/authbind/byport/ && \
   chmod -R 755 /etc/authbind/byport/
   
-#RUN \
-#	npm install local-ip
-	
 RUN \
     npm install express --save  
     
@@ -36,26 +33,27 @@ RUN \
 RUN \	
 	npm install mongodb --save
 	
-#RUN \
-#	npm install sqs-queue-parallel --save
+RUN \
+	npm install sqs-queue-parallel --save
 		
 RUN \	
 	npm install aws-sdk --save
 
 RUN \
-	npm install redis --save
+	npm install sqs-queue-parallel --save
 	
+RUN \
+	npm install sqs --save	
+	
+RUN \
+	npm install redis --save	
+
 RUN \	
 	npm install winston --save
 	
-#RUN \
-#	npm install node-zookeeper-client --save
-	
-#RUN \
-#	npm install kafka --save
+RUN \
+	npm install node-zookeeper-client --save
 
-#RUN \	
-#	npm install kafkaesque
 
 WORKDIR /var/www/
 
@@ -65,18 +63,8 @@ ENV NODE_DIR /var/www/
 RUN \
 	mkdir /var/log/drillix
 
-COPY events.js /var/www/events.js
-
-#COPY ssl/api.drillix.com.key /var/www/api.drillix.com.key
-#COPY ssl/api.drillix.com.crt /var/www/api.drillix.com.crt
-
-#COPY ssl/AddTrustExternalCARoot.crt /var/www/AddTrustExternalCARoot.crt
-#COPY ssl/COMODORSAAddTrustCA.crt /var/www/COMODORSAAddTrustCA.crt
-#COPY ssl/COMODORSADomainValidationSecureServerCA.crt /var/www/COMODORSADomainValidationSecureServerCA.crt
-
-#EXPOSE 80 443
-EXPOSE 9000 
+COPY drillix_worker_bucketsplitter.js  /var/www/drillix_worker_bucketsplitter.js 
 
 USER node
 
-CMD authbind node events.js 
+CMD node drillix_worker_bucketsplitter.js 

@@ -11,6 +11,6 @@ echo "---------------------------------------------"
 sudo docker build -t drillix_nginx .   
 sudo docker kill $1 
 sudo docker rm $1 
-sudo docker create --name="$1" -p 80:80 -p 443:443 drillix_nginx
+sudo docker create --name="$1" -p 443:443 drillix_nginx
 sudo docker start $1
 
