@@ -1,9 +1,8 @@
 // INSTANCE SPECIFIC
-var numberqueuemsgs     = process.env.QUEUENUMBERMESSAGES;
-var concurrency			= process.env.QUEUECONCURRENCY;
-//var processgroup		= process.env.PROCESSGROUP;
-
-var envprefix			= process.env.ENVPREFIX;
+var numberqueuemsgs     = process.env.DRILLIX_QUEUENUMBERMESSAGES;
+var concurrency			= process.env.DRILLIX_QUEUECONCURRENCY;
+var envprefix			= process.env.DRILLIX_COLLECTION_ENVPREFIX;
+var groupid				= process.env.DRILLIX_PROCESSGROUPID;
 
 envprefix = envprefix.toString().trim();
 
@@ -29,25 +28,29 @@ function getSystemInfo() {
 	return info;
 }
 
-logger.info("ENV: NUMBERQUEUEMESSAGES: " + numberqueuemsgs);
-logger.info("ENV: QUEUECONCURRENCY: " + concurrency);
-logger.info("ENV: ENVPREFIX: " + envprefix);
+logger.info("ENV: DRILLIX_QUEUENUMBERMESSAGES: " + numberqueuemsgs);
+logger.info("ENV: DRILLIX_QUEUECONCURRENCY: " + concurrency);
+logger.info("ENV: DRILLIX_COLLECTION_ENVPREFIX: " + envprefix);
 
 logger.info("Starting docker process",getSystemInfo());
   
- /* 
+  
 var processgroup = {
-	id : "GROUP1",
+	groupid : "GROUP1",
 	tenantprefix: "darby-",
 	queue: "events",
+	awsenvprefix: "DRILLIX_AWS_ENV-TEST-",
+	mongoenvprefix: "DRILLIX_MONGO_ENV-TEST-"		
+	
 	accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
 	secretkey: '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',
 	region: 'us-east-1',
 	account: '139086185180',
 	mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'	
 }
-*/
 
+
+/*
 var processgroup = {
 	id : "GROUP1",
 	queue: "P1-EventQueue",
@@ -57,6 +60,7 @@ var processgroup = {
 	account: '195410579593',
 	mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'	
 } 
+*/
 
 var queuename               = processgroup.queue;
 

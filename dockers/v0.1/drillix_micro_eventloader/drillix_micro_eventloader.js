@@ -1,7 +1,7 @@
 //INSTANCE SPECIFIC
 var porttolisten 		= 9000; 
-var topictopublish      = process.env.TOPICTOPUBLISH;
-var envprefix			= process.env.ENVPREFIX;
+var topictopublish      = process.env.DRILLIX_TOPICTOPUBLISHEVENTS;
+var envprefix			= process.env.DRILLIX_COLLECTION_PREFIX;
 
 envprefix = envprefix.toString().trim();
 
@@ -38,8 +38,8 @@ function getSystemInfo() {
 	return info;
 }
 
-logger.info("ENV: TOPICTOPUBLISH: " + topictopublish);
-logger.info("ENV: ENVPREFIX: " + envprefix);
+logger.info("ENV: DRILLIX_TOPICTOPUBLISHEVENTS: " + topictopublish);
+logger.info("ENV: DRILLIX_COLLECTION_PREFIX: " + envprefix);
 logger.info("Starting docker process",getSystemInfo());
 
 function snsmessageadd(msg, req, res, callback) {
@@ -58,13 +58,22 @@ function snsmessageadd(msg, req, res, callback) {
 function findByToken(token, fn) {
 	
 		var usercontext =	{ 
-				id: 1, 			
+				idmd5: '836eba7b748c218687265a123c8bd80e',	
+				tenantaccountcode: "DARBY",		
 				tenantprefix: "darby-",
+				tenantname: "Darby Smart",
+				tenantadminemail: "karl@darbysmart.com",
+				tenantactive: true,
+				awsenvprefix: "DRILLIX_AWS_ENV-TEST-",
+				mongoenvprefix: "DRILLIX_MONGO_ENV-TEST-",
+				
 				token: 'E95C52F99868D96F6791264A1AE4A', 
+				
 				accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
 				secretkey: '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',
 				region: 'us-east-1',
 				account: '139086185180',
+				
 				mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'
 		}
 	
