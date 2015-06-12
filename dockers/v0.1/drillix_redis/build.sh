@@ -1,13 +1,12 @@
 #!/bin/bash
-
+if [ -z "$DRX_ZOOKPRSVRS" ]; then
+	echo "ENV variable DRX_ZOOKPRSVRS must be set (server1[:port1][,server2[:port2]...]"
+	exit 1
+fi 
 if [ -z "$1" ]; then
 	echo "You must have the container name as an argument"
 	exit 1
 fi
-if [ -z "$DRILLIX_ZOOKEEPER_SERVERS" ]; then
-	echo "ENV variable DRILLIX_ZOOKEEPER_SERVERS must be set (server1[:port1][,server2[:port2]...]"
-	exit 1
-fi 
 
 echo "---------------------------------------------"
 echo "START BUILDING $1"

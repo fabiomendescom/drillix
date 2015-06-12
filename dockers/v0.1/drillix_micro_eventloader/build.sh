@@ -1,15 +1,6 @@
 #!/bin/bash
-
-if [ -z "$DRILLIX_TOPICTOPUBLISHEVENTS" ]; then
-	echo "ENV variable DRILLIX_TOPICTOPUBLISHEVENTS name must be set" 
-	exit 1
-fi
-if [ -z "$DRILLIX_COLLECTION_PREFIX" ]; then
-	echo "ENV variable DRILLIX_COLLECTION_PREFIX must be set"
-	exit 1
-fi
-if [ -z "$DRILLIX_ZOOKEEPER_SERVERS" ]; then
-	echo "ENV variable DRILLIX_ZOOKEEPER_SERVERS must be set (server1[:port1][,server2[:port2]...]"
+if [ -z "$DRX_ZOOKPRSVRS" ]; then
+	echo "ENV variable DRX_ZOOKPRSVRS must be set (server1[:port1][,server2[:port2]...]"
 	exit 1
 fi 
 if [ -z "$1" ]; then
@@ -17,7 +8,11 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 if [ -z "$2" ]; then
-	echo "You must enter the port number as second argument"
+	echo "You must enter the process group as second argument"
+	exit 1
+fi
+if [ -z "$3" ]; then
+	echo "You must enter the port number as third argument"
 	exit 1
 fi
 
@@ -27,7 +22,7 @@ echo "---------------------------------------------"
 sudo docker build -t drillix_micro_eventloader .   
 sudo docker kill $1 
 sudo docker rm $1 
-sudo docker create --name="$1" -e "DRILLIX_COLLECTION_PREFIX=$DRILLIX_COLLECTION_PREFIX" -e "DRILLIX_TOPICTOPUBLISHEVENTS=$DRILLIX_TOPICTOPUBLISHEVENTS" -p $2:9000 drillix_micro_eventloader
+sudo docker create --name="$1" -e "PROCESSGROUP=$2" -e "ZOOKEEPERSERVERS=$DRX_ZOOKPRSVRS"  -p $3:9000 drillix_micro_eventloader
 sudo docker start $1
 IPADDR=$(sudo docker inspect -f '{{ .NetworkSettings.IPAddress }}' $1)
 

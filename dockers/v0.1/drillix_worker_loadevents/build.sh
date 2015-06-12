@@ -1,7 +1,6 @@
 #!/bin/bash
-
-if [ -z "$DRILLIX_COLLECTION_PREFIX" ]; then
-	echo "ENV variable DRILLIX_COLLECTION_PREFIX must be set"
+if [ -z "$DRX_ZOOKPRSVRS" ]; then
+	echo "ENV variable DRX_ZOOKPRSVRS must be set (server1[:port1][,server2[:port2]...]"
 	exit 1
 fi 
 if [ -z "$1" ]; then
@@ -27,6 +26,6 @@ echo "---------------------------------------------"
 sudo docker build -t drillix_worker_loadevents .   
 sudo docker kill $1 
 sudo docker rm $1 
-sudo docker create --name="$1" -e "DRILLIX_PROCESSGROUPID=$2"  -e "DRILLIX_QUEUENUMBERMESSAGES=$3" -e "DRILLIX_QUEUECONCURRENCY=$4" -e "DRILLIX_COLLECTION_PREFIX=$DRILLIX_COLLECTION_PREFIX" drillix_worker_loadevents
+sudo docker create --name="$1" -e "PROCESSGROUP=$2"  -e "QUEUENUMBERMESSAGES=$3" -e "QUEUECONCURRENCY=$4" -e "ZOOKEEPERSERVERS=$DRX_ZOOKPRSVRS"  drillix_worker_loadevents
 sudo docker start $1
 

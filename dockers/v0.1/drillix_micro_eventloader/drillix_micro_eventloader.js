@@ -1,7 +1,5 @@
 //INSTANCE SPECIFIC
 var porttolisten 		= 9000; 
-var topictopublish      = process.env.DRILLIX_TOPICTOPUBLISHEVENTS;
-var envprefix			= process.env.DRILLIX_COLLECTION_PREFIX;
 
 envprefix = envprefix.toString().trim();
 
@@ -58,36 +56,40 @@ function snsmessageadd(msg, req, res, callback) {
 function findByToken(token, fn) {
 	
 		var usercontext =	{ 
-				idmd5: '836eba7b748c218687265a123c8bd80e',	
-				tenantaccountcode: "DARBY",		
-				tenantprefix: "darby-",
+				idmd5: 'darby<<<<<836eba7b748c218687265a123c8bd80e',	
+				token: 'E95C52F99868D96F6791264A1AE4A', 				
+				tenantaccountcode: "10233434",		
+				tenantshortcode: "darby",
 				tenantname: "Darby Smart",
 				tenantadminemail: "karl@darbysmart.com",
 				tenantactive: true,
-				awsenvprefix: "DRILLIX_AWS_ENV-TEST-",
-				mongoenvprefix: "DRILLIX_MONGO_ENV-TEST-",
-				
-				token: 'E95C52F99868D96F6791264A1AE4A', 
-				
-				accesskey: 'AKIAIUAUOG5OVKIGNYWQ', 
-				secretkey: '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',
-				region: 'us-east-1',
-				account: '139086185180',
-				
-				mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'
+				authgroup: {
+					authgroup: "TEST1",
+					bucket: "drillixauth",
+					awsaccesskey: "AKIAIUAUOG5OVKIGNYWQ",
+					awssecretkey: "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",
+					awsregion: "us-east-1",
+					awsaccount: "139086185180"						
+				},		
+				processgroup: {
+					processgroup: "TEST1",
+					eventsnstopic: "test-eventtopic",
+					eventqueue: "events",
+					awsaccesskey: "AKIAIUAUOG5OVKIGNYWQ",
+					awssecretkey: "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",
+					awsregion: "us-east-1",
+					awsaccount: "139086185180"	
+				},
+				storagegroup: {
+					storagegroup: "TEST1",
+					mongouser: "heroku_app34960699",
+					mongopassword: "pbho09fpelbpp597c21fu0cami",
+					mongohosts: "ds029197.mongolab.com:29197",
+					mongodb: "heroku_app34960699",
+					mongocollectionprefix: "test_"					
+				}					
 		}
 	
-/*	
-		var usercontext =	{ 
-				id: 1, 			
-				token: 'E95C52F99868D96F6791264A1AE4A', 
-				accesskey: 'AKIAJGX6GVRKBYFBMFEA', 
-				secretkey: '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',
-				region: 'us-west-1',
-				account: '195410579593',
-				mongouri: 'mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699'
-		}	 
-*/ 
 		if(token==usercontext.token) {
 			return fn(null,usercontext);
 		} else {
