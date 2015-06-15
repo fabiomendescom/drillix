@@ -1,6 +1,7 @@
 // INSTANCE SPECIFIC
 var numberqueuemsgs     = process.env.DRILLIX_QUEUENUMBERMESSAGES;
 var concurrency			= process.env.DRILLIX_QUEUECONCURRENCY;
+
 var envprefix			= process.env.DRILLIX_COLLECTION_ENVPREFIX;
 var groupid				= process.env.DRILLIX_PROCESSGROUPID;
 

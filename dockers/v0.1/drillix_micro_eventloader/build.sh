@@ -8,11 +8,7 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 if [ -z "$2" ]; then
-	echo "You must enter the process group as second argument"
-	exit 1
-fi
-if [ -z "$3" ]; then
-	echo "You must enter the port number as third argument"
+	echo "You must enter the port number as second argument"
 	exit 1
 fi
 
@@ -22,27 +18,28 @@ echo "---------------------------------------------"
 sudo docker build -t drillix_micro_eventloader .   
 sudo docker kill $1 
 sudo docker rm $1 
-sudo docker create --name="$1" -e "PROCESSGROUP=$2" -e "ZOOKEEPERSERVERS=$DRX_ZOOKPRSVRS"  -p $3:9000 drillix_micro_eventloader
+#sudo docker create --name="$1" -e "DRX_ZOOKPRSVRS=$DRX_ZOOKPRSVRS" -e "DRX_AGRP_AWSACCKEY=$DRX_AGRP_AWSACCKEY" -e "DRX_AGRP_AWSSECKEY=$DRX_AGRP_AWSSECKEY" -e "DRX_AGRP_AWSREGION=$DRX_AGRP_AWSREGION" -e "DRX_AGRP_AWSACCNT=$DRX_AGRP_AWSACCNT" -e "DRX_AGRP_DYNAMOTBL=$DRX_AGRP_DYNAMOTBL" -p $3:9000 drillix_micro_eventloader
+sudo docker create --name="$1" -e "DRX_ZOOKPRSVRS=$DRX_ZOOKPRSVRS" -p $2:9000 drillix_micro_eventloader
 sudo docker start $1
 IPADDR=$(sudo docker inspect -f '{{ .NetworkSettings.IPAddress }}' $1)
 
-echo "ZOOKEEPER servers being used: $DRILLIX_ZOOKEEPER_SERVERS"
-ZOO=$(zookeepercli --servers $DRILLIX_ZOOKEEPER_SERVERS -c exists /DRILLIX)
+echo "ZOOKEEPER servers being used: $DRX_ZOOKPRSVRS"
+ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX)
 if [ ! $ZOO ]; then
 	echo "Creating DRILLIX root"
-	zookeepercli --servers $DRILLIX_ZOOKEEPER_SERVERS -c create /DRILLIX drillix
+	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX drillix
 	echo "DRILLIX root created"
 fi
-ZOO=$(zookeepercli --servers $DRILLIX_ZOOKEEPER_SERVERS -c exists /DRILLIX/MICRO_EVENTLOADER)
+ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX/MICRO_EVENTLOADER)
 if [ ! $ZOO ]; then
 	echo "Creating DRILLIX/MICRO_EVENTLOADER service folder"
-	zookeepercli --servers $DRILLIX_ZOOKEEPER_SERVERS -c create /DRILLIX/MICRO_EVENTLOADER eventloader
+	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX/MICRO_EVENTLOADER eventloader
 	echo "/DRILLIX/MICRO_EVENTLOADER service folder created"
 fi
-ZOO=$(zookeepercli --servers $DRILLIX_ZOOKEEPER_SERVERS -c exists /DRILLIX/MICRO_EVENTLOADER/$1)
+ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX/MICRO_EVENTLOADER/$1)
 if [ $ZOO ]; then
-	zookeepercli --servers $DRILLIX_ZOOKEEPER_SERVERS -c delete /DRILLIX/MICRO_EVENTLOADER/$1
+	zookeepercli --servers $DRX_ZOOKPRSVRS -c delete /DRILLIX/MICRO_EVENTLOADER/$1
 fi
-zookeepercli --servers $DRILLIX_ZOOKEEPER_SERVERS -c create /DRILLIX/MICRO_EVENTLOADER/$1 $IPADDR:$2
+zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX/MICRO_EVENTLOADER/$1 $IPADDR:$2
 echo "$1 with IP $IPADDR:$2 registered on /DRILLIX/MICRO_EVENTLOADER/$1 on zookeeper"
 

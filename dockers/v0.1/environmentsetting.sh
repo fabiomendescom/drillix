@@ -1,47 +1,4 @@
 # add this as a call . /thisfile    on the bottom of /etc/profile so it is permanent. Then
 # do a "source /etc/profile" to have this take effect
-export DRX_ZOOKPRSVRS=localhost
+export DRX_ZOOKPRSVRS=172.17.42.1:2181
 
-#Auth groups
-export DRX_AGRP_TEST1_AWSACCKEY=AKIAIUAUOG5OVKIGNYWQ
-export DRX_AGRP_TEST1_AWSSECKEY=UyxMeInnRSqXIZpz5FvQs/ieKicwRTUzuZaHCX6i
-export DRX_AGRP_TEST1_AWSREGION=us-east-1
-export DRX_AGRP_TEST1_AWSACCNT=139086185180
-
-#Process groups
-export DRX_PGRP_TEST1_EVNTSNSTOP=test-eventtopic
-export DRX_PGRP_TEST1_EVNTQUEUE=events
-export DRX_PGRP_TEST1_AWSACCKEY=AKIAIUAUOG5OVKIGNYWQ
-export DRX_PGRP_TEST1_AWSSECKEY=UyxMeInnRSqXIZpz5FvQs/ieKicwRTUzuZaHCX6i
-export DRX_PGRP_TEST1_AWSREGION=us-east-1
-export DRX_PGRP_TEST1_AWSACCNT=139086185180
-
-#Storage groups
-export DRX_SGRP_TEST1_MONGUSR=heroku_app34960699
-export DRX_SGRP_TEST1_MONPWD=pbho09fpelbpp597c21fu0cami
-export DRX_SGRP_TEST1_MONHOSTS=ds029197.mongolab.com:29197
-export DRX_SGRP_TEST1_MONDB=heroku_app34960699
-export DRX_SGRP_TEST1_MONCOLPREFX=test_
-
-#Auth groups PROD
-export DRX_AGRP_PROD1_AWSACCKEY=AKIAJGX6GVRKBYFBMFEA
-export DRX_AGRP_PROD1_AWSSECKEY=9ApLle3zhtln9QjuD2P0iXiCV06KqR9w35DqZAfR
-export DRX_AGRP_PROD1_AWSREGION=us-west-1
-export DRX_AGRP_PROD1_AWSACCNT=195410579593
-
-#Process groups PROD
-export DRX_PGRP_PROD1_EVNTSNSTOP=eventtopic
-export DRX_PGRP_PROD1_EVNTQUEUE=events
-export DRX_PGRP_PROD1_AWSACCKEY=AKIAJGX6GVRKBYFBMFEA
-export DRX_PGRP_PROD1_AWSSECKEY=9ApLle3zhtln9QjuD2P0iXiCV06KqR9w35DqZAfR
-export DRX_PGRP_PROD1_AWSREGION=us-west-1
-export DRX_PGRP_PROD1_AWSACCNT=195410579593
-
-#Storage groups PROD
-export DRX_SGRP_TEST1_MONGUSR=heroku_app34960699
-export DRX_SGRP_TEST1_MONPWD=pbho09fpelbpp597c21fu0cami
-export DRX_SGRP_TEST1_MONHOSTS=ds029197.mongolab.com:29197
-export DRX_SGRP_TEST1_MONDB=heroku_app34960699
-export DRX_SGRP_TEST1_MONCOLPREFX=prod_
-
-# mongodb://heroku_app34960699:pbho09fpelbpp597c21fu0cami@ds029197.mongolab.com:29197/heroku_app34960699

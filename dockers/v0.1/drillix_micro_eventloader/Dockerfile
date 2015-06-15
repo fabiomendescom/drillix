@@ -35,9 +35,6 @@ RUN \
 	
 RUN \	
 	npm install mongodb --save
-	
-#RUN \
-#	npm install sqs-queue-parallel --save
 		
 RUN \	
 	npm install aws-sdk --save
@@ -48,14 +45,9 @@ RUN \
 RUN \	
 	npm install winston --save
 	
-#RUN \
-#	npm install node-zookeeper-client --save
+RUN \
+	npm install node-zookeeper-client --save
 	
-#RUN \
-#	npm install kafka --save
-
-#RUN \	
-#	npm install kafkaesque
 
 WORKDIR /var/www/
 
