@@ -91,19 +91,14 @@ function findByToken(token, fn) {
 						usercontext.processgroup.awsaccesskey = globalvars["DRX_PGRP_" + processgroup].awsaccesskey;
 						usercontext.processgroup.awssecretkey = globalvars["DRX_PGRP_" + processgroup].awssecretkey;
 						usercontext.processgroup.awsregion = globalvars["DRX_PGRP_" + processgroup].awsregion;
-						usercontext.processgroup.awsaccount = globalvars["DRX_PGRP_" + processgroup].awsaccount;
+						usercontext.processgroup.awsaccount = globalvars["DRX_PGRP_" + processgroup].awsaccount;				
+						usercontext.processgroup.mongouser = globalvars["DRX_PGRP_" + processgroup].mongouser;
+						usercontext.processgroup.mongopassword = globalvars["DRX_PGRP_" + processgroup].mongopassword;
+						usercontext.processgroup.mongohosts = globalvars["DRX_PGRP_" + processgroup].mongohosts;
+						usercontext.processgroup.mongodb = globalvars["DRX_PGRP_" + processgroup].mongodb;
+						usercontext.processgroup.mongocollectionprefix = globalvars["DRX_PGRP_" + processgroup].mongocollectionpref;
+						usercontext.processgroup.mongouri = "mongodb://"+usercontext.processgroup.mongouser+":"+usercontext.processgroup.mongopassword+"@"+usercontext.processgroup.mongohosts+"/"+usercontext.processgroup.mongodb;											
 					}
-					if(storagegroup!=null) {
-						usercontext.storagegroup = {};
-						usercontext.storagegroup.id = storagegroup;
-						usercontext.storagegroup.mongouser = globalvars["DRX_SGRP_" + storagegroup].mongouser;
-						usercontext.storagegroup.mongopassword = globalvars["DRX_SGRP_" + storagegroup].mongopassword;
-						usercontext.storagegroup.mongohosts = globalvars["DRX_SGRP_" + storagegroup].mongohosts;
-						usercontext.storagegroup.mongodb = globalvars["DRX_SGRP_" + storagegroup].mongodb;
-						usercontext.storagegroup.mongocollectionprefix = globalvars["DRX_SGRP_" + storagegroup].mongocollectionpref;
-						usercontext.storagegroup.mongouri = "mongodb://"+usercontext.storagegroup.mongouser+":"+usercontext.storagegroup.mongopassword+"@"+usercontext.storagegroup.mongohosts+"/"+usercontext.storagegroup.mongodb;						
-					}				
-					console.log(JSON.stringify(usercontext));				
 					return fn(null,usercontext);
 				} else {
 					return fn(null,null);

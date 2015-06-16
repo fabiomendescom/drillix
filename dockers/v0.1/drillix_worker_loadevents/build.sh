@@ -26,6 +26,6 @@ echo "---------------------------------------------"
 sudo docker build -t drillix_worker_loadevents .   
 sudo docker kill $1 
 sudo docker rm $1 
-sudo docker create --name="$1" -e "ZOOKEEPERSERVERS=$DRX_ZOOKPRSVRS" -e "PROCESSGROUP=$2"  -e "QUEUENUMBERMESSAGES=$3" -e "QUEUECONCURRENCY=$4" drillix_worker_loadevents
+sudo docker create --name="$1" -e "DRX_ZOOKPRSVRS=$DRX_ZOOKPRSVRS" -e "PROCESSGROUP=$2"  -e "QUEUENUMBERMESSAGES=$3" -e "QUEUECONCURRENCY=$4" drillix_worker_loadevents
 sudo docker start $1
 

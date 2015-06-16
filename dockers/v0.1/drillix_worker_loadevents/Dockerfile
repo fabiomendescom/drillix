@@ -50,7 +50,9 @@ RUN \
 
 RUN \	
 	npm install winston --save
-
+	
+RUN \
+	npm install node-zookeeper-client --save
 
 WORKDIR /var/www/
 
