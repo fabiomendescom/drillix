@@ -6,7 +6,6 @@ var sqs = require('sqs');
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 var util = require('util');
-var AWS = require('aws-sdk'); 
 
 function getSystemInfo() {
 	os = require('os');
@@ -65,22 +64,7 @@ zooclient.once('connected', function () {
 				globalvars[child] = JSON.parse(data.toString("utf8"));
 				if(i==children.toString('utf8').split(',').length) {
 					logger.info("GLOBALVARS collected from zookeeper " + process.env.DRX_ZOOKPRSVRS);
-
-
-					function sqsmessageadd(msg,queueurl, callback) {
-						var sqs = new AWS.SQS({accessKeyId: globalvars["DRX_PGRP_" + processgroup].awsaccesskey, secretAccessKey: globalvars["DRX_PGRP_" + processgroup].awssecretkey, region: globalvars["DRX_PGRP_" + processgroup].awsregion});
-
-						var params = {
-							MessageBody: JSON.stringify(msg), 
-							QueueUrl: queueurl
-						};
-	
-						sqs.sendMessage(params, function(err, data) {
-							callback(err, data);
-						});
-					}
-
-										
+									
 					// Simple configuration:
 					//  - 2 concurrency listeners
 					//  - each listener can receive up to 4 messages
@@ -124,22 +108,7 @@ zooclient.once('connected', function () {
 							collection.insert(
 								msg.events
 							, function(err, result) {
-								if(err) {
-								} else {
-									sqsmessageadd(msg, globalvars["DRX_PGRP_" + processgroup].dedupqueueurl, function(err,data) {
-										if(err){
-											console.log(err);
-										} else {
-											sqsmessageadd(msg, globalvars["DRX_PGRP_" + processgroup].bucketqueueurl, function(err,data) {
-												if(err) {
-													console.log(err);
-												} else {
-													
-												}
-											});
-										}
-									});
-								}
+				
 							});
     
 							///////////////////////////////////////////////
