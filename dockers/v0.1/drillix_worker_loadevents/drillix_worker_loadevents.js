@@ -66,7 +66,6 @@ zooclient.once('connected', function () {
 				if(i==children.toString('utf8').split(',').length) {
 					logger.info("GLOBALVARS collected from zookeeper " + process.env.DRX_ZOOKPRSVRS);
 
-
 					function sqsmessageadd(msg,queueurl, callback) {
 						var sqs = new AWS.SQS({accessKeyId: globalvars["DRX_PGRP_" + processgroup].awsaccesskey, secretAccessKey: globalvars["DRX_PGRP_" + processgroup].awssecretkey, region: globalvars["DRX_PGRP_" + processgroup].awsregion});
 
@@ -79,7 +78,6 @@ zooclient.once('connected', function () {
 							callback(err, data);
 						});
 					}
-
 										
 					// Simple configuration:
 					//  - 2 concurrency listeners
@@ -87,8 +85,8 @@ zooclient.once('connected', function () {
 					// With this configuration you could receive and parse 8 `message` events in parallel
 					var queue = new SqsQueueParallel({
 						name: 					globalvars["DRX_PGRP_" + processgroup].eventqueue,
-						maxNumberOfMessages: 	process.env.QUEUENUMBERMESSAGES,
-						concurrency: 			process.env.QUEUECONCURRENCY,
+						maxNumberOfMessages: 	1,
+						concurrency: 			1,
 						region: 				globalvars["DRX_PGRP_" + processgroup].awsregion,
 						accessKeyId: 			globalvars["DRX_PGRP_" + processgroup].awsaccesskey,
 						secretAccessKey: 		globalvars["DRX_PGRP_" + processgroup].awssecretkey
@@ -129,14 +127,6 @@ zooclient.once('connected', function () {
 									sqsmessageadd(msg, globalvars["DRX_PGRP_" + processgroup].dedupqueueurl, function(err,data) {
 										if(err){
 											console.log(err);
-										} else {
-											sqsmessageadd(msg, globalvars["DRX_PGRP_" + processgroup].bucketqueueurl, function(err,data) {
-												if(err) {
-													console.log(err);
-												} else {
-													
-												}
-											});
 										}
 									});
 								}

@@ -6,6 +6,7 @@ var sqs = require('sqs');
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 var util = require('util');
+var async = require('async');
 
 function getSystemInfo() {
 	os = require('os');
@@ -70,9 +71,9 @@ zooclient.once('connected', function () {
 					//  - each listener can receive up to 4 messages
 					// With this configuration you could receive and parse 8 `message` events in parallel
 					var queue = new SqsQueueParallel({
-						name: 					globalvars["DRX_PGRP_" + processgroup].eventqueue,
-						maxNumberOfMessages: 	process.env.QUEUENUMBERMESSAGES,
-						concurrency: 			process.env.QUEUECONCURRENCY,
+						name: 					globalvars["DRX_PGRP_" + processgroup].dedupqueue,
+						maxNumberOfMessages: 	1,
+						concurrency: 			1,
 						region: 				globalvars["DRX_PGRP_" + processgroup].awsregion,
 						accessKeyId: 			globalvars["DRX_PGRP_" + processgroup].awsaccesskey,
 						secretAccessKey: 		globalvars["DRX_PGRP_" + processgroup].awssecretkey
@@ -96,8 +97,10 @@ zooclient.once('connected', function () {
 							////////////////////////////
 							// STEP: Save the event //
 							////////////////////////////
-			
-							msg = JSON.parse(e.data.Message);
+							
+							
+							msg = e.data;
+							
 
 							//By definition, they can only use REST with account on the url to enter this. For thsi reason, it is safe to
 							//trust the account to be consistent by looking at only index 0 since we know the entire message is from the 
@@ -105,20 +108,44 @@ zooclient.once('connected', function () {
 							mongocollection = globalvars["DRX_PGRP_" + processgroup].mongocollectionpref + msg.events[0]["_drillixmeta"].account + "-" + msg.events[0]["_drillixmeta"].name;
 		
 							collection = db.collection(mongocollection);
-							collection.insert(
-								msg.events
-							, function(err, result) {
-				
-							});
-    
-							///////////////////////////////////////////////
-							// STEP: Delete the message from the queue //
-							///////////////////////////////////////////////
-     
-							e.deleteMessage(function(err, data) {
-								e.next();
-							});
+
+								console.log("EVENT");
+								console.log(msg.events);
+								
+							var dedupped = {};
+							dedupped.events = [];	
+							async.each(msg.events, function(event, callback) {						
+								collection.findOne(
+									{_id: event["_id"]}
+								, function(err, result) {
+									if(err) {
+										callback(err);
+									} else {
+										if(result == null) {
+											//Don't do anyhthing. Move on
+											callback();
+										} else {
+											console.log("FOUND");	
+											dedupped.events.push(event);
+											callback();																					
+										}
+									}
+								});								
+							}, function(err) {
+								if (err) {
+									console.log(err);
+								} else {
+									///////////////////////////////////////////////
+									// STEP: Delete the message from the queue //
+									///////////////////////////////////////////////
+									console.log("DELETING");
+									e.deleteMessage(function(err, data) {
+										e.next();
+									});		
+								}								
+							});	
 						});
+						
 
 						queue.on('error', function (err)
 						{
