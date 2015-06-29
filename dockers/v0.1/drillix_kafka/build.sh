@@ -18,7 +18,7 @@ echo "---------------------------------------------"
 sudo docker build -t drillix_kafka .   
 sudo docker kill $1 
 sudo docker rm $1 
-sudo docker create --name="$1" -e "DRX_ZOOKPRSVRS=$DRX_ZOOKPRSVRS" -p $2:9092 drillix_kafka
+sudo docker create --name="$1" -e "ZOOKEEPER_IP=172.17.42.1" -e "ZOOKEEPER_PORT=2181" -p $2:9092 drillix_kafka
 sudo docker start $1
 IPADDR=$(sudo docker inspect -f '{{ .NetworkSettings.IPAddress }}' $1)
 
