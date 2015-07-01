@@ -18,27 +18,5 @@ echo "---------------------------------------------"
 sudo docker build -t drillix_kafka .   
 sudo docker kill $1 
 sudo docker rm $1 
-sudo docker create --name="$1" -e "ZOOKEEPER_IP=172.17.42.1" -e "ZOOKEEPER_PORT=2181" -p $2:9092 drillix_kafka
-sudo docker start $1
-IPADDR=$(sudo docker inspect -f '{{ .NetworkSettings.IPAddress }}' $1)
-
-echo "ZOOKEEPER servers being used: $DRX_ZOOKPRSVRS"
-ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX)
-if [ ! $ZOO ]; then
-	echo "Creating DRILLIX root"
-	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX drillix
-	echo "DRILLIX root created"
-fi
-ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX/KAFKA)
-if [ ! $ZOO ]; then
-	echo "Creating DRILLIX/KAFKA service folder"
-	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX/KAFKA kafka
-	echo "/DRILLIX/KAFKA service folder created"
-fi
-ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX/KAFKA/$1)
-if [ $ZOO ]; then
-	zookeepercli --servers $DRX_ZOOKPRSVRS -c delete /DRILLIX/KAFKA/$1
-fi
-zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX/KAFKA/$1 $IPADDR:$2
-echo "$1 with IP $IPADDR:$2 registered on /DRILLIX/KAFKA/$1 on zookeeper"
+sudo docker run -d --name="$1" -e "ZOOKEEPER_IP=172.17.42.1" -e "ZOOKEEPER_PORT=2181" -e "DRX_ZOOKPRSVRS=$DRX_ZOOKPRSVRS" -e "CONTAINERNAME=$1" -e "PORTNUMBER=$2" -p $2:9092 drillix_kafka
 

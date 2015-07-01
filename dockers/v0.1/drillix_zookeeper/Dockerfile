@@ -36,9 +36,7 @@ WORKDIR /opt/zookeeper
 RUN mkdir -p /opt/zookeeper/workdir
 VOLUME /opt/zookeeper/workdir
 
-#When you have a cluster for zookeeper, remove this so you can
-#copy the configs
-#COPY zoo.cfg /opt/zookeeper/conf/zoo.cfg
-
 ENTRYPOINT ["/opt/zookeeper/bin/zkServer.sh"]
+
 CMD ["start-foreground"] 
+

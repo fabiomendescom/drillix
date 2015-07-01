@@ -1,10 +1,9 @@
-source /etc/profile
+#!/bin/bash -l
 
 cd drillix_zookeeper
 ./build.sh drillix.zookeeper1
 
-#need to give time for the server above to pick up before setting vars
-sleep 2 
+sleep 6
 
 cd ..
 ./setzookeepervars.sh

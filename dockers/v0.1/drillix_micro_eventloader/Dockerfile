@@ -47,9 +47,6 @@ RUN \
 	
 RUN \
 	npm install node-zookeeper-client --save
-	
-
-WORKDIR /var/www/
 
 #set to effective working dir for default command (working_dir directive doesn't work in tutum)
 ENV NODE_DIR /var/www/
@@ -69,6 +66,19 @@ COPY drillix_micro_eventloader.js /var/www/drillix_micro_eventloader.js
 #EXPOSE 80 443
 EXPOSE 9000 
 
+ADD bootstrapper.sh /home/vagrant/bootstrapper.sh
+RUN chmod +x /home/vagrant/bootstrapper.sh
+
+WORKDIR /home/vagrant
+
+RUN apt-get update
+RUN apt-get -f install
+RUN apt-get install -y wget
+RUN wget -O /home/vagrant/zookeepercli https://github.com/outbrain/zookeepercli/releases/download/v1.0.10/zookeepercli
+RUN chmod +x /home/vagrant/zookeepercli
+
+RUN apt-get install -y net-tools 
+	
 USER node
 
-CMD authbind node drillix_micro_eventloader.js 
+ENTRYPOINT ["./bootstrapper.sh"]

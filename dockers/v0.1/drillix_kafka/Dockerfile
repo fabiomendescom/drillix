@@ -33,6 +33,19 @@ ADD http://repo1.maven.org/maven2/org/slf4j/slf4j-log4j12/1.7.6/slf4j-log4j12-1.
 ADD config /kafka/config
 ADD start.sh /start.sh
 
+ADD bootstrapper.sh /bootstrapper.sh
+RUN chmod +x /bootstrapper.sh
+
+WORKDIR /home/vagrant
+
+RUN apt-get update
+RUN apt-get -f install
+RUN apt-get install -y wget
+RUN wget -O /home/vagrant/zookeepercli https://github.com/outbrain/zookeepercli/releases/download/v1.0.10/zookeepercli
+RUN chmod +x /home/vagrant/zookeepercli
+
+RUN apt-get install -y net-tools 	 	
+
 # Set up a user to run Kafka
 RUN groupadd kafka && \
   useradd -d /kafka -g kafka -s /bin/false kafka && \
@@ -45,5 +58,6 @@ WORKDIR /kafka
 EXPOSE 9092 7203
 VOLUME [ "/data", "/logs" ]
 
-CMD ["/start.sh"]
+ENTRYPOINT ["/bootstrapper.sh"]
+#CMD ["/start.sh"]
 
