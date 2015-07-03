@@ -41,7 +41,7 @@ ADD conf/cluster.xml $STORM_HOME/logback/cluster.xml
 ADD conf/storm.yaml.template $STORM_HOME/conf/storm.yaml.template
 
 # Add scripts required to run storm daemons under supervision
-ADD script/entrypoint.sh /home/storm/entrypoint.sh
+ADD script/entrypoint_drx.sh /home/storm/entrypoint.sh
 ADD supervisor/storm-daemon.conf /home/storm/storm-daemon.conf
 
 RUN chown -R storm:storm $STORM_HOME && chmod u+x /home/storm/entrypoint.sh

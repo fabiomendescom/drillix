@@ -31,7 +31,9 @@ RUN tar -zx -C /kafka --strip-components=1 -f ${KAFKA_RELEASE_ARCHIVE} && \
 
 ADD http://repo1.maven.org/maven2/org/slf4j/slf4j-log4j12/1.7.6/slf4j-log4j12-1.7.6.jar /kafka/libs/
 ADD config /kafka/config
-ADD start.sh /start.sh
+
+#Copy my start_drx.sh instead to the start.sh to apply my substitions. See my comments in it
+ADD start_drx.sh /start.sh
 
 ADD bootstrapper.sh /bootstrapper.sh
 RUN chmod +x /bootstrapper.sh

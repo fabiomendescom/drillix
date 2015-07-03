@@ -1,0 +1,12 @@
+#!/bin/bash -l
+
+LOCATION="/vagrant/drillix/dockers/v0.1"
+
+sudo docker build -t zookeeper -f $LOCATION/zookeeper/Dockerfile $LOCATION/zookeeper   
+sleep 6
+$LOCATION/setzookeepervars.sh
+sudo docker build -t redis -f $LOCATION/redis/Dockerfile $LOCATION/redis   
+sudo docker build -t nginx -f $LOCATION/nginx/Dockerfile $LOCATION/nginx  
+sudo docker build -t micro_eventloader -f $LOCATION/micro_eventloader/Dockerfile $LOCATION/micro_eventloader
+sudo docker build -t kafka -f $LOCATION/kafka/Dockerfile $LOCATION/kafka
+sudo docker build -t storm -f $LOCATION/storm/Dockerfile $LOCATION/storm

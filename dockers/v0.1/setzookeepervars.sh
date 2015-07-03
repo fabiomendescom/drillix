@@ -1,34 +1,36 @@
 #!/bin/bash
 
+MAINROOT="DRILLIX"
+
 KEY[0]='DRX_AGRP'; 		
 VAL[0]='{"awsaccesskey":"AKIAIUAUOG5OVKIGNYWQ","awssecretkey":"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","awsregion":"us-east-1","awsdynamotbl":"drillixauth"}'
 KEY[1]='DRX_PGRP_TEST1';
 VAL[1]='{"eventtopic":"arn:aws:sns:us-east-1:139086185180:eventtopic","eventqueue":"events","dedupqueue":"dedupevents","dedupqueueurl":"https://sqs.us-east-1.amazonaws.com/139086185180/dedupevents","bucketqueueurl":"https://sqs.us-east-1.amazonaws.com/139086185180/bucketevents","awsaccesskey":"AKIAIUAUOG5OVKIGNYWQ","awssecretkey":"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","awsregion":"us-east-1","awsaccount":"139086185180","mongouser":"heroku_app34960699","mongopassword":"pbho09fpelbpp597c21fu0cami","mongohosts":"ds029197.mongolab.com:29197","mongodb":"heroku_app34960699","mongocollectionpref":"test_"}'
 
 echo "ZOOKEEPER servers being used: $DRX_ZOOKPRSVRS"
-ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX)
+ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /$MAINROOT)
 if [ ! $ZOO ]; then
-	echo "Creating DRILLIX root"
-	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX drillix
-	echo "DRILLIX root created"
+	echo "Creating $MAINROOT root"
+	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT $MAINROOT
+	echo "$MAINROOT root created"
 fi
 
-ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX/GLOBALVARS)
+ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /$MAINROOT/GLOBALVARS)
 if [ ! $ZOO ]; then
-	echo "Creating DRILLIX/GLOBALVARS service folder"
-	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX/GLOBALVARS globalvars
-	echo "/DRILLIX/GLOBALVARS service folder created"
+	echo "Creating $MAINROOT/GLOBALVARS service folder"
+	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT/GLOBALVARS globalvars
+	echo "/$MAINROOT/GLOBALVARS service folder created"
 fi
 
 
 x=0;
 for i in ${KEY[@]}; do
-	ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /DRILLIX/GLOBALVARS/$i)
+	ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /$MAINROOT/GLOBALVARS/$i)
 	if [ $ZOO ]; then
-		zookeepercli --servers $DRX_ZOOKPRSVRS -c delete /DRILLIX/GLOBALVARS/$i 
+		zookeepercli --servers $DRX_ZOOKPRSVRS -c delete /$MAINROOT/GLOBALVARS/$i 
 	fi
-	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /DRILLIX/GLOBALVARS/$i ${VAL[$x]}
-	echo "$i registered on /DRILLIX/GLOBALVARS/$i on zookeeper"   
+	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT/GLOBALVARS/$i ${VAL[$x]}
+	echo "$i registered on /$MAINROOT/GLOBALVARS/$i on zookeeper"   
 	((x=x+1))     
 done
 

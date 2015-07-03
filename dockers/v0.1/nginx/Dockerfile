@@ -1,7 +1,7 @@
 FROM nginx
 
-ADD bootstrapper.sh /home/vagrant/bootstrapper.sh
-RUN chmod +x /home/vagrant/bootstrapper.sh
+#ADD bootstrapper.sh /home/vagrant/bootstrapper.sh
+#RUN chmod +x /home/vagrant/bootstrapper.sh
 
 WORKDIR /home/vagrant
 
