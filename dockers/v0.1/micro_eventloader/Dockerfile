@@ -50,6 +50,9 @@ RUN \
 RUN \
 	npm install node-zookeeper-client --save
 
+RUN \	
+	npm install kafka-node --save
+
 #set to effective working dir for default command (working_dir directive doesn't work in tutum)
 ENV NODE_DIR /var/www/
 
@@ -68,9 +71,6 @@ COPY drillix_micro_eventloader.js /var/www/drillix_micro_eventloader.js
 #EXPOSE 80 443
 EXPOSE 9000 
 
-ADD bootstrapper.sh /home/vagrant/bootstrapper.sh
-RUN chmod +x /home/vagrant/bootstrapper.sh
-
 WORKDIR /home/vagrant
 
 RUN apt-get update
@@ -80,6 +80,9 @@ RUN wget -O /home/vagrant/zookeepercli https://github.com/outbrain/zookeepercli/
 RUN chmod +x /home/vagrant/zookeepercli
 
 RUN apt-get install -y net-tools 
+	
+ADD bootstrapper.sh /home/vagrant/bootstrapper.sh
+RUN chmod +x /home/vagrant/bootstrapper.sh
 	
 USER node
 

@@ -22,6 +22,14 @@ if [ ! $ZOO ]; then
 	echo "/$MAINROOT/GLOBALVARS service folder created"
 fi
 
+echo "ZOOKEEPER servers being used: $DRX_ZOOKPRSVRS"
+ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /$MAINROOT/KAFKA)
+if [ ! $ZOO ]; then
+	echo "Creating $MAINROOT/KAFKA root"
+	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT/KAFKA $MAINROOT
+	echo "$MAINROOT/KAFKA root created"
+fi
+
 
 x=0;
 for i in ${KEY[@]}; do

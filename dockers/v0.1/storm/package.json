@@ -1,0 +1,11 @@
+{
+  "name": "storm",
+  "version": "1.0.0",
+  "description": "docker-storm ============= A Dockerfile for deploying a [Storm](http://storm.apache.org/) cluster under [supervision](http://supervisord.org/) using [Docker](https://www.docker.io/)  containers.",
+  "main": "nimbustopology.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

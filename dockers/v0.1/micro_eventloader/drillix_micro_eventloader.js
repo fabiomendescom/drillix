@@ -12,7 +12,10 @@ var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 var AWS = require('aws-sdk');
 var http = require('http');
- 
+var kafka = require('kafka-node'),
+    Producer = kafka.Producer;
+var client;
+var producer;
 
 function getSystemInfo() {
 	os = require('os');
@@ -42,6 +45,9 @@ function snsmessageadd(msg, req, res, callback) {
 }
 
 function findByToken(token, fn) {
+			var usercontext = {}; //Remove this later. Put here becuase Dynamo is slow
+			return fn(null,usercontext);	//Remove this later. Put here becuase Dynamo is slow
+	
 	    var dynamodb = new AWS.DynamoDB({accessKeyId: globalvars["DRX_AGRP"].awsaccesskey, secretAccessKey: globalvars["DRX_AGRP"].awssecretkey, region: globalvars["DRX_AGRP"].awsregion});
 
 		//get the sha256 of the token:	
@@ -137,6 +143,66 @@ app.use(function (req, res, next) {
 	next()
 })	
 
+app.post('/:account/transactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
+
+	logger.info("Starting request");
+	var msg = req.body;
+	
+	var meta = {};	
+	meta["account"] = req.params.account;
+	meta["type"] = "T";
+	meta["name"] = req.params.transaction;
+	meta["timestamp"] = new Date().toISOString();
+	
+	for(i=0;i<msg.events.length;i++) {
+		msg.events[i]["_drillixmeta"] = meta;
+	}
+	
+	var msgtext = JSON.stringify(msg);
+
+
+    payloads = [
+        { topic: 'events', messages: msgtext, partition: 0 }
+    ];	
+    
+    logger.info(payloads);
+
+	producer.send(payloads, function (err, data) {
+		//console.log(data);
+		//console.log(err);	
+		if(err) {
+			console.log(err);
+			res.status(500);
+			res.send({"status" : "error"});					
+		} else {
+			res.status(200);
+			res.send({"status" : "success"});	
+		}				
+	});	
+	
+	//producer.on('error', function (err) {
+	//	console.log("ERRRRRRR: " + err);
+	//	res.status(500);
+	//	res.send({"status" : "error"});				
+	//});	
+
+
+/*	
+	snsmessageadd(msgtext, req, res, function(err, data) {
+		if (err) {
+			logger.error(err, err.stack); // an error occurred
+			res.status(500);
+			res.send({"status" : "error","statuscode" : 1,"message" : "Problem inserting event","description" : "Problem inserting event"});						
+		}
+		else {    
+			logger.info(data);           // successful response
+			res.status(200);
+			res.send({"status" : "success"});						
+		}
+	});
+*/
+});
+
 app.get('/:account/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
 	var countercollection	= req.user.storagegroup.mongocollectionprefix + req.params.account + "-" + "maxsequence";
 	MongoClient.connect(req.user.storagegroup.mongouri, function(err, db) {
@@ -183,36 +249,6 @@ app.post('/:account/maxsequencetransactions/:transaction',  passport.authenticat
 	});	
 });
 
-app.post('/:account/transactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
-
-	var msg = req.body;
-	
-	var meta = {};	
-	meta["account"] = req.params.account;
-	meta["type"] = "T";
-	meta["name"] = req.params.transaction;
-	meta["timestamp"] = new Date().toISOString();
-	
-	for(i=0;i<msg.events.length;i++) {
-		msg.events[i]["_drillixmeta"] = meta;
-	}
-	
-	var msgtext = JSON.stringify(msg);
-	
-	
-	snsmessageadd(msgtext, req, res, function(err, data) {
-		if (err) {
-			logger.error(err, err.stack); // an error occurred
-			res.status(500);
-			res.send({"status" : "error","statuscode" : 1,"message" : "Problem inserting event","description" : "Problem inserting event"});						
-		}
-		else {    
-			logger.info(data);           // successful response
-			res.status(200);
-			res.send({"status" : "success"});						
-		}
-	});
-});
 
 /*
 redisurl = "172.17.42.1";
@@ -270,9 +306,15 @@ zooclient.once('connected', function () {
 				globalvars[child] = JSON.parse(data.toString("utf8"));
 				if(i==children.toString('utf8').split(',').length) {
 					logger.info("GLOBALVARS collected from zookeeper " + process.env.DRX_ZOOKPRSVRS);
-					var server = http.createServer(app).listen(porttolisten, function(){
-						logger.info("Express server listening on port " + porttolisten);
-					});					
+					logger.info("Creating KAFKA client");
+					client = new kafka.Client(process.env.DRX_ZOOKPRSVRS);
+					producer = new Producer(client); 					
+					producer.on('ready', function () {
+						logger.info("Connected to KAFKA client successfully");
+						var server = http.createServer(app).listen(porttolisten, function(){
+							logger.info("Express server listening on port " + porttolisten);
+						});
+					});						
 				}
 				i++;				
 			})

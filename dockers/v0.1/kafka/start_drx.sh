@@ -25,6 +25,8 @@ cat /kafka/config/server.properties${EXTENSION} \
   | sed "s|{{EXPOSED_PORT}}|${PORTNUMBER:-9092}|g" \
    > /kafka/config/server.properties
    
+cat /kafka/config/server.properties   
+   
 
 export CLASSPATH=$CLASSPATH:/kafka/lib/slf4j-log4j12.jar
 export JMX_PORT=7203
