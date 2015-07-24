@@ -24,42 +24,43 @@ RUN \
 #	npm install local-ip
 	
 RUN \
-    npm install express --save  
+    npm install express  
     
 RUN \
-	npm install body-parser --save
+	npm install body-parser
     
 RUN \
-	npm install passport --save
+	npm install passport
 
 RUN \
-	npm install passport-http-bearer --save
+	npm install passport-http-bearer
 	
 RUN \	
-	npm install mongodb --save
+	npm install mongodb
 		
 RUN \	
-	npm install aws-sdk --save
+	npm install aws-sdk 
 
 RUN \
-	npm install redis --save
+	npm install redis 
 	
 RUN \	
-	npm install winston --save
+	npm install winston 
 	
-RUN \
-	npm install node-zookeeper-client --save
+#RUN \	
+#	npm install kafka-node 
 
-RUN \	
-	npm install kafka-node --save
+RUN \
+	npm install kafka
+
+RUN \
+	npm install node-zookeeper-client 
 
 #set to effective working dir for default command (working_dir directive doesn't work in tutum)
 ENV NODE_DIR /var/www/
 
 RUN \
 	mkdir /var/log/drillix
-
-COPY drillix_micro_eventloader.js /var/www/drillix_micro_eventloader.js
 
 #COPY ssl/api.drillix.com.key /var/www/api.drillix.com.key
 #COPY ssl/api.drillix.com.crt /var/www/api.drillix.com.crt
@@ -81,6 +82,7 @@ RUN chmod +x /home/vagrant/zookeepercli
 
 RUN apt-get install -y net-tools 
 	
+COPY drillix_micro_eventloader.js /var/www/drillix_micro_eventloader.js	
 ADD bootstrapper.sh /home/vagrant/bootstrapper.sh
 RUN chmod +x /home/vagrant/bootstrapper.sh
 	

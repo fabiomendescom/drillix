@@ -40,6 +40,8 @@ EXPOSE 2181 2888 3888
 
 WORKDIR /opt/zookeeper
 
+ADD zoo.cfg /opt/zookeeper/conf/zoo.cfg
+
 RUN mkdir -p /opt/zookeeper/workdir
 VOLUME /opt/zookeeper/workdir
 

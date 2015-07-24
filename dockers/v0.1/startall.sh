@@ -10,6 +10,8 @@ sudo docker run -d \
 	
 sleep 6	
 
+./setzookeepervars.sh	
+
 CONTAINER="nimbus"
 sudo docker kill $CONTAINER 
 sudo docker rm $CONTAINER 
@@ -50,9 +52,7 @@ sudo docker run -d \
 	-e "ZKROOT=" \
 	-p 9092:9092 \
 	kafka
-	
-./setzookeepervars.sh	
-	
+		
 CONTAINER="micro_eventloader"
 sudo docker kill $CONTAINER 
 sudo docker rm $CONTAINER 
@@ -62,7 +62,7 @@ sudo docker run -d \
 	-e "CONTAINERNAME=$CONTAINER" \
 	-e "PORTNUMBER=9000" \
 	-p 9000:9000 \
-	micro_eventloader	
+	micro_eventloader
 	
 
 

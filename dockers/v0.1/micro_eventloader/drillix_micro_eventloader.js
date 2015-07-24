@@ -11,11 +11,11 @@ var numCPUs = require('os').cpus().length;
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 var AWS = require('aws-sdk');
-var http = require('http');
-var kafka = require('kafka-node'),
-    Producer = kafka.Producer;
-var client;
-var producer;
+//var http = require('http');
+//var kafka = require('kafka-node'),
+//    Producer = kafka.Producer;
+//var client;
+//var producer;
 
 function getSystemInfo() {
 	os = require('os');
@@ -290,41 +290,56 @@ logger.info("Starting docker process",getSystemInfo());
 
 //load the zookeeper config into env variables
 var globalvars = {};
-var zookeeper = require('node-zookeeper-client');
-logger.info("Zookeeper servers: " + process.env.DRX_ZOOKPRSVRS);
-var zooclient = zookeeper.createClient(process.env.DRX_ZOOKPRSVRS);
-zooclient.once('connected', function () {
-	logger.info("Connected to: " + process.env.DRX_ZOOKPRSVRS);
-	zooclient.getChildren('/DRILLIX/GLOBALVARS', function (event) {watcher(event)}, function (error, children, stats) {
-		if (error) {
-			console.log(error.stack);
-			return;
-		}		
-		i=1;
-		children.toString('utf8').split(',').forEach(function(child) {
-			zooclient.getData('/DRILLIX/GLOBALVARS/'+child,function (error, data, stats) {
-				globalvars[child] = JSON.parse(data.toString("utf8"));
-				if(i==children.toString('utf8').split(',').length) {
-					logger.info("GLOBALVARS collected from zookeeper " + process.env.DRX_ZOOKPRSVRS);
-					logger.info("Creating KAFKA client");
-					client = new kafka.Client(process.env.DRX_ZOOKPRSVRS);
-					producer = new Producer(client); 					
-					producer.on('ready', function () {
-						logger.info("Connected to KAFKA client successfully");
-						var server = http.createServer(app).listen(porttolisten, function(){
-							logger.info("Express server listening on port " + porttolisten);
-						});
-					});						
-				}
-				i++;				
-			})
-		})
-	});	
+//var zookeeper = require('node-zookeeper-client');
+//logger.info("Zookeeper servers: " + process.env.DRX_ZOOKPRSVRS);
+//var zooclient = zookeeper.createClient(process.env.DRX_ZOOKPRSVRS);
+//zooclient.once('connected', function () {
+//	logger.info("Connected to: " + process.env.DRX_ZOOKPRSVRS);
+//	zooclient.getChildren('/DRILLIX/GLOBALVARS', function (event) {watcher(event)}, function (error, children, stats) {
+//		if (error) {
+//			console.log(error.stack);
+//			return;
+//		}		
+//		i=1;
+//		children.toString('utf8').split(',').forEach(function(child) {
+//			zooclient.getData('/DRILLIX/GLOBALVARS/'+child,function (error, data, stats) {
+//				globalvars[child] = JSON.parse(data.toString("utf8"));
+//				if(i==children.toString('utf8').split(',').length) {
+//					logger.info("GLOBALVARS collected from zookeeper " + process.env.DRX_ZOOKPRSVRS);					
+//					setTimeout(function() {
+//						logger.info("Creating KAFKA client: "+process.env.DRX_ZOOKPRSVRS+"/DRILLIX");
+//						client = new kafka.Client(process.env.DRX_ZOOKPRSVRS+"/DRILLIX",{sessionTimeout: 90000, spinDelay: 5000, retries: 10});
+
+//						producer = new Producer(client); 		
+//						producer.on('error', function(err) {
+//							console.log(err);
+//						});									
+//						producer.on('ready', function () {
+//							logger.info("Connected to KAFKA client successfully");
+//							var server = http.createServer(app).listen(porttolisten, function(){
+//								logger.info("Express server listening on port " + porttolisten);
+//							});
+//						});
+//					},5000);							
+//				}
+//				i++;				
+//			})
+//		})
+//	});	
+//})
+//zooclient.connect();
+
+var kafka = require('kafka')
+var producer = new kafka.Producer({
+    host:         '172.17.0.249',
+    port:         9092,
+    topic:        'test',
+    partition:    0
 })
-zooclient.connect();
-
-
-
+producer.connect(function() {
+    producer.send('message bytes')
+    console.log("SUCCESS");
+})
 																																		
 
 				 

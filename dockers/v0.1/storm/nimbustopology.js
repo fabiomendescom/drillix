@@ -59,9 +59,9 @@ var wordcount = (function() {
 })()
 
 var builder = storm.topologybuilder()
-builder.setSpout('kafkaspout	', kafkaspout)
-//builder.setBolt('splitsentence', splitsentence, 8).shuffleGrouping('randomsentence')
-//builder.setBolt('wordcount', wordcount, 12).fieldsGrouping('splitsentence', ['word'])
+builder.setSpout('kafkaspout', kafkaspout)
+builder.setBolt('splitsentence', splitsentence, 8).shuffleGrouping('kafkaspout')
+builder.setBolt('wordcount', wordcount, 12).fieldsGrouping('splitsentence', ['word'])
 
 var nimbus = process.argv[2]
 var options = {
