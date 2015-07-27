@@ -1,19 +1,9 @@
 #!/bin/bash
 
-MAINROOT="DRILLIX"
-
 KEY[0]='DRX_AGRP'; 		
 VAL[0]='{"awsaccesskey":"AKIAIUAUOG5OVKIGNYWQ","awssecretkey":"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","awsregion":"us-east-1","awsdynamotbl":"drillixauth"}'
 KEY[1]='DRX_PGRP_TEST1';
 VAL[1]='{"eventtopic":"arn:aws:sns:us-east-1:139086185180:eventtopic","eventqueue":"events","dedupqueue":"dedupevents","dedupqueueurl":"https://sqs.us-east-1.amazonaws.com/139086185180/dedupevents","bucketqueueurl":"https://sqs.us-east-1.amazonaws.com/139086185180/bucketevents","awsaccesskey":"AKIAIUAUOG5OVKIGNYWQ","awssecretkey":"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","awsregion":"us-east-1","awsaccount":"139086185180","mongouser":"heroku_app34960699","mongopassword":"pbho09fpelbpp597c21fu0cami","mongohosts":"ds029197.mongolab.com:29197","mongodb":"heroku_app34960699","mongocollectionpref":"test_"}'
-
-echo "ZOOKEEPER servers being used: $DRX_ZOOKPRSVRS"
-ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /$MAINROOT)
-if [ ! $ZOO ]; then
-	echo "Creating $MAINROOT root"
-	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT $MAINROOT
-	echo "$MAINROOT root created"
-fi
 
 ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /$MAINROOT/GLOBALVARS)
 if [ ! $ZOO ]; then
@@ -21,15 +11,6 @@ if [ ! $ZOO ]; then
 	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT/GLOBALVARS globalvars
 	echo "/$MAINROOT/GLOBALVARS service folder created"
 fi
-
-echo "ZOOKEEPER servers being used: $DRX_ZOOKPRSVRS"
-ZOO=$(zookeepercli --servers $DRX_ZOOKPRSVRS -c exists /$MAINROOT/KAFKA)
-if [ ! $ZOO ]; then
-	echo "Creating $MAINROOT/KAFKA root"
-	zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT/KAFKA $MAINROOT
-	echo "$MAINROOT/KAFKA root created"
-fi
-
 
 x=0;
 for i in ${KEY[@]}; do

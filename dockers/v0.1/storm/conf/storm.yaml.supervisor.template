@@ -12,3 +12,4 @@ supervisor.slots.ports:
     - 6703
 
 
+storm.zookeeper.root: "%zookeeperroot%"

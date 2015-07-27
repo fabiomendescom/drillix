@@ -47,11 +47,8 @@ RUN \
 RUN \	
 	npm install winston 
 	
-#RUN \	
-#	npm install kafka-node 
-
-RUN \
-	npm install kafka
+RUN \	
+	npm install kafka-node 
 
 RUN \
 	npm install node-zookeeper-client 

@@ -33,6 +33,7 @@ case $1 in
           create_supervisor_conf ui
 		  MYIP=$(ifconfig eth0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p') 
 		  echo "My IP is $MYIP"
+		  echo "Registering this node as nimbus with address $MYIP"
 		  #MAINROOT="DRILLIX"
 		  #echo "Zookeeper servers: $DRX_ZOOKPRSVRS"
 		  #echo "Check existence: /$MAINROOT/GLOBALVARS/NIMBUS"
@@ -42,20 +43,23 @@ case $1 in
 		  #fi		  
 		  #echo "Create /home/storm/zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT/GLOBALVARS/NIMBUS $MYIP"
 		  #/home/storm/zookeepercli --servers $DRX_ZOOKPRSVRS -c create /$MAINROOT/GLOBALVARS/NIMBUS $MYIP
-		  awk -v ZOOIPS="$ZOOIPS" -v NIMBUS_ADDR="$MYIP" '{
+		  awk -v ZOOIPS="$ZOOIPS" -v NIMBUS_ADDR="$MYIP" -v ZKROOT=$ZKROOT '{
 			sub(/%zookeeper%/, ZOOIPS);
 			sub(/%nimbus%/, NIMBUS_ADDR);
+			sub(/%zookeeperroot%/, ZKROOT);
 			print;
 		  }' $STORM_HOME/conf/storm.yaml.nimbus.template > $STORM_HOME/conf/storm.yaml		           
     ;;
     supervisor)
           create_supervisor_conf supervisor
+          echo "Registering this node as supervisor with nimbus $NIMBUS_ADDR"
           #MAINROOT="DRILLIX"
           #NIMBUS_ADDR=$(/home/storm/zookeepercli --servers $DRX_ZOOKPRSVRS -c get /$MAINROOT/GLOBALVARS/NIMBUS)
-          NIMBUS_ADDR=$2  #IP address of the nimbus
-		  awk -v ZOOIPS="$ZOOIPS" -v NIMBUS_ADDR="$NIMBUS_ADDR" '{
+          #NIMBUS_ADDR=$2  #IP address of the nimbus
+		  awk -v ZOOIPS="$ZOOIPS" -v NIMBUS_ADDR="$NIMBUS_ADDR" -v ZKROOT=$ZKROOT '{
 			sub(/%zookeeper%/, ZOOIPS);
 			sub(/%nimbus%/, NIMBUS_ADDR);
+			sub(/%zookeeperroot%/, ZKROOT);
 			print;
 		  }' $STORM_HOME/conf/storm.yaml.supervisor.template > $STORM_HOME/conf/storm.yaml	          
     ;;

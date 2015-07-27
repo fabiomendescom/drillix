@@ -5,4 +5,6 @@ nimbus.host: "%nimbus%"
 
 storm.local.dir: "/home/storm"
 
+storm.zookeeper.root: "%zookeeperroot%"
+
 

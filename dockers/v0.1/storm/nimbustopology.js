@@ -1,21 +1,8 @@
 var storm = require('node-storm')
 
-var kafka = require('kafka-node'),
-Consumer = kafka.Consumer;
-
-
-//var client = new kafka.Client("172.17.42.1:2181" + "/DRILLIX/KAFKA"),
-//    consumer = new Consumer(
-//        client,
-//        [
-//            { topic: 'events', partition: 0 }
-//        ],
-//        {
-//            autoCommit: false
-//        }
-//    );	
 
 var kafkaspout = (function() {
+	
 	var sentences = [
 		"the cow jumped over the moon",
 		"an apple a day keeps the doctor away",
@@ -23,16 +10,38 @@ var kafkaspout = (function() {
 		"snow white and the seven dwarfs",
 		"i am at two with nature"
 	]
-
+	
 	return storm.spout(function(sync) {
-		var self = this
+		var self = this		
+		
 		setTimeout(function() {
+			
+			var kafka = require('kafka-node'),
+				Consumer = kafka.Consumer,
+				client = new kafka.Client(process.env.DRX_ZOOKPRSVRS + "/DRILLIX/KAFKA"),
+				consumer = new Consumer(
+					client,
+					[
+						{ topic: 'events', partition: 0 }
+					],
+					{
+						autoCommit: true
+					}
+				);	
+			
+			consumer.on("message", function(message) {
+				self.emit(["THIS IS A TEST"]);
+				sync();
+			});
+			/*				
 			var i = Math.floor(Math.random()*sentences.length)
 			var sentence = sentences[i]
-			self.emit([sentence]) /* {id:'unique'} //for reliable emit */
+			self.emit([sentence]) 
 			sync()
+			*/
 		}, 100)
 	}).declareOutputFields(["word"])
+	
 })()
 
 var splitsentence = storm.basicbolt(function(data) {
@@ -58,19 +67,31 @@ var wordcount = (function() {
 	}).declareOutputFields(["word", "count"])
 })()
 
-var builder = storm.topologybuilder()
-builder.setSpout('kafkaspout', kafkaspout)
-builder.setBolt('splitsentence', splitsentence, 8).shuffleGrouping('kafkaspout')
-builder.setBolt('wordcount', wordcount, 12).fieldsGrouping('splitsentence', ['word'])
+//console.log("Attempting to connect to Kafka server " + process.env.KAFKAIP);
+//consumer.connect(function() {
+//	console.log("Connected to Kafka server " + process.env.KAFKAIP + " successfully");
+//    consumer.subscribeTopic({name: 'events', partition: 0})
+//    console.log("Topic subscription completed");
 
-var nimbus = process.argv[2]
-var options = {
-	config: {'topology.debug': true}
-}
-var topology = builder.createTopology()
-if (nimbus == null) {
-	console.log("nimbus is empty");
-} else {
-	options.nimbus = nimbus
-	storm.submit(topology, options).fail(console.error)
-}
+	var builder = storm.topologybuilder()
+	builder.setSpout('kafkaspout', kafkaspout)
+	builder.setBolt('splitsentence', splitsentence, 8).shuffleGrouping('kafkaspout')
+	builder.setBolt('wordcount', wordcount, 12).fieldsGrouping('splitsentence', ['word'])
+
+	var nimbus = process.argv[2]
+	var options = {
+		config: {'topology.debug':true}
+	}
+	var topology = builder.createTopology()
+	if (nimbus == null) {
+		var cluster = storm.localcluster()
+		cluster.submit(topology, options).then(function() {
+			return q.delay(20000)
+		}).finally(function() {
+			return cluster.shutdown()
+		}).fail(console.error)
+	} else {
+		options.nimbus = nimbus
+		storm.submit(topology, options).fail(console.error)	
+	}
+//})

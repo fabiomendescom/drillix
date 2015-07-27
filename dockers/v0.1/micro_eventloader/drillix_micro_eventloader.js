@@ -11,11 +11,9 @@ var numCPUs = require('os').cpus().length;
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 var AWS = require('aws-sdk');
-//var http = require('http');
-//var kafka = require('kafka-node'),
-//    Producer = kafka.Producer;
-//var client;
-//var producer;
+var http = require('http');
+
+var kafka = require('kafka-node');
 
 function getSystemInfo() {
 	os = require('os');
@@ -160,47 +158,30 @@ app.post('/:account/transactions/:transaction',  passport.authenticate('bearer',
 	
 	var msgtext = JSON.stringify(msg);
 
-
+	Producer = kafka.Producer;
+	client = new kafka.Client(process.env.DRX_ZOOKPRSVRS+"/DRILLIX/KAFKA");
+	producer = new Producer(client);
+			
     payloads = [
-        { topic: 'events', messages: msgtext, partition: 0 }
+        { topic: 'events', messages: "This is a test", partition: 0 }
     ];	
     
-    logger.info(payloads);
-
-	producer.send(payloads, function (err, data) {
-		//console.log(data);
-		//console.log(err);	
-		if(err) {
-			console.log(err);
-			res.status(500);
-			res.send({"status" : "error"});					
-		} else {
-			res.status(200);
-			res.send({"status" : "success"});	
-		}				
-	});	
-	
-	//producer.on('error', function (err) {
-	//	console.log("ERRRRRRR: " + err);
-	//	res.status(500);
-	//	res.send({"status" : "error"});				
-	//});	
-
-
-/*	
-	snsmessageadd(msgtext, req, res, function(err, data) {
-		if (err) {
-			logger.error(err, err.stack); // an error occurred
-			res.status(500);
-			res.send({"status" : "error","statuscode" : 1,"message" : "Problem inserting event","description" : "Problem inserting event"});						
-		}
-		else {    
-			logger.info(data);           // successful response
-			res.status(200);
-			res.send({"status" : "success"});						
-		}
+	producer.on('ready', function () {
+		producer.send(payloads, function (err, data) {
+				//console.log(data);
+				if (err) {
+					logger.error(err);
+					res.status(500);
+					res.send({"status" : "error","statuscode" : 1,"description" : "Problem inserting event"});								
+				} else {
+					res.status(200);
+					res.send({"status" : "success", "data": data});							
+				}			
+		});
 	});
-*/
+ 
+	//producer.on('error', function (err) {console.error(err)})    	
+
 });
 
 app.get('/:account/maxsequencetransactions/:transaction',  passport.authenticate('bearer', { session: false }), function(req, res) {
@@ -290,57 +271,46 @@ logger.info("Starting docker process",getSystemInfo());
 
 //load the zookeeper config into env variables
 var globalvars = {};
-//var zookeeper = require('node-zookeeper-client');
-//logger.info("Zookeeper servers: " + process.env.DRX_ZOOKPRSVRS);
-//var zooclient = zookeeper.createClient(process.env.DRX_ZOOKPRSVRS);
-//zooclient.once('connected', function () {
-//	logger.info("Connected to: " + process.env.DRX_ZOOKPRSVRS);
-//	zooclient.getChildren('/DRILLIX/GLOBALVARS', function (event) {watcher(event)}, function (error, children, stats) {
-//		if (error) {
-//			console.log(error.stack);
-//			return;
-//		}		
-//		i=1;
-//		children.toString('utf8').split(',').forEach(function(child) {
-//			zooclient.getData('/DRILLIX/GLOBALVARS/'+child,function (error, data, stats) {
-//				globalvars[child] = JSON.parse(data.toString("utf8"));
-//				if(i==children.toString('utf8').split(',').length) {
-//					logger.info("GLOBALVARS collected from zookeeper " + process.env.DRX_ZOOKPRSVRS);					
-//					setTimeout(function() {
-//						logger.info("Creating KAFKA client: "+process.env.DRX_ZOOKPRSVRS+"/DRILLIX");
-//						client = new kafka.Client(process.env.DRX_ZOOKPRSVRS+"/DRILLIX",{sessionTimeout: 90000, spinDelay: 5000, retries: 10});
+var zookeeper = require('node-zookeeper-client');
+logger.info("Zookeeper servers: " + process.env.DRX_ZOOKPRSVRS);
+var zooclient = zookeeper.createClient(process.env.DRX_ZOOKPRSVRS);
+zooclient.once('connected', function () {
+	logger.info("Connected to: " + process.env.DRX_ZOOKPRSVRS);
+	zooclient.getChildren('/DRILLIX/GLOBALVARS', function (event) {watcher(event)}, function (error, children, stats) {
+		if (error) {
+			console.log(error.stack);
+			return;
+		}		
+		i=1;
+		children.toString('utf8').split(',').forEach(function(child) {
+			zooclient.getData('/DRILLIX/GLOBALVARS/'+child,function (error, data, stats) {
+				globalvars[child] = JSON.parse(data.toString("utf8"));
+				if(i==children.toString('utf8').split(',').length) {
+					logger.info("GLOBALVARS collected from zookeeper " + process.env.DRX_ZOOKPRSVRS);					
+						//logger.info("Creating KAFKA client: "+process.env.DRX_ZOOKPRSVRS+"/DRILLIX/KAFKA");
+						//client = new kafka.Client(process.env.DRX_ZOOKPRSVRS+"/DRILLIX/KAFKA",{sessionTimeout: 90000, spinDelay: 5000, retries: 10});
 
-//						producer = new Producer(client); 		
-//						producer.on('error', function(err) {
-//							console.log(err);
-//						});									
-//						producer.on('ready', function () {
-//							logger.info("Connected to KAFKA client successfully");
-//							var server = http.createServer(app).listen(porttolisten, function(){
-//								logger.info("Express server listening on port " + porttolisten);
-//							});
-//						});
-//					},5000);							
-//				}
-//				i++;				
-//			})
-//		})
-//	});	
-//})
-//zooclient.connect();
+						//producer = new Producer(client); 		
+						//producer.on('error', function(err) {
+						//	console.log(err);
+						//});									
+						//producer.on('ready', function () {
+						//	logger.info("Connected to KAFKA client successfully");
 
-var kafka = require('kafka')
-var producer = new kafka.Producer({
-    host:         '172.17.0.249',
-    port:         9092,
-    topic:        'test',
-    partition:    0
+							var server = http.createServer(app).listen(porttolisten, function(){
+								logger.info("Express server listening on port " + porttolisten);
+							});
+						//});
+				}
+				i++;				
+			})
+		})
+	});	
 })
-producer.connect(function() {
-    producer.send('message bytes')
-    console.log("SUCCESS");
-})
-																																		
+zooclient.connect();
+
+
+																																	
 
 				 
 
