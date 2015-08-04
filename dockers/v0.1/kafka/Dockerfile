@@ -16,8 +16,11 @@ RUN apt-get update && \
 ENV KAFKA_RELEASE_ARCHIVE kafka_2.10-0.8.2.1.tgz
 
 # Download Kafka binary distribution
-ADD http://www.trieuvan.com/apache/kafka/0.8.2.1/${KAFKA_RELEASE_ARCHIVE} /tmp/
-ADD https://dist.apache.org/repos/dist/release/kafka/0.8.2.1/${KAFKA_RELEASE_ARCHIVE}.md5 /tmp/
+#ADD http://www.trieuvan.com/apache/kafka/0.8.2.1/${KAFKA_RELEASE_ARCHIVE} /tmp/
+#ADD https://dist.apache.org/repos/dist/release/kafka/0.8.2.1/${KAFKA_RELEASE_ARCHIVE}.md5 /tmp/
+
+ADD https://archive.apache.org/dist/kafka/0.8.0/kafka_2.8.0-0.8.0.tar.gz
+ADD https://archive.apache.org/dist/kafka/0.8.0/kafka_2.8.0-0.8.0.tar.gz.md5
 
 WORKDIR /tmp
 

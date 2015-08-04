@@ -21,20 +21,20 @@ RUN \
   chmod -R 755 /etc/authbind/byport/ 
   
 
-ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
+#ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
-RUN apt-get update && apt-get install -y openjdk-7-jre-headless wget
+#RUN apt-get update && apt-get install -y openjdk-7-jre-headless wget
 
-RUN wget -q -O - http://apache.mirrors.lucidnetworks.net/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz | tar -xzf - -C /opt \
-    && mv /opt/zookeeper-3.4.6 /opt/zookeeper \
-    && cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg \
-    && mkdir -p /tmp/zookeeper
-
-
-#RUN wget -q -O - http://apache.mirrors.pair.com/zookeeper/zookeeper-3.3.4/zookeeper-3.3.4.tar.gz | tar -xzf - -C /opt \
-#    && mv /opt/zookeeper-3.3.4 /opt/zookeeper \
+#RUN wget -q -O - http://apache.mirrors.lucidnetworks.net/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz | tar -xzf - -C /opt \
+#    && mv /opt/zookeeper-3.4.6 /opt/zookeeper \
 #    && cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg \
 #    && mkdir -p /tmp/zookeeper
+
+
+RUN wget -q -O - http://apache.mirrors.pair.com/zookeeper/zookeeper-3.3.3/zookeeper-3.3.3.tar.gz | tar -xzf - -C /opt \
+    && mv /opt/zookeeper-3.3.4 /opt/zookeeper \
+    && cp /opt/zookeeper/conf/zoo_sample.cfg /opt/zookeeper/conf/zoo.cfg \
+    && mkdir -p /tmp/zookeeper
 
 EXPOSE 2181 2888 3888
 

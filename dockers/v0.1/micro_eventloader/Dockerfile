@@ -52,6 +52,9 @@ RUN \
 
 RUN \
 	npm install node-zookeeper-client 
+	
+RUN \
+	npm install cassandra-driver	
 
 #set to effective working dir for default command (working_dir directive doesn't work in tutum)
 ENV NODE_DIR /var/www/

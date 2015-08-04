@@ -7,4 +7,4 @@ storm.local.dir: "/home/storm"
 
 storm.zookeeper.root: "%zookeeperroot%"
 
-
+ui.host: "%ui%"

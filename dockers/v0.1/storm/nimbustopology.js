@@ -1,45 +1,51 @@
 var storm = require('node-storm')
 
-
 var kafkaspout = (function() {
-	
-	var sentences = [
-		"the cow jumped over the moon",
-		"an apple a day keeps the doctor away",
-		"four score and seven years ago",
-		"snow white and the seven dwarfs",
-		"i am at two with nature"
-	]
-	
+
 	return storm.spout(function(sync) {
-		var self = this		
 		
-		setTimeout(function() {
-			
-			var kafka = require('kafka-node'),
-				Consumer = kafka.Consumer,
-				client = new kafka.Client(process.env.DRX_ZOOKPRSVRS + "/DRILLIX/KAFKA"),
-				consumer = new Consumer(
-					client,
-					[
-						{ topic: 'events', partition: 0 }
-					],
-					{
-						autoCommit: true
-					}
-				);	
-			
-			consumer.on("message", function(message) {
-				self.emit(["THIS IS A TEST"]);
+			var self = this		
+
+			setInterval(function() {
+				self.emit(["Fabio Mendes"]);
 				sync();
-			});
-			/*				
-			var i = Math.floor(Math.random()*sentences.length)
-			var sentence = sentences[i]
-			self.emit([sentence]) 
-			sync()
-			*/
-		}, 100)
+			},5000);
+
+/*			
+			var Kafka = require('kafka0.8');
+			var kTransport = new Kafka.Transport({
+					zkClient: new Kafka.Zookeeper(process.env.DRX_ZOOKPRSVRS + "/DRILLIX/KAFKA")
+				})
+    
+			var options =  {
+					payloads: [{                                        
+						topic: 'events',
+						partition: 0,
+						serializer: new Kafka.Serializer.Json()         
+					}],
+
+					transport: kTransport,
+
+					timeout: 60000
+				}    
+
+			var consumer = new Kafka.Consumer(options, do_consume);
+			function do_consume() {
+				consumer.consume(
+					function(msg, meta, next) {
+						self.emit(["Fabio Mendes"]);
+						sync();            
+						next();
+					},
+					function() {
+					},
+					function(err) {
+						setTimeout(do_consume, 2000);
+					}
+				)
+			}		
+*/
+				
 	}).declareOutputFields(["word"])
 	
 })()
@@ -67,11 +73,6 @@ var wordcount = (function() {
 	}).declareOutputFields(["word", "count"])
 })()
 
-//console.log("Attempting to connect to Kafka server " + process.env.KAFKAIP);
-//consumer.connect(function() {
-//	console.log("Connected to Kafka server " + process.env.KAFKAIP + " successfully");
-//    consumer.subscribeTopic({name: 'events', partition: 0})
-//    console.log("Topic subscription completed");
 
 	var builder = storm.topologybuilder()
 	builder.setSpout('kafkaspout', kafkaspout)
@@ -80,7 +81,7 @@ var wordcount = (function() {
 
 	var nimbus = process.argv[2]
 	var options = {
-		config: {'topology.debug':true}
+		config: {'topology.debug':false}
 	}
 	var topology = builder.createTopology()
 	if (nimbus == null) {
@@ -94,4 +95,4 @@ var wordcount = (function() {
 		options.nimbus = nimbus
 		storm.submit(topology, options).fail(console.error)	
 	}
-//})
+

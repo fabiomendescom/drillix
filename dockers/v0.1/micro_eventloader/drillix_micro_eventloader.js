@@ -163,7 +163,7 @@ app.post('/:account/transactions/:transaction',  passport.authenticate('bearer',
 	producer = new Producer(client);
 			
     payloads = [
-        { topic: 'events', messages: "This is a test", partition: 0 }
+        { topic: 'events', messages: msgtext, partition: 0 }
     ];	
     
 	producer.on('ready', function () {

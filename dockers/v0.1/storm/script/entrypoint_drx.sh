@@ -46,6 +46,7 @@ case $1 in
 		  awk -v ZOOIPS="$ZOOIPS" -v NIMBUS_ADDR="$MYIP" -v ZKROOT=$ZKROOT '{
 			sub(/%zookeeper%/, ZOOIPS);
 			sub(/%nimbus%/, NIMBUS_ADDR);
+			sub(/%ui%/, NIMBUS_ADDR);
 			sub(/%zookeeperroot%/, ZKROOT);
 			print;
 		  }' $STORM_HOME/conf/storm.yaml.nimbus.template > $STORM_HOME/conf/storm.yaml		           

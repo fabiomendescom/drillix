@@ -13,3 +13,7 @@ supervisor.slots.ports:
 
 
 storm.zookeeper.root: "%zookeeperroot%"
+
+supervisor.heartbeat.frequency.secs: 40
+worker.heartbeat.frequency.secs: 30
+task.heartbeat.frequency.secs: 60
